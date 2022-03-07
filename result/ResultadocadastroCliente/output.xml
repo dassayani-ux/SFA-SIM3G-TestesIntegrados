@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.1.1 (Python 3.10.0 on win32)" generated="20220307 15:43:06.626" rpa="false" schemaversion="2">
+<suite id="s1" name="cadastroCliente" source="C:\Users\jaime.rosa\Documents\Automacao_robot\test\cadastroCliente.robot">
+<test id="s1-t1" name="Caso de teste 01: Abrir navegador">
+<kw name="Abrir navegador chrome" library="globalVariables">
+<doc>Abre uma página do chrome na página de login</doc>
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>${URL}</arg>
+<arg>${CHROME}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20220307 15:43:08.474" level="INFO">Opening browser 'Chrome' to base url 'http://qa03.sfa.wssim.com.br:9004/totvscrmsfa/'.</msg>
+<status status="PASS" starttime="20220307 15:43:08.473" endtime="20220307 15:43:14.265"/>
+</kw>
+<kw name="Maximize Browser Window" library="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" starttime="20220307 15:43:14.265" endtime="20220307 15:43:14.493"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>id=${CENTRO DE LOGIN}</arg>
+<arg>timeout=50</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20220307 15:43:14.493" endtime="20220307 15:43:14.517"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:08.471" endtime="20220307 15:43:14.518"/>
+</kw>
+<doc>Caso de teste, abrindo o CRM</doc>
+<tag>Navegador</tag>
+<status status="PASS" starttime="20220307 15:43:08.470" endtime="20220307 15:43:14.519"/>
+</test>
+<test id="s1-t2" name="caso de teste 02: Realizar o login">
+<kw name="Realizar login" library="loginResources">
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=${LOGIN PROFISSIONAL}</arg>
+<arg>01000016</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:14.526" level="INFO">Typing text '01000016' into text field 'id=formusuario'.</msg>
+<status status="PASS" starttime="20220307 15:43:14.525" endtime="20220307 15:43:14.738"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:15.741" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20220307 15:43:14.739" endtime="20220307 15:43:15.741"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=${SENHA PROFISSIONAL}</arg>
+<arg>12</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:15.742" level="INFO">Typing text '12' into text field 'id=formsenha'.</msg>
+<status status="PASS" starttime="20220307 15:43:15.741" endtime="20220307 15:43:15.912"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:16.914" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20220307 15:43:15.913" endtime="20220307 15:43:16.914"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${BOTÂO ENTRAR}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:16.916" level="INFO">Clicking element 'id=btnGravar'.</msg>
+<status status="PASS" starttime="20220307 15:43:16.915" endtime="20220307 15:43:19.254"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:14.523" endtime="20220307 15:43:19.255"/>
+</kw>
+<doc>Caso de teste, Realizar Login</doc>
+<tag>Login</tag>
+<status status="PASS" starttime="20220307 15:43:14.521" endtime="20220307 15:43:19.270"/>
+</test>
+<test id="s1-t3" name="Caso de teste 03: Acessar novo Cliente">
+<kw name="entrar em cliente" library="cadastroClienteResources">
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>id=${CLIENTE MENU}</arg>
+<arg>timeout=50</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20220307 15:43:19.296" endtime="20220307 15:43:19.365"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${CLIENTE MENU}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:19.366" level="INFO">Clicking element 'id=cliente.menuMain'.</msg>
+<status status="PASS" starttime="20220307 15:43:19.365" endtime="20220307 15:43:19.476"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:19.678" level="INFO">Slept 200 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:19.477" endtime="20220307 15:43:19.678"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${MENU CLIENTE CADASTRAR}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:19.679" level="INFO">Clicking element 'id=menu.cliente.cadastrar'.</msg>
+<status status="PASS" starttime="20220307 15:43:19.678" endtime="20220307 15:43:19.815"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:20.017" level="INFO">Slept 200 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:19.815" endtime="20220307 15:43:20.017"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${MENU CLIENTE NOVO}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:20.019" level="INFO">Clicking element 'id=menu.cliente.cadastrar.novo'.</msg>
+<status status="PASS" starttime="20220307 15:43:20.018" endtime="20220307 15:43:22.604"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>id=${TELA CADASTRO CLIENTE}</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20220307 15:43:22.604" endtime="20220307 15:43:22.661"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:19.295" endtime="20220307 15:43:22.661"/>
+</kw>
+<tag>Cadastro Cliente</tag>
+<status status="PASS" starttime="20220307 15:43:19.287" endtime="20220307 15:43:22.662"/>
+</test>
+<test id="s1-t4" name="Caso de teste 04: Preenchimento de dados na aba geral">
+<kw name="cadastro cliente geral" library="cadastroClienteResources">
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>Xpath=${TIPO PESSOA JURIDICA}</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20220307 15:43:22.667" endtime="20220307 15:43:22.699"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>Xpath=${TIPO PESSOA JURIDICA}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:22.701" level="INFO">Clicking element 'Xpath=//*[@id="abaGeralParceiro"]/ul/li[3]/label[2]'.</msg>
+<status status="PASS" starttime="20220307 15:43:22.700" endtime="20220307 15:43:22.774"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>Xpath=${CONTRIBUINTE NÂO}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:22.776" level="INFO">Clicking element 'Xpath=//*[@id="abaGeralParceiro"]/ul/li[4]/label[3]'.</msg>
+<status status="PASS" starttime="20220307 15:43:22.775" endtime="20220307 15:43:22.851"/>
+</kw>
+<kw name="Name" library="FakerLibrary">
+<var>${NOME FAKE}</var>
+<doc>:example 'John Doe'</doc>
+<msg timestamp="20220307 15:43:22.851" level="INFO">${NOME FAKE} = Emanuel Souza</msg>
+<status status="PASS" starttime="20220307 15:43:22.851" endtime="20220307 15:43:22.851"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${NOME CLIENTE}</arg>
+<arg>${NOME FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:22.852" level="INFO">Sending key(s) ('Emanuel Souza',) to Name=parceiro_nomeparceiro element.</msg>
+<msg timestamp="20220307 15:43:23.196" level="INFO">Sending keys Emanuel Souza</msg>
+<status status="PASS" starttime="20220307 15:43:22.851" endtime="20220307 15:43:23.354"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:23.556" level="INFO">Slept 200 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:23.355" endtime="20220307 15:43:23.556"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>Name=${NOME FANTASIA}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:23.558" level="INFO">Clicking element 'Name=parceiro_nomeparceirofantasia'.</msg>
+<status status="PASS" starttime="20220307 15:43:23.557" endtime="20220307 15:43:23.661"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${NOME FANTASIA}</arg>
+<arg>${NOME FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:23.663" level="INFO">Sending key(s) ('Emanuel Souza',) to Name=parceiro_nomeparceirofantasia element.</msg>
+<msg timestamp="20220307 15:43:23.964" level="INFO">Sending keys Emanuel Souza</msg>
+<status status="PASS" starttime="20220307 15:43:23.661" endtime="20220307 15:43:24.095"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:24.197" level="INFO">Slept 100 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:24.096" endtime="20220307 15:43:24.197"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>Name=${NUMERO MATRICULA}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:24.198" level="INFO">Clicking element 'Name=parceiro_numeromatricula'.</msg>
+<status status="PASS" starttime="20220307 15:43:24.198" endtime="20220307 15:43:24.286"/>
+</kw>
+<kw name="Random Number" library="FakerLibrary">
+<var>${NUMERO FAKE}</var>
+<doc>Generate a random integer according to the following rules:</doc>
+<msg timestamp="20220307 15:43:24.287" level="INFO">${NUMERO FAKE} = 6552945</msg>
+<status status="PASS" starttime="20220307 15:43:24.286" endtime="20220307 15:43:24.287"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${NUMERO MATRICULA}</arg>
+<arg>${NUMERO FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:24.289" level="INFO">Sending key(s) ('6552945',) to Name=parceiro_numeromatricula element.</msg>
+<msg timestamp="20220307 15:43:24.613" level="INFO">Sending keys 6552945</msg>
+<status status="PASS" starttime="20220307 15:43:24.287" endtime="20220307 15:43:24.717"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${CLASSIFICAÇÂO CLIENTE}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:24.718" level="INFO">Clicking element 'id=classificacaoparceiro'.</msg>
+<status status="PASS" starttime="20220307 15:43:24.717" endtime="20220307 15:43:24.853"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.6s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:25.455" level="INFO">Slept 600 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:24.854" endtime="20220307 15:43:25.455"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${CLASSIFICAÇÂO CLIENTE}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:25.457" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=classificacaoparceiro element.</msg>
+<msg timestamp="20220307 15:43:25.901" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:25.901" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:25.456" endtime="20220307 15:43:25.935"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:22.666" endtime="20220307 15:43:25.935"/>
+</kw>
+<tag>Cadastro Cliente</tag>
+<status status="PASS" starttime="20220307 15:43:22.664" endtime="20220307 15:43:25.936"/>
+</test>
+<test id="s1-t5" name="Caso de teste 05: Preenchimento de dados na aba complemento">
+<kw name="cadastro cliente complemento" library="cadastroClienteResources">
+<kw name="Sleep" library="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:26.943" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20220307 15:43:25.942" endtime="20220307 15:43:26.943"/>
+</kw>
+<kw name="Scroll Element Into View" library="SeleniumLibrary">
+<arg>Name=${VALOR CAPITAL INTEGRAL}</arg>
+<doc>Scrolls the element identified by ``locator`` into view.</doc>
+<status status="PASS" starttime="20220307 15:43:26.944" endtime="20220307 15:43:27.240"/>
+</kw>
+<kw name="Cnpj" library="FakerLibrary">
+<var>${CNPJ FAKE}</var>
+<msg timestamp="20220307 15:43:27.241" level="INFO">${CNPJ FAKE} = 94.512.067/0001-59</msg>
+<status status="PASS" starttime="20220307 15:43:27.240" endtime="20220307 15:43:27.241"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${CNPJ}</arg>
+<arg>${CNPJ FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:27.242" level="INFO">Sending key(s) ('94.512.067/0001-59',) to Name=pessoajuridica_documentoidentificacao element.</msg>
+<msg timestamp="20220307 15:43:27.551" level="INFO">Sending keys 94.512.067/0001-59</msg>
+<status status="PASS" starttime="20220307 15:43:27.241" endtime="20220307 15:43:27.677"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${NUMERO DE FUNCIONARIOS}</arg>
+<arg>1500</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:27.678" level="INFO">Sending key(s) ('1500',) to Name=pessoajuridica_numerofuncionarios element.</msg>
+<msg timestamp="20220307 15:43:28.008" level="INFO">Sending keys 1500</msg>
+<status status="PASS" starttime="20220307 15:43:27.677" endtime="20220307 15:43:28.068"/>
+</kw>
+<kw name="Date" library="FakerLibrary">
+<var>${DATA FAKE}</var>
+<arg>pattern=%d-%m-%Y</arg>
+<doc>Get a date string between January 1, 1970 and now
+:param pattern: format
+:example: '2008-11-27'</doc>
+<msg timestamp="20220307 15:43:28.070" level="INFO">${DATA FAKE} = 17-04-2020</msg>
+<status status="PASS" starttime="20220307 15:43:28.069" endtime="20220307 15:43:28.070"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${DATA FUNDAÇÂO}</arg>
+<arg>${DATA FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:28.072" level="INFO">Sending key(s) ('17-04-2020',) to Name=pessoajuridica_datafundacao element.</msg>
+<msg timestamp="20220307 15:43:28.450" level="INFO">Sending keys 17-04-2020</msg>
+<status status="PASS" starttime="20220307 15:43:28.070" endtime="20220307 15:43:28.616"/>
+</kw>
+<kw name="Random Number" library="FakerLibrary">
+<var>${FATURAMENTO FAKE}</var>
+<doc>Generate a random integer according to the following rules:</doc>
+<msg timestamp="20220307 15:43:28.618" level="INFO">${FATURAMENTO FAKE} = 370024757</msg>
+<status status="PASS" starttime="20220307 15:43:28.617" endtime="20220307 15:43:28.618"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${VALOR FATURAMENTO}</arg>
+<arg>${FATURAMENTO FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:28.620" level="INFO">Sending key(s) ('370024757',) to Name=pessoajuridica_valorfaturamento element.</msg>
+<msg timestamp="20220307 15:43:28.939" level="INFO">Sending keys 370024757</msg>
+<status status="PASS" starttime="20220307 15:43:28.618" endtime="20220307 15:43:29.080"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${VALOR CAPITAL SOCIAL}</arg>
+<arg>${FATURAMENTO FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:29.082" level="INFO">Sending key(s) ('370024757',) to Name=pessoajuridica_valorcapitalsocial element.</msg>
+<msg timestamp="20220307 15:43:29.412" level="INFO">Sending keys 370024757</msg>
+<status status="PASS" starttime="20220307 15:43:29.080" endtime="20220307 15:43:29.676"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${VALOR CAPITAL SUBSCRITO}</arg>
+<arg>${FATURAMENTO FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:29.678" level="INFO">Sending key(s) ('370024757',) to Name=pessoajuridica_valorcapitalsubscrito element.</msg>
+<msg timestamp="20220307 15:43:30.007" level="INFO">Sending keys 370024757</msg>
+<status status="PASS" starttime="20220307 15:43:29.676" endtime="20220307 15:43:30.177"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${VALOR CAPITAL INTEGRAL}</arg>
+<arg>${FATURAMENTO FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:30.179" level="INFO">Sending key(s) ('370024757',) to Name=pessoajuridica_valorcapitalintegral element.</msg>
+<msg timestamp="20220307 15:43:30.506" level="INFO">Sending keys 370024757</msg>
+<status status="PASS" starttime="20220307 15:43:30.177" endtime="20220307 15:43:30.649"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:25.941" endtime="20220307 15:43:30.649"/>
+</kw>
+<tag>Cadastro Cliente</tag>
+<status status="PASS" starttime="20220307 15:43:25.939" endtime="20220307 15:43:30.650"/>
+</test>
+<test id="s1-t6" name="Caso de teste 06: Preenchimento de dados na aba informações adicionais">
+<kw name="cadastro cliente informações adicionais" library="cadastroClienteResources">
+<kw name="Scroll Element Into View" library="SeleniumLibrary">
+<arg>id=${CNPJ MATRIZ}</arg>
+<doc>Scrolls the element identified by ``locator`` into view.</doc>
+<status status="PASS" starttime="20220307 15:43:30.657" endtime="20220307 15:43:30.979"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${INSTRUÇÂO}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:30.981" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=DYNAMIC_ID_1 element.</msg>
+<msg timestamp="20220307 15:43:31.342" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:31.342" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:30.980" endtime="20220307 15:43:31.372"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:31.874" level="INFO">Slept 500 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:31.372" endtime="20220307 15:43:31.874"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${NATUREZA}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:31.876" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=DYNAMIC_ID_2 element.</msg>
+<msg timestamp="20220307 15:43:32.243" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:32.243" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:31.874" endtime="20220307 15:43:32.270"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:32.771" level="INFO">Slept 500 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:32.270" endtime="20220307 15:43:32.771"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${GRUPO TRIBUTAÇÂO}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:32.772" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=DYNAMIC_ID_3 element.</msg>
+<msg timestamp="20220307 15:43:33.149" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:33.149" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:32.771" endtime="20220307 15:43:33.196"/>
+</kw>
+<kw name="Cnpj" library="FakerLibrary">
+<var>${CNPJ FAKE}</var>
+<msg timestamp="20220307 15:43:33.197" level="INFO">${CNPJ FAKE} = 54.781.309/0001-95</msg>
+<status status="PASS" starttime="20220307 15:43:33.196" endtime="20220307 15:43:33.197"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${CNPJ MATRIZ}</arg>
+<arg>${CNPJ FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:33.199" level="INFO">Sending key(s) ('54.781.309/0001-95',) to id=DYNAMIC_ID_5 element.</msg>
+<msg timestamp="20220307 15:43:33.517" level="INFO">Sending keys 54.781.309/0001-95</msg>
+<status status="PASS" starttime="20220307 15:43:33.197" endtime="20220307 15:43:33.633"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:30.656" endtime="20220307 15:43:33.633"/>
+</kw>
+<tag>Cadastro Cliente</tag>
+<status status="PASS" starttime="20220307 15:43:30.653" endtime="20220307 15:43:33.634"/>
+</test>
+<test id="s1-t7" name="Caso de teste 07: Preenchimento de dados na aba geral (local)">
+<kw name="cadastro cliente geral local" library="cadastroClienteResources">
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${LOCAL DESCRIÇÂO}</arg>
+<arg>TESTE ROBOT</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:33.640" level="INFO">Sending key(s) ('TESTE ROBOT',) to Name=local_descricao element.</msg>
+<msg timestamp="20220307 15:43:33.971" level="INFO">Sending keys TESTE ROBOT</msg>
+<status status="PASS" starttime="20220307 15:43:33.639" endtime="20220307 15:43:34.092"/>
+</kw>
+<kw name="Cnpj" library="FakerLibrary">
+<var>${CNPJ FAKE}</var>
+<msg timestamp="20220307 15:43:34.093" level="INFO">${CNPJ FAKE} = 06.587.912/0001-98</msg>
+<status status="PASS" starttime="20220307 15:43:34.092" endtime="20220307 15:43:34.093"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${CNPJ LOCAL}</arg>
+<arg>${CNPJ FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:34.095" level="INFO">Sending key(s) ('06.587.912/0001-98',) to Name=local_documentoidentificacao element.</msg>
+<msg timestamp="20220307 15:43:34.407" level="INFO">Sending keys 06.587.912/0001-98</msg>
+<status status="PASS" starttime="20220307 15:43:34.093" endtime="20220307 15:43:34.512"/>
+</kw>
+<kw name="Street Name" library="FakerLibrary">
+<var>${LOGRADOURO FAKE}</var>
+<doc>:example: 'Crist Parks'</doc>
+<msg timestamp="20220307 15:43:34.512" level="INFO">${LOGRADOURO FAKE} = Estrada de Duarte</msg>
+<status status="PASS" starttime="20220307 15:43:34.512" endtime="20220307 15:43:34.512"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${LOGRADOURO}</arg>
+<arg>${LOGRADOURO FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:34.513" level="INFO">Sending key(s) ('Estrada de Duarte',) to Name=local_logradouro element.</msg>
+<msg timestamp="20220307 15:43:34.810" level="INFO">Sending keys Estrada de Duarte</msg>
+<status status="PASS" starttime="20220307 15:43:34.512" endtime="20220307 15:43:34.946"/>
+</kw>
+<kw name="Random Int" library="FakerLibrary">
+<var>${NUMERO LOGRADOURO FAKE}</var>
+<arg>min=10</arg>
+<arg>max=20000</arg>
+<doc>Generate a random integer between two integers ``min`` and ``max`` inclusive
+while observing the provided ``step`` value.</doc>
+<msg timestamp="20220307 15:43:34.947" level="INFO">${NUMERO LOGRADOURO FAKE} = 9694</msg>
+<status status="PASS" starttime="20220307 15:43:34.946" endtime="20220307 15:43:34.947"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${NUMERO LOGRADOURO}</arg>
+<arg>102</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:34.949" level="INFO">Sending key(s) ('102',) to Name=local_numero element.</msg>
+<msg timestamp="20220307 15:43:35.244" level="INFO">Sending keys 102</msg>
+<status status="PASS" starttime="20220307 15:43:34.948" endtime="20220307 15:43:35.280"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${BAIRRO}</arg>
+<arg>BAIRRO TESTE</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:35.281" level="INFO">Sending key(s) ('BAIRRO TESTE',) to Name=local_bairro element.</msg>
+<msg timestamp="20220307 15:43:35.591" level="INFO">Sending keys BAIRRO TESTE</msg>
+<status status="PASS" starttime="20220307 15:43:35.280" endtime="20220307 15:43:35.700"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${COMPLEMENTO}</arg>
+<arg>TESTE COMPLEMENTO</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:35.701" level="INFO">Sending key(s) ('TESTE COMPLEMENTO',) to Name=local_complemento element.</msg>
+<msg timestamp="20220307 15:43:36.010" level="INFO">Sending keys TESTE COMPLEMENTO</msg>
+<status status="PASS" starttime="20220307 15:43:35.700" endtime="20220307 15:43:36.182"/>
+</kw>
+<kw name="Postcode" library="FakerLibrary">
+<var>${CEP FAKE}</var>
+<doc>Randomly returns a postcode.
+:param formatted: True to allow formatted postcodes, else False (default True)
+:example formatted: '41224-212' '83992-291' '12324322'
+:example raw: '43920231' '34239530'</doc>
+<msg timestamp="20220307 15:43:36.183" level="INFO">${CEP FAKE} = 11642-079</msg>
+<status status="PASS" starttime="20220307 15:43:36.182" endtime="20220307 15:43:36.183"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${CEP}</arg>
+<arg>${CEP FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:36.184" level="INFO">Sending key(s) ('11642-079',) to Name=local_cep element.</msg>
+<msg timestamp="20220307 15:43:36.483" level="INFO">Sending keys 11642-079</msg>
+<status status="PASS" starttime="20220307 15:43:36.183" endtime="20220307 15:43:36.550"/>
+</kw>
+<kw name="Random Int" library="FakerLibrary">
+<var>${CAIXA POSTAL FAKE}</var>
+<arg>min=10</arg>
+<arg>max=2000</arg>
+<doc>Generate a random integer between two integers ``min`` and ``max`` inclusive
+while observing the provided ``step`` value.</doc>
+<msg timestamp="20220307 15:43:36.551" level="INFO">${CAIXA POSTAL FAKE} = 455</msg>
+<status status="PASS" starttime="20220307 15:43:36.550" endtime="20220307 15:43:36.552"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${CAIXA POSTAL}</arg>
+<arg>${CAIXA POSTAL FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:36.553" level="INFO">Sending key(s) ('455',) to Name=local_caixapostal element.</msg>
+<msg timestamp="20220307 15:43:36.894" level="INFO">Sending keys 455</msg>
+<status status="PASS" starttime="20220307 15:43:36.552" endtime="20220307 15:43:36.926"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${UF}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:36.928" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=cmbUF element.</msg>
+<msg timestamp="20220307 15:43:37.287" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:37.287" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:36.927" endtime="20220307 15:43:37.318"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:37.821" level="INFO">Slept 500 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:37.319" endtime="20220307 15:43:37.821"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${CIDADE}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:37.822" level="INFO">Clicking element 'id=cmbCidade'.</msg>
+<status status="PASS" starttime="20220307 15:43:37.821" endtime="20220307 15:43:37.926"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${CIDADE}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:37.927" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=cmbCidade element.</msg>
+<msg timestamp="20220307 15:43:38.274" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:38.274" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:37.926" endtime="20220307 15:43:38.328"/>
+</kw>
+<kw name="Random Int" library="FakerLibrary">
+<var>${CREDITO FAKE}</var>
+<arg>min=10000</arg>
+<arg>max=200000</arg>
+<doc>Generate a random integer between two integers ``min`` and ``max`` inclusive
+while observing the provided ``step`` value.</doc>
+<msg timestamp="20220307 15:43:38.329" level="INFO">${CREDITO FAKE} = 184458</msg>
+<status status="PASS" starttime="20220307 15:43:38.328" endtime="20220307 15:43:38.329"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${LIMITE CREDITO}</arg>
+<arg>${CREDITO FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:38.330" level="INFO">Sending key(s) ('184458',) to id=local_limitesugerido element.</msg>
+<msg timestamp="20220307 15:43:38.657" level="INFO">Sending keys 184458</msg>
+<status status="PASS" starttime="20220307 15:43:38.329" endtime="20220307 15:43:38.697"/>
+</kw>
+<kw name="Phone Number" library="FakerLibrary">
+<var>${TELEFONE FAKE}</var>
+<msg timestamp="20220307 15:43:38.697" level="INFO">${TELEFONE FAKE} = +55 84 0426 3618</msg>
+<status status="PASS" starttime="20220307 15:43:38.697" endtime="20220307 15:43:38.697"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${TELEFONE}</arg>
+<arg>${TELEFONE FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:38.698" level="INFO">Sending key(s) ('+55 84 0426 3618',) to id=txtTelefoneLocal element.</msg>
+<msg timestamp="20220307 15:43:38.999" level="INFO">Sending keys +55 84 0426 3618</msg>
+<status status="PASS" starttime="20220307 15:43:38.697" endtime="20220307 15:43:39.115"/>
+</kw>
+<kw name="Scroll Element Into View" library="SeleniumLibrary">
+<arg>Name=${INSCRIÇÂO SUFRAMA}</arg>
+<doc>Scrolls the element identified by ``locator`` into view.</doc>
+<status status="PASS" starttime="20220307 15:43:39.115" endtime="20220307 15:43:39.404"/>
+</kw>
+<kw name="Email" library="FakerLibrary">
+<var>${EMAIL FAKE}</var>
+<msg timestamp="20220307 15:43:39.404" level="INFO">${EMAIL FAKE} = ana-livia25@example.net</msg>
+<status status="PASS" starttime="20220307 15:43:39.404" endtime="20220307 15:43:39.405"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${EMAIL}</arg>
+<arg>${EMAIL FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:39.405" level="INFO">Sending key(s) ('ana-livia25@example.net',) to id=txtEmailLocal element.</msg>
+<msg timestamp="20220307 15:43:39.702" level="INFO">Sending keys ana-livia25@example.net</msg>
+<status status="PASS" starttime="20220307 15:43:39.405" endtime="20220307 15:43:39.878"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:33.638" endtime="20220307 15:43:39.878"/>
+</kw>
+<tag>Cadastro Cliente</tag>
+<status status="PASS" starttime="20220307 15:43:33.636" endtime="20220307 15:43:39.879"/>
+</test>
+<test id="s1-t8" name="Caso de teste 08: Preenchimento de dados na aba documentos de identificação">
+<kw name="cadastro cliente documentos de identificação" library="cadastroClienteResources">
+<kw name="Random Int" library="FakerLibrary">
+<var>${CREDITO FAKE}</var>
+<arg>min=1000000000000</arg>
+<arg>max=9000000000000</arg>
+<doc>Generate a random integer between two integers ``min`` and ``max`` inclusive
+while observing the provided ``step`` value.</doc>
+<msg timestamp="20220307 15:43:39.884" level="INFO">${CREDITO FAKE} = 4193616741339</msg>
+<status status="PASS" starttime="20220307 15:43:39.883" endtime="20220307 15:43:39.884"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${CARTÂO PRODUTOR}</arg>
+<arg>${CREDITO FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:39.887" level="INFO">Sending key(s) ('4193616741339',) to Name=tipoidentificacao_local_cartaoprodutor element.</msg>
+<msg timestamp="20220307 15:43:40.209" level="INFO">Sending keys 4193616741339</msg>
+<status status="PASS" starttime="20220307 15:43:39.885" endtime="20220307 15:43:40.335"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${INSCRIÇÂO ESTADUAL}</arg>
+<arg>0121754832766</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:40.337" level="INFO">Sending key(s) ('0121754832766',) to id=inscricao-estadual-input element.</msg>
+<msg timestamp="20220307 15:43:40.631" level="INFO">Sending keys 0121754832766</msg>
+<status status="PASS" starttime="20220307 15:43:40.335" endtime="20220307 15:43:40.744"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${INSCRIÇÂO MUNICIPAL}</arg>
+<arg>${CREDITO FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:40.745" level="INFO">Sending key(s) ('4193616741339',) to Name=tipoidentificacao_local_inscricaomunicipal element.</msg>
+<msg timestamp="20220307 15:43:41.035" level="INFO">Sending keys 4193616741339</msg>
+<status status="PASS" starttime="20220307 15:43:40.744" endtime="20220307 15:43:41.147"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${INSCRIÇÂO SUFRAMA}</arg>
+<arg>${CREDITO FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:41.148" level="INFO">Sending key(s) ('4193616741339',) to Name=tipoidentificacao_local_inscricaosuframa element.</msg>
+<msg timestamp="20220307 15:43:41.433" level="INFO">Sending keys 4193616741339</msg>
+<status status="PASS" starttime="20220307 15:43:41.147" endtime="20220307 15:43:41.539"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:39.882" endtime="20220307 15:43:41.539"/>
+</kw>
+<tag>Cadastro Cliente</tag>
+<status status="PASS" starttime="20220307 15:43:39.881" endtime="20220307 15:43:41.540"/>
+</test>
+<test id="s1-t9" name="Caso de teste 09: Preenchimento de dados na complemento (local)">
+<kw name="cadastro cliente complemento local" library="cadastroClienteResources">
+<kw name="Scroll Element Into View" library="SeleniumLibrary">
+<arg>Name=${OBSERVAÇÂO LOCAL}</arg>
+<doc>Scrolls the element identified by ``locator`` into view.</doc>
+<status status="PASS" starttime="20220307 15:43:41.545" endtime="20220307 15:43:41.839"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${TIPO LOCAL}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:41.840" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=cmbTipoLocal element.</msg>
+<msg timestamp="20220307 15:43:42.184" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:42.184" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:41.840" endtime="20220307 15:43:42.210"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:42.712" level="INFO">Slept 500 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:42.210" endtime="20220307 15:43:42.712"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${SEGMENTO}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:42.712" level="INFO">Clicking element 'id=cmbSegmento'.</msg>
+<status status="PASS" starttime="20220307 15:43:42.712" endtime="20220307 15:43:42.792"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${SEGMENTO}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:42.793" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=cmbSegmento element.</msg>
+<msg timestamp="20220307 15:43:43.144" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:43.144" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:42.792" endtime="20220307 15:43:43.166"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:43.668" level="INFO">Slept 500 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:43.167" endtime="20220307 15:43:43.668"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${TABELA DE PREÇO}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:43.668" level="INFO">Clicking element 'id=cmbTabelaPreco'.</msg>
+<status status="PASS" starttime="20220307 15:43:43.668" endtime="20220307 15:43:43.761"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${TABELA DE PREÇO}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:43.762" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=cmbTabelaPreco element.</msg>
+<msg timestamp="20220307 15:43:44.114" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:44.115" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:43.762" endtime="20220307 15:43:44.144"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:44.646" level="INFO">Slept 500 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:44.145" endtime="20220307 15:43:44.646"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${CONDIÇÂO PAGAMENTO}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:44.647" level="INFO">Clicking element 'id=cmbCondicaoPagamento'.</msg>
+<status status="PASS" starttime="20220307 15:43:44.646" endtime="20220307 15:43:44.733"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${CONDIÇÂO PAGAMENTO}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:44.735" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=cmbCondicaoPagamento element.</msg>
+<msg timestamp="20220307 15:43:45.080" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:45.080" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:44.733" endtime="20220307 15:43:45.122"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:45.624" level="INFO">Slept 500 milliseconds</msg>
+<status status="PASS" starttime="20220307 15:43:45.122" endtime="20220307 15:43:45.624"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${TIPO COBRANÇA}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:45.625" level="INFO">Clicking element 'id=cmbTipoCobranca'.</msg>
+<status status="PASS" starttime="20220307 15:43:45.624" endtime="20220307 15:43:45.724"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${TIPO COBRANÇA}</arg>
+<arg>ARROW_DOWN</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:45.724" level="INFO">Sending key(s) ('ARROW_DOWN',) to id=cmbTipoCobranca element.</msg>
+<msg timestamp="20220307 15:43:46.073" level="INFO">Pressing special key ARROW_DOWN to element.</msg>
+<msg timestamp="20220307 15:43:46.073" level="INFO">Releasing special key ARROW_DOWN.</msg>
+<status status="PASS" starttime="20220307 15:43:45.724" endtime="20220307 15:43:46.094"/>
+</kw>
+<kw name="Random Int" library="FakerLibrary">
+<var>${PREÇO BASE FAKE}</var>
+<arg>min=1000000</arg>
+<arg>max=20000000</arg>
+<doc>Generate a random integer between two integers ``min`` and ``max`` inclusive
+while observing the provided ``step`` value.</doc>
+<msg timestamp="20220307 15:43:46.095" level="INFO">${PREÇO BASE FAKE} = 19962853</msg>
+<status status="PASS" starttime="20220307 15:43:46.094" endtime="20220307 15:43:46.095"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${PREÇO BASE}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:46.096" level="INFO">Clicking element 'id=local_precobase'.</msg>
+<status status="PASS" starttime="20220307 15:43:46.095" endtime="20220307 15:43:46.207"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>id=${PREÇO BASE}</arg>
+<arg>${PREÇO BASE FAKE}</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:46.209" level="INFO">Sending key(s) ('19962853',) to id=local_precobase element.</msg>
+<msg timestamp="20220307 15:43:46.513" level="INFO">Sending keys 19962853</msg>
+<status status="PASS" starttime="20220307 15:43:46.207" endtime="20220307 15:43:46.571"/>
+</kw>
+<kw name="Press Keys" library="SeleniumLibrary">
+<arg>Name=${OBSERVAÇÂO LOCAL}</arg>
+<arg>TESTE ROBOT FRAMEWORK</arg>
+<doc>Simulates the user pressing key(s) to an element or on the active browser.</doc>
+<msg timestamp="20220307 15:43:46.572" level="INFO">Sending key(s) ('TESTE ROBOT FRAMEWORK',) to Name=local_observacao element.</msg>
+<msg timestamp="20220307 15:43:46.869" level="INFO">Sending keys TESTE ROBOT FRAMEWORK</msg>
+<status status="PASS" starttime="20220307 15:43:46.571" endtime="20220307 15:43:47.139"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:41.544" endtime="20220307 15:43:47.139"/>
+</kw>
+<tag>Cadastro Cliente</tag>
+<status status="PASS" starttime="20220307 15:43:41.542" endtime="20220307 15:43:47.140"/>
+</test>
+<test id="s1-t10" name="Caso de teste 10: Gravar cadastro de cliente">
+<kw name="gravar cadastro" library="cadastroClienteResources">
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${GRAVAR}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20220307 15:43:47.144" level="INFO">Clicking element 'id=btnGravar'.</msg>
+<status status="PASS" starttime="20220307 15:43:47.144" endtime="20220307 15:43:47.289"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220307 15:43:50.291" level="INFO">Slept 3 seconds</msg>
+<status status="PASS" starttime="20220307 15:43:47.290" endtime="20220307 15:43:50.291"/>
+</kw>
+<kw name="Element Should Contain" library="SeleniumLibrary">
+<arg>id=${VALIDAÇÂO}</arg>
+<arg>${TEXTO VALIDAÇÂO}</arg>
+<doc>Verifies that element ``locator`` contains text ``expected``.</doc>
+<msg timestamp="20220307 15:43:50.323" level="INFO">Element 'id=jGrowl' contains text 'Cadastrado com sucesso.'.</msg>
+<status status="PASS" starttime="20220307 15:43:50.291" endtime="20220307 15:43:50.324"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:47.143" endtime="20220307 15:43:50.324"/>
+</kw>
+<kw name="Fechar navegador" library="globalVariables">
+<kw name="Close Browser" library="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20220307 15:43:50.325" endtime="20220307 15:43:53.143"/>
+</kw>
+<status status="PASS" starttime="20220307 15:43:50.325" endtime="20220307 15:43:53.144"/>
+</kw>
+<tag>Cadastro Cliente</tag>
+<status status="PASS" starttime="20220307 15:43:47.142" endtime="20220307 15:43:53.145"/>
+</test>
+<status status="PASS" starttime="20220307 15:43:06.631" endtime="20220307 15:43:53.149"/>
+</suite>
+<statistics>
+<total>
+<stat pass="10" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="8" fail="0" skip="0">Cadastro Cliente</stat>
+<stat pass="1" fail="0" skip="0">Login</stat>
+<stat pass="1" fail="0" skip="0">Navegador</stat>
+</tag>
+<suite>
+<stat pass="10" fail="0" skip="0" id="s1" name="cadastroCliente">cadastroCliente</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
