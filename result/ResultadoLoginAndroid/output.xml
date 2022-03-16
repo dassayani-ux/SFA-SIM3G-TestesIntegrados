@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.1.1 (Python 3.10.0 on win32)" generated="20220315 11:23:59.424" rpa="false" schemaversion="2">
+<suite id="s1" name="loginAndroid" source="C:\Users\jaime.rosa\Documents\Automação Totvs\testes-integrados\test\loginAndroid.robot">
+<test id="s1-t1" name="Caso de teste 01: Abrir o aplicativo Totvs">
+<kw name="abrir aplicativo" library="globalAndroid">
+<kw name="Open Application" library="AppiumLibrary">
+<arg>http://localhost:4723/wd/hub</arg>
+<arg>automationName=UiAutomator2</arg>
+<arg>platformName=Android</arg>
+<arg>noReset=false</arg>
+<arg>deviceName=teste</arg>
+<arg>app=C:\\Users\\jaime.rosa\\Documents\\Automação Totvs\\testes-integrados\\app\\TOTVS CRMSFA.apk</arg>
+<arg>udid=emulator-5554</arg>
+<doc>Opens a new application to given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/server-args.md
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | no     | alias             |</doc>
+<status status="PASS" starttime="20220315 11:24:00.310" endtime="20220315 11:24:42.041"/>
+</kw>
+<status status="PASS" starttime="20220315 11:24:00.308" endtime="20220315 11:24:42.042"/>
+</kw>
+<status status="PASS" starttime="20220315 11:24:00.280" endtime="20220315 11:24:42.073"/>
+</test>
+<test id="s1-t2" name="Caso de teste 02: Realizar Login">
+<kw name="login" library="loginAndroidResources">
+<kw name="Wait Until Page Contains Element" library="AppiumLibrary">
+<arg>${PROFISSIONAL}</arg>
+<arg>timeout=120</arg>
+<doc>Waits until element specified with `locator` appears on current page.</doc>
+<status status="PASS" starttime="20220315 11:24:42.078" endtime="20220315 11:24:46.721"/>
+</kw>
+<kw name="Element Should Contain Text" library="AppiumLibrary">
+<arg>${PROFISSIONAL}</arg>
+<arg>01000016</arg>
+<doc>Verifies element identified by ``locator`` contains text ``expected``.</doc>
+<msg timestamp="20220315 11:24:46.726" level="INFO">Verifying element 'com.wealthsystems.sim3g:id/login_txtuser' contains text '01000016'.</msg>
+<status status="PASS" starttime="20220315 11:24:46.722" endtime="20220315 11:24:46.889"/>
+</kw>
+<kw name="Input Text" library="AppiumLibrary">
+<arg>${SENHA}</arg>
+<arg>12</arg>
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<msg timestamp="20220315 11:24:46.894" level="INFO">Typing text '12' into text field 'com.wealthsystems.sim3g:id/login_txtpwd'</msg>
+<status status="PASS" starttime="20220315 11:24:46.889" endtime="20220315 11:24:47.735"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${ENTRAR}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20220315 11:24:47.741" level="INFO">Clicking element 'com.wealthsystems.sim3g:id/login_btnentrar'.</msg>
+<status status="PASS" starttime="20220315 11:24:47.735" endtime="20220315 11:24:48.458"/>
+</kw>
+<status status="PASS" starttime="20220315 11:24:42.077" endtime="20220315 11:24:48.458"/>
+</kw>
+<status status="PASS" starttime="20220315 11:24:42.076" endtime="20220315 11:24:48.461"/>
+</test>
+<status status="PASS" starttime="20220315 11:23:59.438" endtime="20220315 11:24:48.468"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="loginAndroid">loginAndroid</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

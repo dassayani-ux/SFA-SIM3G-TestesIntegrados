@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.1.1 (Python 3.10.0 on win32)" generated="20220315 10:53:03.461" rpa="false" schemaversion="2">
+<suite id="s1" name="primeiraConexaoAndroid" source="C:\Users\jaime.rosa\Documents\Automação Totvs\testes-integrados\test\primeiraConexaoAndroid.robot">
+<test id="s1-t1" name="Caso de teste 01: Abrir o aplicativo Totvs">
+<kw name="abrir aplicativo" library="globalAndroid">
+<kw name="Open Application" library="AppiumLibrary">
+<arg>http://localhost:4723/wd/hub</arg>
+<arg>automationName=UiAutomator2</arg>
+<arg>platformName=Android</arg>
+<arg>noReset=false</arg>
+<arg>deviceName=teste</arg>
+<arg>app=C:\\Users\\jaime.rosa\\Documents\\Automação Totvs\\testes-integrados\\app\\TOTVS CRMSFA.apk</arg>
+<arg>udid=emulator-5554</arg>
+<doc>Opens a new application to given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/server-args.md
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | no     | alias             |</doc>
+<status status="PASS" starttime="20220315 10:53:04.368" endtime="20220315 10:53:53.997"/>
+</kw>
+<status status="PASS" starttime="20220315 10:53:04.367" endtime="20220315 10:53:53.998"/>
+</kw>
+<status status="PASS" starttime="20220315 10:53:04.346" endtime="20220315 10:53:54.003"/>
+</test>
+<test id="s1-t2" name="Caso de teste 02: Digitar login e senha">
+<kw name="primeira conexão">
+<msg timestamp="20220315 10:53:54.013" level="FAIL">No keyword with name 'primeira conexão' found.</msg>
+<status status="FAIL" starttime="20220315 10:53:54.013" endtime="20220315 10:53:54.013"/>
+</kw>
+<status status="FAIL" starttime="20220315 10:53:54.005" endtime="20220315 10:53:54.016">No keyword with name 'primeira conexão' found.</status>
+</test>
+<status status="FAIL" starttime="20220315 10:53:03.469" endtime="20220315 10:53:54.021"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="1" skip="0" id="s1" name="primeiraConexaoAndroid">primeiraConexaoAndroid</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

@@ -24,9 +24,11 @@ Caso de teste 03: Acessar novo Cliente
     entrar em cliente
 
 Caso de teste 04: Preenchimento de dados na aba geral
+
     cadastro cliente geral
 
 Caso de teste 05: Preenchimento de dados na aba complemento
+
     cadastro cliente complemento
 
 Caso de teste 06: Preenchimento de dados na aba informações adicionais
