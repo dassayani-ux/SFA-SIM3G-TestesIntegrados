@@ -14,6 +14,6 @@ abrir aplicativo
     ...                 platformName=Android
     ...                 noReset=false
     ...                 deviceName=teste
-    ...                 app=C:\\Users\\jaime.rosa\\Documents\\Automação Totvs\\testes-integrados\\app\\TOTVS CRMSFA.apk
+    ...                 app=${EXECDIR}\\app\\TOTVS CRMSFA.apk
     ...                 udid=emulator-5554
 
