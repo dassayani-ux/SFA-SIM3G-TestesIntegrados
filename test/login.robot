@@ -8,6 +8,6 @@ Resource    ../variables/globalVariables.robot
 
 Caso de teste 01: realizar Login
 
-    acessar a pagina home do crm
+    Abrir navegador chrome
     Realizar login 
     Fechar navegador

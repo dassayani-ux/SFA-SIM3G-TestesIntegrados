@@ -7,7 +7,7 @@ Resource    ../variables/loginAndroidVariables.robot
 
 login
 
-    Wait Until Page Contains Element    ${PROFISSIONAL}     timeout=120
+    Wait Until Page Contains Element    ${PROFISSIONAL}     timeout=1200
 
     Element Should Contain Text     ${PROFISSIONAL}     01000016
 

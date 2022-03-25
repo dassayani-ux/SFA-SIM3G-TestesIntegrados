@@ -14,5 +14,5 @@ logoff
 
     Wait Until Element Is Visible       ${BOTÂO SIM}    timeout=120 
 
-    Click Element  ${BOTÂO SIM}
+    Click Element   ${BOTÂO SIM}
 

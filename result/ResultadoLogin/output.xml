@@ -1,70 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 4.1.1 (Python 3.10.0 on win32)" generated="20220221 14:49:26.844" rpa="false" schemaversion="2">
-<suite id="s1" name="Login" source="C:\Users\jaime.rosa\Documents\Automacao_robot\test\login.robot">
+<robot generator="Robot 4.1.1 (Python 3.10.0 on win32)" generated="20220322 13:39:55.256" rpa="false" schemaversion="2">
+<suite id="s1" name="Login" source="C:\Users\jaime.rosa\Documents\Automação Totvs\testes-integrados\test\login.robot">
 <test id="s1-t1" name="Caso de teste 01: realizar Login">
-<kw name="acessar a pagina home do crm" library="loginResources">
 <kw name="Abrir navegador chrome" library="globalVariables">
 <doc>Abre uma página do chrome na página de login</doc>
 <kw name="Open Browser" library="SeleniumLibrary">
 <arg>${URL}</arg>
 <arg>${CHROME}</arg>
 <doc>Opens a new browser instance to the optional ``url``.</doc>
-<msg timestamp="20220221 14:49:28.749" level="INFO">Opening browser 'Chrome' to base url 'http://qa03.sfa.wssim.com.br:9004/totvscrmsfa/'.</msg>
-<status status="PASS" starttime="20220221 14:49:28.747" endtime="20220221 14:49:38.430"/>
+<msg timestamp="20220322 13:39:55.909" level="INFO">Opening browser 'Chrome' to base url 'http://qa03.sfa.wssim.com.br:9004/totvscrmsfa/'.</msg>
+<status status="PASS" starttime="20220322 13:39:55.908" endtime="20220322 13:40:01.330"/>
 </kw>
 <kw name="Maximize Browser Window" library="SeleniumLibrary">
 <doc>Maximizes current browser window.</doc>
-<status status="PASS" starttime="20220221 14:49:38.431" endtime="20220221 14:49:38.780"/>
+<status status="PASS" starttime="20220322 13:40:01.331" endtime="20220322 13:40:01.702"/>
 </kw>
 <kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
 <arg>id=${CENTRO DE LOGIN}</arg>
 <arg>timeout=50</arg>
 <doc>Waits until the element ``locator`` appears on the current page.</doc>
-<status status="PASS" starttime="20220221 14:49:38.780" endtime="20220221 14:49:38.840"/>
+<status status="PASS" starttime="20220322 13:40:01.702" endtime="20220322 13:40:01.759"/>
 </kw>
-<status status="PASS" starttime="20220221 14:49:28.744" endtime="20220221 14:49:38.840"/>
-</kw>
-<status status="PASS" starttime="20220221 14:49:28.738" endtime="20220221 14:49:38.840"/>
+<status status="PASS" starttime="20220322 13:39:55.906" endtime="20220322 13:40:01.759"/>
 </kw>
 <kw name="Realizar login" library="loginResources">
 <kw name="Input Text" library="SeleniumLibrary">
 <arg>id=${LOGIN PROFISSIONAL}</arg>
 <arg>01000016</arg>
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<msg timestamp="20220221 14:49:38.850" level="INFO">Typing text '01000016' into text field 'id=formusuario'.</msg>
-<status status="PASS" starttime="20220221 14:49:38.849" endtime="20220221 14:49:39.027"/>
+<msg timestamp="20220322 13:40:01.773" level="INFO">Typing text '01000016' into text field 'id=formusuario'.</msg>
+<status status="PASS" starttime="20220322 13:40:01.772" endtime="20220322 13:40:01.951"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <arg>1s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20220221 14:49:40.028" level="INFO">Slept 1 second</msg>
-<status status="PASS" starttime="20220221 14:49:39.027" endtime="20220221 14:49:40.028"/>
+<msg timestamp="20220322 13:40:02.953" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20220322 13:40:01.951" endtime="20220322 13:40:02.953"/>
 </kw>
 <kw name="Input Text" library="SeleniumLibrary">
 <arg>id=${SENHA PROFISSIONAL}</arg>
 <arg>12</arg>
 <doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<msg timestamp="20220221 14:49:40.030" level="INFO">Typing text '12' into text field 'id=formsenha'.</msg>
-<status status="PASS" starttime="20220221 14:49:40.029" endtime="20220221 14:49:40.267"/>
+<msg timestamp="20220322 13:40:02.954" level="INFO">Typing text '12' into text field 'id=formsenha'.</msg>
+<status status="PASS" starttime="20220322 13:40:02.953" endtime="20220322 13:40:03.099"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <arg>1s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20220221 14:49:41.269" level="INFO">Slept 1 second</msg>
-<status status="PASS" starttime="20220221 14:49:40.267" endtime="20220221 14:49:41.269"/>
+<msg timestamp="20220322 13:40:04.101" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20220322 13:40:03.100" endtime="20220322 13:40:04.102"/>
 </kw>
 <kw name="Click Element" library="SeleniumLibrary">
 <arg>id=${BOTÂO ENTRAR}</arg>
 <doc>Click the element identified by ``locator``.</doc>
-<msg timestamp="20220221 14:49:41.271" level="INFO">Clicking element 'id=btnGravar'.</msg>
-<status status="PASS" starttime="20220221 14:49:41.270" endtime="20220221 14:49:46.031"/>
+<msg timestamp="20220322 13:40:04.104" level="INFO">Clicking element 'id=btnGravar'.</msg>
+<status status="PASS" starttime="20220322 13:40:04.103" endtime="20220322 13:40:06.245"/>
 </kw>
-<status status="PASS" starttime="20220221 14:49:38.848" endtime="20220221 14:49:46.032"/>
+<status status="PASS" starttime="20220322 13:40:01.771" endtime="20220322 13:40:06.246"/>
 </kw>
-<status status="PASS" starttime="20220221 14:49:28.682" endtime="20220221 14:49:46.075"/>
+<kw name="Fechar navegador" library="globalVariables">
+<kw name="Close Browser" library="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20220322 13:40:06.249" endtime="20220322 13:40:09.262"/>
+</kw>
+<status status="PASS" starttime="20220322 13:40:06.248" endtime="20220322 13:40:09.263"/>
+</kw>
+<status status="PASS" starttime="20220322 13:39:55.902" endtime="20220322 13:40:09.264"/>
 </test>
 <doc>Login</doc>
-<status status="PASS" starttime="20220221 14:49:26.850" endtime="20220221 14:49:46.079"/>
+<status status="PASS" starttime="20220322 13:39:55.260" endtime="20220322 13:40:09.267"/>
 </suite>
 <statistics>
 <total>

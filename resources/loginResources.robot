@@ -2,15 +2,8 @@
 
 Library     SeleniumLibrary
 Resource    ../variables/loginVariables.robot
-Resource    ../variables/globalVariables.robot
-
-*** Variables ***
 
 *** Keywords ***
-
-acessar a pagina home do crm
-
-    Abrir navegador chrome
 
 Realizar login
 
