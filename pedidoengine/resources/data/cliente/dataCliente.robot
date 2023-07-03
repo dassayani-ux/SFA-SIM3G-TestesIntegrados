@@ -2,8 +2,13 @@
 Documentation    Arquivo criado para armazenar as SQLs utilizadas para validar clientes.
 
 Library    DatabaseLibrary
+Library    Collections
 
 *** Variables ***
+
+@{listaSituacaoAprovacacao}    ##Armazenará de maneira temporária os registros de situação aprovação disponíveis.
+@{listaSituacaoCadastro}    ##Armazenará de maneira temporária os registros de situação de cadastro disponíveis.
+
 ${CLIENTE_ATIVO_SQL}
     ...    select
     ...    distinct this_.idParceiro as y0_,
@@ -158,12 +163,98 @@ Pesquisa rapida sql
 
     Return From Keyword    ${pesquisa}
 
+Retorna siuacao aprovacao
+    [Documentation]    Caso o argumento *_tipo_* for 0, esta keyword irá retornar uma lista com todas as situações disponíveis.
+    ...    \nCaso o argumento *_tipo_* for 1, retornar uma uma lista contendo um *ID* e *DESCRICAO* de uma situação de aprovação aleatória.
+    [Arguments]    ${tipo}=0
+
+    ${SQL_SITUACAO_APROVACAO}    Catenate    SEPARATOR=\n
+    ...    select
+    ...        this_.idTipoSituacaoAprovacao as idTipoSi1_1631_0_,
+    ...        this_.descricao as descricao,
+    ...        this_.sglTipoSituacaoAprovacao as sglTipoS3_1631_0_,
+    ...        this_.idnAtivo as idnAtivo4_1631_0_,
+    ...        this_.codigoERP as codigoER5_1631_0_
+    ...    from
+    ...        TipoSituacaoAprovacao this_ 
+    ...    where
+    ...        this_.idnAtivo=1
+    ...    order by
+    ...        this_.descricao desc
+
+    ${retornoSituacaoAprovacao}    Query    ${SQL_SITUACAO_APROVACAO}
+    ${count}    Row Count    ${SQL_SITUACAO_APROVACAO}
+
+    FOR  ${I}  IN RANGE    ${count}
+        Append To List    ${listaSituacaoAprovacacao}    ${retornoSituacaoAprovacao[${I}][1]}
+    END
+    
+    Return From Keyword If    ${tipo} == ${0}    ${listaSituacaoAprovacacao}
+
+    FOR  ${elemento}  IN    @{listaSituacaoAprovacacao}
+        Remove Values From List    ${listaSituacaoAprovacacao}    ${elemento}
+    END
+
+    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
+
+    Return From Keyword If    ${tipo} == ${1}    ${retornoSituacaoAprovacao[${index[0]}][0]}    ${retornoSituacaoAprovacao[${index[0]}][1]}
+    
+Retorna classificacao de parceiro aleatoria
+    [Documentation]    Irá retornar uma lista contendo um *ID* e *NOME* de classificação de parceiro aleatória.
+
+    ${SQL_CLASSIFICAO}    Catenate    SEPARATOR=\n
+    ...    select
+    ...        this_.idClassificacaoParceiro,
+    ...        this_.descricao,
+    ...        this_.sglClassificacao
+    ...    from
+    ...        ClassificacaoParceiro this_
+    ...    order by
+    ...        this_.descricao desc
+
+    ${count}    Row Count    ${SQL_CLASSIFICAO}
+    ${classificacao}    Query    ${SQL_CLASSIFICAO}
+
+    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
+
+    Return From Keyword    ${classificacao[${index[0]}][0]}    ${classificacao[${index[0]}][1]}
+
+Retorna siuacao cadastro
+    [Documentation]    Caso o argumento *_tipo_* for 0, esta keyword irá retornar uma lista com todas as situações de cadastros disponíveis.
+    ...    \nCaso o argumento *_tipo_* for 1, retornar uma uma lista contendo um *ID* e *DESCRICAO* de uma situação de cadastro aleatória.
+    [Arguments]    ${tipo}=0
+
+    ${SQL_SITUACAO_CADASTRO}    Catenate    SEPARATOR=\n
+    ...    select
+    ...        this_.idTipoSituacaoCadastro,
+    ...        this_.idnAtivo,
+    ...        this_.idnPadrao,
+    ...        this_.descricao,
+    ...        this_.sglTipoSituacaoCadastro
+    ...    from
+    ...        TipoSituacaoCadastro this_
+    ...    order by
+    ...        this_.descricao desc
+
+    ${retornoSituacaoCadastro}    Query    ${SQL_SITUACAO_CADASTRO}
+    ${count}    Row Count    ${SQL_SITUACAO_CADASTRO}
+
+    FOR  ${I}  IN RANGE    ${count}
+        Append To List    ${listaSituacaoCadastro}    ${retornoSituacaoCadastro[${I}][3]}
+    END
+    
+    Return From Keyword If    ${tipo} == ${0}    ${listaSituacaoCadastro}
+
+    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
+
+    Return From Keyword If    ${tipo} == ${1}    ${retornoSituacaoCadastro[${index[0]}][0]}    ${retornoSituacaoCadastro[${index[0]}][3]}
+
 SQL Pesquisa Avancada
     [Documentation]    Keyword utilizada para realizar a consulta SQL de acordo com os termos da pesquisa avançada.
     ...    \nValores válidos para o argumento *tipoPessoa* : _None, PF, PJ, Ambos_.
     ...    \nValores válidos para o argumento *situacao* : _None, 0 (inativo), 1 (ativo), Ambos_.
 
-    [Arguments]    ${tipoPessoa}=None    ${situacao}=None
+    [Arguments]    ${tipoPessoa}=None    ${situacao}=None    ${situacaoAprovacao}=None    ${razaoSocial}=None    ${nomeFantasia}=None    ${local}=None    ${documento}=None    ${matricula}=None    ${bairro}=None    ${logradouro}=None    ${estadoUF}=None    ${cidade}=None    ${usuario}=1    ${classificacao}=None    ${situacaoCadastro}=None
 
     ${PESQUISA_PADRAO}    Catenate    SEPARATOR=\n
     ...    select
@@ -203,7 +294,7 @@ SQL Pesquisa Avancada
     ...            inner join Usuario u3_ on ul2_.idUsuario=u3_.idUsuario 
     ...            where
     ...                (
-    ...                    u3_.idUsuario=1
+    ...                    u3_.idUsuario=${usuario}
     ...                    or u3_.idUsuario in (
     ...                        select
     ...                            distinct UH_.idUsuario as y0_ 
@@ -212,7 +303,7 @@ SQL Pesquisa Avancada
     ...                        inner join Usuario u1_ on UH_.idUsuario=u1_.idUsuario 
     ...                        inner join Usuario us2_ on UH_.idUsuarioSuperior=us2_.idUsuario 
     ...                        where
-    ...                            us2_.idUsuario=1
+    ...                            us2_.idUsuario=${usuario}
     ...                    )
     ...                )
     ...            ) 
@@ -255,7 +346,145 @@ SQL Pesquisa Avancada
 
     # ------------//------------//------------//------------//------------
 
-    ${countPesquisaAvancada}    Row Count    ${PESQUISA_PADRAO} ${CLAUSULA_TIPO_PESSOA} ${CLAUSULA_SITUACAO}
+    # INÍCIO CLÁUSULA Situação Aprovação
+    IF  '${situacaoAprovacao}' != 'None'
+        ${idSituacaoAprovacao}    Query    select idTipoSituacaoAprovacao from TipoSituacaoAprovacao where descricao = '${situacaoAprovacao}'
+        ${CLAUSULA_SITUACAO_APROVACAO}    Catenate    SEPARATOR=\n
+        ...    and tsa5_.idTipoSituacaoAprovacao in (${idSituacaoAprovacao[0][0]})    
+    ELSE
+        ${CLAUSULA_SITUACAO_APROVACAO}    Catenate    SEPARATOR=\n    
+    END
+    # FIM CLÁUSULA Situação Aprovação
+
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Razão Social
+    IF  '${razaoSocial}' != 'None'
+        ${CLAUSULA_RAZAO_SOCIAL}    Catenate    SEPARATOR=\n
+        ...    and this_.nomeParceiro ilike '%${razaoSocial}%'
+    ELSE
+        ${CLAUSULA_RAZAO_SOCIAL}    Catenate    SEPARATOR=\n       
+    END
+    # FIM CLÁUSULA Razão Social
+
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Nome Fantasia
+    IF  '${nomeFantasia}' != 'None'
+        ${CLAUSULA_NOME_FANTASIA}    Catenate    SEPARATOR=\n
+        ...    and this_.nomeParceiroFantasia ilike '%${nomeFantasia}%'
+    ELSE
+        ${CLAUSULA_NOME_FANTASIA}    Catenate    SEPARATOR=\n       
+    END
+    # FIM CLÁUSULA Nome Fantasia
+
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Local
+    IF  '${local}' != 'None'
+        ${CLAUSULA_LOCAL}    Catenate    SEPARATOR=\n
+        ...    and l1_.idLocal in (${local})
+    ELSE
+        ${CLAUSULA_LOCAL}    Catenate    SEPARATOR=\n       
+    END
+    # FIM CLÁUSULA Local
+
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Documento
+    IF  '${documento}' != 'None'
+        ${CLAUSULA_DOCUMENTO}    Catenate    SEPARATOR=\n
+        ...    and (pj10_.documentoIdentificacao ilike '%${documento}%'
+        ...        or pf9_.documentoIdentificacao ilike '%${documento}%'
+        ...        or li11_.documentoIdentificacao ilike '%${documento}%'
+        ...        or l1_.documentoIdentificacao ilike '%${documento}%')
+    ELSE
+        ${CLAUSULA_DOCUMENTO}    Catenate    SEPARATOR=\n
+    END
+    # FIM CLÁUSULA Documento
+
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Matrícula
+    IF  '${matricula}' != 'None'
+        ${CLAUSULA_MATRICULA}    Catenate    SEPARATOR=\n
+        ...    and this_.numeroMatricula='${matricula}'
+    ELSE
+        ${CLAUSULA_MATRICULA}    Catenate    SEPARATOR=\n  
+    END
+    # FIM CLÁUSULA Matrícula
+
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Bairro
+    IF  '${bairro}' != 'None'
+        ${CLAUSULA_BAIRRO}    Catenate    SEPARATOR=\n
+        ...    and (l1_.bairro ilike '${bairro}')   
+    ELSE
+        ${CLAUSULA_BAIRRO}    Catenate    SEPARATOR=\n
+    END
+    # FIM CLÁUSULA Bairro
+    
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Logradouro
+    IF  '${logradouro}' != 'None'
+        ${CLAUSULA_LOGRADOURO}    Catenate    SEPARATOR=\n
+        ...    and (l1_.logradouro ilike '%${logradouro}%')   
+    ELSE
+        ${CLAUSULA_LOGRADOURO}    Catenate    SEPARATOR=\n
+    END
+    # FIM CLÁUSULA Logradouro
+    
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Estado/UF
+    IF  '${estadoUF}' != 'None'
+        ${idUF}    Query    select u.idunidadefederativa from unidadefederativa u where u.descricao = '${estadoUF}';
+        ${CLAUSULA_UF}    Catenate    SEPARATOR=\n
+        ...    and uni3_.idUnidadeFederativa in (${idUF[0][0]})
+    ELSE
+        ${CLAUSULA_UF}    Catenate    SEPARATOR=\n
+    END
+    # FIM CLÁUSULA Estado/UF
+    
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Cidade
+    IF  '${cidade}' != 'None'
+        ${idCidade}    Query    select c.idcidade from cidade c where c.descricao ilike '%${cidade}%';
+        ${CLAUSULA_CIDADE}    Catenate    SEPARATOR=\n
+        ...    and c2_.idCidade in (${idCidade[0][0]})
+    ELSE
+        ${CLAUSULA_CIDADE}    Catenate    SEPARATOR=\n
+    END
+    # FIM CLÁUSULA Cidade
+    
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Classificação
+    IF  '${classificacao}' != 'None'
+        ${CLAUSULA_CLASSIFICACAO}    Catenate    SEPARATOR=\n
+        ...    and this_.idClassificacaoParceiro in (${classificacao})
+    ELSE
+        ${CLAUSULA_CLASSIFICACAO}    Catenate    SEPARATOR=\n
+    END
+    # FIM CLÁUSULA Classificação
+    
+    # ------------//------------//------------//------------//------------
+
+    # INÍCIO CLÁUSULA Situação Cadastro
+    IF  '${situacaoCadastro}' != 'None'
+        ${CLAUSULA_SITUACAO_CADASTRO}    Catenate    SEPARATOR=\n
+        ...    and tsc6_.idTipoSituacaoCadastro in (${situacaoCadastro})
+    ELSE
+        ${CLAUSULA_SITUACAO_CADASTRO}    Catenate    SEPARATOR=\n
+    END
+    # FIM CLÁUSULA Situação Cadastro
+    
+    # ------------//------------//------------//------------//------------
+
+    ${countPesquisaAvancada}    Row Count    ${PESQUISA_PADRAO} ${CLAUSULA_TIPO_PESSOA} ${CLAUSULA_SITUACAO} ${CLAUSULA_SITUACAO_APROVACAO} ${CLAUSULA_RAZAO_SOCIAL} ${CLAUSULA_NOME_FANTASIA} ${CLAUSULA_LOCAL} ${CLAUSULA_DOCUMENTO} ${CLAUSULA_MATRICULA} ${CLAUSULA_BAIRRO} ${CLAUSULA_LOGRADOURO} ${CLAUSULA_UF} ${CLAUSULA_CIDADE} ${CLAUSULA_CLASSIFICACAO} ${CLAUSULA_SITUACAO_CADASTRO}
     ...    order by this_.nomeParceiro asc
     
     Return From Keyword    ${countPesquisaAvancada}
