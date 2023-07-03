@@ -2,7 +2,7 @@
 Documentation    Arquivo utilizado para armazenar variáveis de dados utilizados para cadastro de atendimento.
 
 *** Variables ***
-${repositorioImagemAtendimento}    C:\\WS\\Fontes\\SFA-CLIENTE-PedidoEngine\\testes-integrados\\resources\\elements\\atendimento
+${repositorioImagemAtendimento}    C:\\WS\\Fontes\\SFA-SIM3G-TestesIntegrados\\pedidoengine\\resources\\elements\\atendimento
 ${nomeImagemAtendimento}    imgAtendimento.jpg
 
 ${idAtendimento}    ##Utilizada para armazenar temporariamente o ID do atendimento que será validado
