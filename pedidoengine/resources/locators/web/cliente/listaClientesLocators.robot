@@ -9,7 +9,7 @@ ${tituloPaginaListagemCliente}    //*[@id="principal"]/div[1]/div/div[1]/h1[cont
 &{gridClientes}
 ...    labelQtdeRegsitros=header-content    #class
 ...    campoRazaoSocial=//*[@id="grid_parceiro"]/div[5]/div/div[3]/div[1]    #xpath
-...    btnEditar=//*[@id="grid_parceiro"]/div[5]/div/div[3]/div[6]/a/img    #xpath
+...    btnEditar=//*[@id="grid_parceiro"]/div[5]/div/div[3]/div[7]/a/img    #xpath
 
 &{pesquisaAvancada}
 ...    exibePesquisa=btnExibePesquisaAvancada    #class

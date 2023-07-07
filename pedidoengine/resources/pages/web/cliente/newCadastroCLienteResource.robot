@@ -6,6 +6,7 @@ Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
 Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robot
 Resource    ${EXECDIR}/resources/locators/web/cliente/cadastroCLienteLocators.robot
 Resource    ${EXECDIR}/resources/variables/web/cliente/newCadastroClienteVariables.robot
+Library    ${EXECDIR}/libraries/lib_auxiliar.py
 
 *** Variables ***
 ${nome}
@@ -166,3 +167,68 @@ Valida cliente listagem
     SeleniumLibrary.Click Element    xpath=${popUpAcoes.listaClientes}   
     SeleniumLibrary.Wait Until Page Contains Element    xpath=${tituloPaginaListagemCliente}    10s
     Filtra cliente especifico    ${nome}    ${matricula}
+
+Valida campos obrigatorios do cliente
+    [Documentation]    Esta keyword é responsável por verificar se os campos tidos como obrigtórios estão preenchidos corretamente no cadastro do cliente.
+
+    ${urlAtual}=    SeleniumLibrary.Get Location
+    ${listaXpath}    return_xpath_parent    css_class=requerido    url=${urlAtual}
+    ${lenght}    BuiltIn.Get Length    ${listaXpath}
+
+    Log To Console    \nCampos orbigatórios:
+    FOR  ${i}  IN RANGE    ${lenght}
+        ${campo}=    SeleniumLibrary.Get Text    xpath=${listaXpath[${i}]}/label
+        ${campoStr}=    String.Remove String    ${campo}    :
+        Log To Console    ${campoStr}
+    END
+
+    SeleniumLibrary.Click Element    id=${btnGravarCadastro}
+    Sleep    0.7s
+
+    FOR  ${i}  IN RANGE    ${lenght}
+        SeleniumLibrary.Element Should Be Visible    xpath=${listaXpath[${i}]}/div[@class="error"]
+    END
+
+Retorna parceiro tipo cobranca aleatorio
+    [Documentation]    Utilizada para retornar um parceiro aleatório levando em conta que este possui tipo de cobrança padrão.
+    ...    \nEsta keyword retorna uma lista contendo a *Razão Social*, *Matrícula* e descrição do *Tipo cobrança* padrão, respectivamente.
+
+    ${dados}    Query    ${SQL_PARCEIRO_MATRICULA_TIPO_COBRANCA}
+    ${countDados}    Row Count    ${SQL_PARCEIRO_MATRICULA_TIPO_COBRANCA}
+    ${index}=    Evaluate    random.sample(range(0, ${countDados}), 1)    random
+
+    Return From Keyword    ${dados[${index[0]}][0]}    ${dados[${index[0]}][1]}    ${dados[${index[0]}][2]}
+
+Valida tipo cobranca padrao
+    [Documentation]    Esta keyword é responsável por editar o cadastro de um cliente aleatório e validar se a opção exibida no combo de *Tipo cobrança* está
+    ...    de acordo com o banco de dados.
+
+    ${dadosParceiro}=    Retorna parceiro tipo cobranca aleatorio
+    Log To Console    Parceiro selecionado: ${dadosParceiro[0]}
+
+    SeleniumLibrary.Input Text    name=${pesquisaAvancada.razaoSocial}    ${dadosParceiro[0]}
+    SeleniumLibrary.Input Text    name=${pesquisaAvancada.matricula}    ${dadosParceiro[1]}
+    SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
+    SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
+
+    ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
+    ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
+    ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
+
+    IF  ${intQtdeRegistros} == ${1}
+        SeleniumLibrary.Click Element    ${gridClientes.btnEditar}
+        SeleniumLibrary.Wait Until Element Is Enabled    xpath=${edicaoCliente.edicaoLocal}
+        SeleniumLibrary.Click Element    xpath=${edicaoCliente.edicaoLocal}
+        SeleniumLibrary.Wait Until Element Is Enabled    id=${localComplemento.tipoCobranca}
+        ${valor}=    SeleniumLibrary.Get Value   id=${localComplemento.tipoCobranca}    
+        ${tipoCobranca}=    SeleniumLibrary.Get Text    xpath=//*[@id="${localComplemento.tipoCobranca}"]/option[@value="${valor}"]
+        IF  '${tipoCobranca}'== '${dadosParceiro[2]}'
+            Log To Console    Tipo cobrança: ${tipoCobranca} corresponde ao registro salvo no banco de dados.
+        ELSE    
+            Log To Console    Tipo cobrança: ${tipoCobranca} *não* corresponde ao registro salvo no banco de dados.
+            Fail
+        END
+    ELSE
+        Log To Console    Filtragem do cliente está inconsistênte.
+        Fail
+    END
