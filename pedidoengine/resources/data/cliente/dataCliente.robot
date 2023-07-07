@@ -95,6 +95,13 @@ ${CLIENTE_ATIVO_SQL}
     ...    order by
     ...    this_.nomeParceiro asc
 
+${SQL_PARCEIRO_MATRICULA_TIPO_COBRANCA}    select p.nomeparceiro, p.numeromatricula, tc.descricao from parceiro p 
+    ...    join ParceiroLocal pl on p.idParceiro = pl.idParceiro 
+    ...    join Local l on l.idLocal = (select pl.idlocal from ParceiroLocal limit 1)
+    ...    join localtipocobranca lc on lc.idlocal = l.idlocal and lc.idnpadrao = 1
+    ...    join tipocobranca tc on tc.idtipocobranca = lc.idtipocobranca
+    ...    where p.idnativo = 1 and l.idnativo = 1
+
 *** Keywords ***
 Pesquisa rapida sql
     [Documentation]    Retorna a quantidade de registros utilizando o termo será informado na pesquisa rápida.

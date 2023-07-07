@@ -58,3 +58,6 @@ ${cadastroBemSucedido}    jGrowl    #id
 &{popUpAcoes}
 ...    popUp=//*[@id="principal"]/div[2]/div/div[2]/div   #xpath 
 ...    listaClientes=//*[@id="principal"]/div[2]/div/div[2]/div/div/div[2]/div/div/ul/li[5]   #xpath
+
+&{edicaoCliente}
+...    edicaoLocal=//*[@id="grid_local"]/div[5]/div/div[3]/div[4]/a/img    #xpath
