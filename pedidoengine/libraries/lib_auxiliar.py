@@ -6,7 +6,7 @@ login_url = 'http://localhost:8080/automacao/login.logar.ws?redirecturl='
 
 # Dados de autenticação
 username = 'admin'
-password = '12'
+password = 'ws18012001'
 
 # Criar uma sessão
 session = requests.Session()
