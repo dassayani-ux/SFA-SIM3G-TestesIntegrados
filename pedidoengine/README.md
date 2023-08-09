@@ -34,22 +34,17 @@ ${DBDriver}       psycopg2
 ${dirSikully}    ${EXECDIR}\\resources\\elements
 ```
 
-2. Criar um arquivo chamado **newlLoginVariables.robot** no direório: **pedidoengine/resources/variables/web/login**.
+2. Criar um arquivo chamado **varLogin.py** no direório: **pedidoengine/libraries/variables**.
 
     Usar o seguinte template como exemplo:
 
-    _Obs.: Após criar o aquivo seguindo o template abaixo, basta substituir as informações de acordo com os dados utilizados por você._
+    _Obs.: Após criar o aquivo seguindo o template abaixo, basta substituir variáveis **usuario** e **senha** de acordo com os dados utilizados por você._
 ```
-*** Settings ***
-Documentation    Arquivo utilizado para armazenar as variáveis de dados utilizadas para realizar o login na plataforma web.
-
-*** Variables ***
-&{login}
-...    usuario=user    
-...    senha=senha
-...    usuarioInvalido=123
-...    senhaInvalida=123
-...    msgErro=Informações preenchidas incorretamente
+usuario = 'user'    
+senha = 'password'
+usuarioInvalido = '123'
+senhaInvalida = '123'
+msgErro = 'Informações preenchidas incorretamente'
 ```
 
 # ❗Recomendação
