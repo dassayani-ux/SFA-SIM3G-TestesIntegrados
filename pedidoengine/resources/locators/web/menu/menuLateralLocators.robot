@@ -1,13 +1,10 @@
 *** Variables ***
 
 &{venda}
-...    menuVenda=//*[@id="pedido.menu"]/span
-...    menuPedido=//*[@id="menu.venda.pedido"]/span
-...    pedidoCockpit=//*[@id="menu.venda.pedido.dashboarddefault"]/a
-...    pedidoListar=//*[@id="menu.venda.pedido.listagem"]/a
-...    pedidoNovo=//*[@id="menu.venda.pedido.novo"]/a
-
-
+...    menuVenda=pedido.menu    #id
+...    subMenuPedido=menu.venda.pedido    #id
+...    listarPedido=menu.venda.pedido.listagem    #id
+...    novoPedido=menu.venda.pedido.novo    #id
 
 &{cliente}
 ...    menuCliente=cliente.menuMain

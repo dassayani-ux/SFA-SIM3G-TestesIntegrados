@@ -61,4 +61,4 @@ ${tituloPaginaListagemCliente}    //*[@id="principal"]/div[1]/div/div[1]/h1[cont
 &{pesquisaSituacaoCadastro}
 ...    input=termSelection_TIPOSITUACAOCADASTRO    #id
 
-${cerregandoRegistros}    //*[@class="carregando-only-message"][contains(text(),'Carregando...')]    #xpath
+${cerregandoRegistros}    html/body/div[3]/div/div[2]/span[contains(text(),'Carregando...')]    #xpath

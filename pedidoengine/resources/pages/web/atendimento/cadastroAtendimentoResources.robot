@@ -25,8 +25,10 @@ Preenche cabeçalho do atendimento
     Wait Until Element Is Visible    id=${cabecalho.pesquisaRapidaCliente}
     SeleniumLibrary.Input Text    id=${cabecalho.pesquisaRapidaCliente}    ${cliente[1]}
     Press Keys    None    ENTER
-
     Sleep    1s
+    Press Keys    None    ENTER
+
+    Sleep    2s
 
     ##Local
     Click Element    xpath=${cabecalho.pesquisaLocal} 

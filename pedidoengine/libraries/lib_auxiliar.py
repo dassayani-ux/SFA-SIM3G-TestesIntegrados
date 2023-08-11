@@ -1,20 +1,17 @@
 import requests
 from lxml import etree, cssselect
+from variables.varLogin import usuario, senha
 
 # URL de login
 login_url = 'http://localhost:8080/automacao/login.logar.ws?redirecturl='
-
-# Dados de autenticação
-username = 'admin'
-password = '12'
 
 # Criar uma sessão
 session = requests.Session()
 
 # Realizar o login na sessão
 login_data = {
-    'usuario': username,
-    'senha': password
+    'usuario': usuario,
+    'senha': senha
 }
 session.post(login_url, data=login_data)
 

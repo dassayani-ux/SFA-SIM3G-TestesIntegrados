@@ -30,6 +30,16 @@ Retorna cliente ativo
 
     Return From Keyword    ${CLIENTE_ATIVO[${Index[0]}][0]}    ${CLIENTE_ATIVO[${Index[0]}][1]}
 
+Retorna razao e matricula parceiro aleatorio
+    [Documentation]    Esta keyword retorna uma lista contendo a razão social e matrícula de um parceiro aletório, respectivamente.
+
+    ${count}    Row Count    ${SQL_PARCEIRO_MATRICULA}
+    ${parceiro}    Query    ${SQL_PARCEIRO_MATRICULA}
+    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
+
+    Log To Console    \nParceiro sorteado: ${parceiro[${index[0]}][1]} - ${parceiro[${index[0]}][0]}
+    Return From Keyword    ${parceiro[${index[0]}][0]}    ${parceiro[${index[0]}][1]}
+
 Filtra cliente especifico
     [Documentation]    Irá filtrar um cliente específico utilizando o nome e matrícula como argumentos.
     [Arguments]    ${nome}    ${matricula}

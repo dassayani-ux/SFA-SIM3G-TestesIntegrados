@@ -102,6 +102,14 @@ ${SQL_PARCEIRO_MATRICULA_TIPO_COBRANCA}    select p.nomeparceiro, p.numeromatric
     ...    join tipocobranca tc on tc.idtipocobranca = lc.idtipocobranca
     ...    where p.idnativo = 1 and l.idnativo = 1
 
+${SQL_PARCEIRO_MATRICULA}    select p.nomeparceiro, p.numeromatricula from parceiro p 
+    ...    join ParceiroLocal pl on p.idParceiro = pl.idParceiro 
+    ...    join Local l on l.idLocal = (select pl.idlocal from ParceiroLocal limit 1)
+    ...    join UsuarioLocal ul on l.idLocal=ul.idLocal
+    ...    join Usuario usu on usu.idusuario = ul.idusuario
+    ...    join UsuarioHierarquia uhe on uhe.idusuario = usu.idusuario
+    ...    where p.idnativo = 1 and l.idnativo = 1 and ( uhe.idUsuarioSuperior=1 or usu.idUsuario=1 )
+
 *** Keywords ***
 Pesquisa rapida sql
     [Documentation]    Retorna a quantidade de registros utilizando o termo será informado na pesquisa rápida.
@@ -495,3 +503,11 @@ SQL Pesquisa Avancada
     ...    order by this_.nomeParceiro asc
     
     Return From Keyword    ${countPesquisaAvancada}
+
+Retorna idparceiro
+    [Documentation]    Esta keyword irá retornar o ID do Parceiro com base nos argumentos *matricula* e *nomeParceiro*
+    [Arguments]    ${maricula}    ${nomeParceiro}
+
+    ${idParceiro}=    Query    select p.idparceiro from parceiro p where p.numeromatricula = '${maricula}' and p.nomeparceiro ilike '%${nomeParceiro}%'
+
+    Return From Keyword    ${idParceiro[0][0]}
