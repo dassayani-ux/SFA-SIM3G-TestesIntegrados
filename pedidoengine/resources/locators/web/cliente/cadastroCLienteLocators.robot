@@ -41,6 +41,7 @@ ${tituloPaginaCadastroCLiente}    //*[@id="principal"]/div[1]/div/div[1]/h1[cont
 ...    email=txtEmailLocal    #id
 
 ${btnGravarCadastro}    btnGravar    #id
+${btnCancelarCadastro}    btnCancelar    #id
 
 &{localComplemento}
 ...    tipoLocal=cmbTipoLocal    #id

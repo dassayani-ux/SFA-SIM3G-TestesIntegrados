@@ -32,10 +32,10 @@ ${SQL_LOCAL}    with descricaoLocal as(
 
 *** Keywords ***
 Retorna idlocal
-    [Documentation]    Irá retornar o ID do Local utilizando o campo *descricao* como argumento.
-    [Arguments]    ${descricao}
+    [Documentation]    Irá retornar o ID do Local utilizando os campos *descricao* e *parceiro* como argumento.
+    [Arguments]    ${descricao}    ${parceiro}
 
-    ${idLocal}=    Query    select l.idlocal from local l where l.descricao ilike '%${descricao}%'
+    ${idLocal}=    Query    select l.idlocal from local l inner join parceiro p on p.numeromatricula = l.numeromatricula where l.descricao ilike '%${descricao}%' and p.idparceiro = ${parceiro}
 
     Return From Keyword    ${idLocal[0][0]}
 

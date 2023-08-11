@@ -228,6 +228,7 @@ Valida tipo cobranca padrao
             Log To Console    Tipo cobrança: ${tipoCobranca} *não* corresponde ao registro salvo no banco de dados.
             Fail
         END
+        SeleniumLibrary.Click Element    id=${btnCancelarCadastro}
     ELSE
         Log To Console    Filtragem do cliente está inconsistênte.
         Fail

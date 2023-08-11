@@ -2,8 +2,6 @@
 Documentation    Arquivo utilizado para armazenar os localizadores de elementos necessários no processo de cadastro de pedido.
 
 *** Variables ***
-${msgCarregando}    //*[@class="carregando-only-message"][contains(text(),'Carregando...')]    #xpath
-
 ${botaoGravarPedio}    btnGravar    #id
 
 &{cabecalhoPedido}
@@ -17,8 +15,10 @@ ${botaoGravarPedio}    btnGravar    #id
 ...    comboboxTipoCobranca=select2-cmbTipoCobranca-container    #id
 ...    comboboxLocal=select2-cmbLocal-container    #id
 ...    numeroPedido=//*[@id="principal"]/div[1]/div/div[1]/h1    #xpath
+...    msgCarregando=//*[@class="jGrowl-message"][contains(text(),'Carregando...')]    #xpath
 
 &{pesquisaCliente}
+...    headerGridPedidos=//*[@id="popup0"]/div/div/div[2]/div/div/div/div[1]    #xpath
 ...    input=termSelection_TERMO    #id
 ...    pesquisaAvancada=btnExibePesquisaAvancada    #class
 ...    camposAtivos=panelPesquisa    #id
@@ -59,7 +59,8 @@ ${paceiroSelecionado}    //*[@id="inputPluginSearchCliente"]/div/a[1]    #xpath
 ...    adicionarProduto=btnAdicionar    #id
 ...    confirmarProdutos=btnConfirmar    #id
 ...    selecionarProduto=//*[@id="pesquisaProdutos"]/div[2]/div[4]/div/div/div[1]/input    #xpath
-...    campoQuantidade= //*[@id="pesquisaProdutos"]/div[2]/div[1]/div/div[@title="Quantidade"]/span    #xpath
+...    campoQuantidade=//*[@id="pesquisaProdutos"]/div[2]/div[4]/div/div/div[6]    #xpath
+...    inputCampoQuantidade= //*[@id="pesquisaProdutos"]/div[2]/div[4]/div/div/div[6]/input    #xpath
 
 &{popUpPedidoGravado}
 ...    divPopUp=/html/body/div[3]    #xpath

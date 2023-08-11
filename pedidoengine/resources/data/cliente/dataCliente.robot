@@ -106,7 +106,9 @@ ${SQL_PARCEIRO_MATRICULA}    select p.nomeparceiro, p.numeromatricula from parce
     ...    join ParceiroLocal pl on p.idParceiro = pl.idParceiro 
     ...    join Local l on l.idLocal = (select pl.idlocal from ParceiroLocal limit 1)
     ...    join UsuarioLocal ul on l.idLocal=ul.idLocal
-    ...    where p.idnativo = 1 and l.idnativo = 1
+    ...    join Usuario usu on usu.idusuario = ul.idusuario
+    ...    join UsuarioHierarquia uhe on uhe.idusuario = usu.idusuario
+    ...    where p.idnativo = 1 and l.idnativo = 1 and ( uhe.idUsuarioSuperior=1 or usu.idUsuario=1 )
 
 *** Keywords ***
 Pesquisa rapida sql
