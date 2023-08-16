@@ -1,13 +1,22 @@
 *** Settings ***
+Documentation    Arquivo utilizado para realizar os testes de acesso na plataforma web.
 
-Documentation    Login
-Resource    ../../../resources/pages/web/login/loginResources.robot
-Resource    ../../../resources/variables/web/global/globalVariables.robot
+Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
+Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
+
+Suite Setup    Abre navegador
 
 *** Test Cases ***
+Teste 001 ::: Login usuario invalido
+    Login com usuario invalido
 
-Caso de teste 01: realizar Login
+Teste 002 ::: Login senha Invalida
+    Login com senha invalida
 
-    Abrir navegador chrome
-    Realizar login     admin
-    Fechar navegador
+Teste 003 ::: Login usuario e senha invalidos
+    Login com usuario e senha invalidos
+
+Teste 004 ::: Login valido
+    [Documentation]    https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testPlayer/DTSFAPD-C3
+
+    Realiza login na plataforma web

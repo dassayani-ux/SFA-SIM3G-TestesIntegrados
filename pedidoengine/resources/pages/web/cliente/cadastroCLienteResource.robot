@@ -5,7 +5,7 @@ Resource    ${EXECDIR}/resources/lib/web/lib.robot
 Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
 Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robot
 Resource    ${EXECDIR}/resources/locators/web/cliente/cadastroCLienteLocators.robot
-Resource    ${EXECDIR}/resources/variables/web/cliente/newCadastroClienteVariables.robot
+Resource    ${EXECDIR}/resources/variables/web/cliente/cadastroClienteVariables.robot
 Library    ${EXECDIR}/libraries/lib_auxiliar.py
 
 *** Variables ***

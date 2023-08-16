@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation    Arquivo utilizado para realizar os testes relativos a lançamento de novo atendimento.
 
-Resource    ${EXECDIR}/resources/pages/web/login/newLoginResources.robot
+Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
 Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
 Resource    ${EXECDIR}/resources/pages/web/atendimento/cadastroAtendimentoResources.robot
 Resource    ${EXECDIR}/resources/database/conectionDatabase.robot

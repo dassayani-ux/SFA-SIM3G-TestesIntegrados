@@ -2,7 +2,7 @@
 Documentation    Arquivo utilizado para armazenar os casos de testes relativos à cadastro de pedido na web.
 
 Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
-Resource    ${EXECDIR}/resources/pages/web/login/newLoginResources.robot
+Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
 Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
 Resource    ${EXECDIR}/resources/pages/web/pedido/cadastroPedidoResources.robot
 

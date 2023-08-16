@@ -172,7 +172,6 @@ Cabecalho - Tipo Cobranca
         SeleniumLibrary.Input Text    class=select2-search__field    ${tipoCobranca}
         SeleniumLibrary.Click Element    xpath=//*[@id="${pesquisaTipoCobranca.idComboboxTipoCobranca}"]/li[contains(text(),'${tipoCobranca}')]
     END
-    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...    15s
 
 Popula dicionario de dados do pedido
     [Documentation]    Está keyword irá popular o dicionário *\&{dadosPedido}* com informações úteis para a manipulação do pedido.

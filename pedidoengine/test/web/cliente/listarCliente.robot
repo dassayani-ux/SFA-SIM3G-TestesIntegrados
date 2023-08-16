@@ -2,7 +2,7 @@
 Documentation    Arquivo utilizado para realizar os testes relativos a listagem de clientes.
 
 Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
-Resource    ${EXECDIR}/resources/pages/web/login/newLoginResources.robot
+Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
 Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
 Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robot
 

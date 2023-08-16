@@ -2,7 +2,7 @@
 Documentation    Arquivo utilizado para realizar a abertura da aplicação web no navegador configurado.
 
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/variables/web/global/newGlobalVariables.robot
+Resource    ${EXECDIR}/resources/variables/web/global/globalVariables.robot
 
 *** Keywords ***
 Abre navegador
