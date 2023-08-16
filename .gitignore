@@ -1,6 +1,5 @@
 results*
 Sikuli_java*.txt
-pedidoengine/resources/variables/web/global/globalVariables.robot
-pedidoengine/resources/variables/web/login/newlLoginVariables.robot
 pedidoengine/libraries/variables/varLogin.py
+pedidoengine/resources/variables/web/global/globalVariables.robot
 __pycache__*
