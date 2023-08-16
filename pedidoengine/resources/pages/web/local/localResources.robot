@@ -2,7 +2,6 @@
 Documentation    Arquivo utilizado para escrever as keywords utilizadas para validar ou apresentar informalões respectivas ao local do parceiro.
 
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/variables/web/global/newGlobalVariables.robot
 Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
 Resource    ${EXECDIR}/resources/data/local/dataLocal.robot
 

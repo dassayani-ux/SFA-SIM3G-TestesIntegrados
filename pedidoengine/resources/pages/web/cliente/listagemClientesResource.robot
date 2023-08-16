@@ -2,7 +2,6 @@
 Documentation    Arquivo utilizado para escrever as keywords utilizadas no processo de listagem de clientes.
 
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/variables/web/global/newGlobalVariables.robot
 Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
 Resource    ${EXECDIR}/resources/locators/web/cliente/listaClientesLocators.robot
 Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot

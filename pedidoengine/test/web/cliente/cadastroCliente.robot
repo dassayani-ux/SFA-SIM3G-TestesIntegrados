@@ -1,50 +1,26 @@
 *** Settings ***
-# Test Setup          Abrir navegador chrome
-# Test Teardown       Fechar navegador
+Documentation    Arquivo utilizado para armazenar os testes relativos a cadastro de clientes.
 
-Resource    ../../../resources/pages/web/login/loginResources.robot
-Resource    ../../../resources/pages/web/cliente/cadastroClienteResources.robot
-Resource    ../../../resources/pages/web/cliente/editarClienteResource.robot
-Resource    ../../../resources/pages/web/cliente/listagemClientesResource.robot
-Resource    ../../../resources/data/dados_pedido.robot
-Resource    ../../../resources/variables/web/cliente/ajustesVinculosLocal.robot
-Resource    ../../../resources/variables/web/cliente/ajustesParceiro.robot
+Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
+Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
+Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
+Resource    ${EXECDIR}/resources/pages/web/cliente/cadastroClienteResource.robot
 
-
-Default Tags      Cadastro Cliente
+Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    Realiza login na plataforma web
+Suite Teardown    Disconnect From Database
 
 *** Test Cases ***
+Teste 001 ::: Valida campos obrigatórios cadastro cliente
+    [Documentation]    DTSFASAPP-T59 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/256241
+    Acessa tela de cadastro de cliente
+    Valida campos obrigatorios do cliente
 
-Caso de teste 01: Abrir navegador 
-    [Documentation]    Caso de teste, abrindo a aplicação Web 
-    [Tags]    Navegador
-    Abrir navegador Chrome
+Teste 002 ::: Cadastro de cliente
+    [Documentation]    DTSFASAPP-T76 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/256534
+    Cadastra cliente juridico
 
-caso de teste 02: Realizar o login Admin
-    [Documentation]    Caso de teste, Realizar Login 
-    [Tags]    Login
-    Realizar login    admin
-
-Caso de teste: Acessar novo Cliente 
-
-    entrar em cliente
-
-Caso de teste: Preenchimento de dados na aba geral
-
-    cadastro cliente geral
-
-Caso de teste: Preenchimento de dados na aba complemento
-
-    cadastro cliente complemento
-
-Caso de teste: Preenchimento de dados na aba geral (local)
-
-    cadastro cliente geral local
-
-Caso de Teste: cadastro Preenchimento dos documentos de identificação
-
-   cadastro cliente documentos de identificação
-
-Caso de teste: Gravar cadastro de cliente
-
-   gravar cadastro
+Teste 003 ::: Valida tipo cobrança cliente
+    [Documentation]    DTSFASAPP-T89 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/258851
+    Acessa tela de listagem de clientes
+    Ativa pesquisa avancada
+    Valida tipo cobranca padrao

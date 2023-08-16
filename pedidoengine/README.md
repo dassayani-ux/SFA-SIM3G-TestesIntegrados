@@ -3,7 +3,7 @@ Pasta utilizada para armazenar os casos de testes automatizados do produto padr�
 # ⚠ IMPORTANTE
 Por motivos de segurança, arquivos que possuem dados de acesso à plataforma e ao banco de dados são ignorados no commit, portanto, caso queira rodar o projeto em sua máquina é necessário seguir as instruções abaixo:
 
-1. Criar um arquivo chamado **newGlobalVariables.robot** no direório: **pedidoengine/resources/variables/web/global**.
+1. Criar um arquivo chamado **globalVariables.robot** no direório: **pedidoengine/resources/variables/web/global**.
 
     Usar o seguinte template como exemplo:
 

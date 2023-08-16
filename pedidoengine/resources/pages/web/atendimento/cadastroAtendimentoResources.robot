@@ -5,7 +5,6 @@ Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
 Resource    ${EXECDIR}/resources/locators/web/atendimento/cadastroAtendimentoLocators.robot
 Resource    ${EXECDIR}/resources/variables/web/atendimento/cadastroAtendimentoVariables.robot
 Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robot
-Resource    ${EXECDIR}/resources/pages/web/local/localResources.robot
 Resource    ${EXECDIR}/resources/data/atendimento/dataAtendimento.robot
 
 *** Keywords ***

@@ -2,7 +2,7 @@
 Documentation    Arquivo utilizado para realizar a conexão com o banco de dados de acordo com os dador fornecidos.
 
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/variables/web/global/newGlobalVariables.robot
+Resource    ${EXECDIR}/resources/variables/web/global/globalVariables.robot
 
 *** Keywords ***
 Conecta ao banco de dados

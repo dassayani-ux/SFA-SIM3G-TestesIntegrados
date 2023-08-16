@@ -3,7 +3,6 @@ Documentation    Arquivo utilizado para escrever as keywords utilizadas no proce
 
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
 Resource    ${EXECDIR}/resources/locators/web/login/locatorsLogin.robot
-Resource    ${EXECDIR}/resources/variables/web/global/newGlobalVariables.robot
 Variables    ${EXECDIR}/libraries/variables/varLogin.py
 
 *** Keywords ***

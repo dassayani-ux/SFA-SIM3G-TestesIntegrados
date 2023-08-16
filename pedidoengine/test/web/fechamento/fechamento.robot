@@ -4,10 +4,10 @@ Documentation    Arquivo utilizado para rodar o ciclo de teste de fechamento
 
 Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
 Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
-Resource    ${EXECDIR}/resources/pages/web/login/newLoginResources.robot
+Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
 Resource    ${EXECDIR}/resources/pages/web/atendimento/listagemAtendimentoResources.robot
 Resource    ${EXECDIR}/resources/pages/web/atendimento/cadastroAtendimentoResources.robot
-Resource    ${EXECDIR}/resources/pages/web/cliente/newCadastroCLienteResource.robot
+Resource    ${EXECDIR}/resources/pages/web/cliente/cadastroCLienteResource.robot
 Resource    ${EXECDIR}/resources/pages/web/pedido/cadastroPedidoResources.robot
 
 Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador
