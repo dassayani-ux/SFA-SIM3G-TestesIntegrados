@@ -92,7 +92,11 @@ Cabecalho - Tipo pedido
     ${listaTipoPedido}=    Remove itens duplicados    @{listaTipoPedido}
 
     ${lenght}=    Get Length    ${listaTipoPedido}
-    ${index}=    Evaluate    random.sample(range(0, ${lenght}),1)    random
+    ${opcao}=    Set Variable    --Selecione--
+    WHILE  '${opcao}' == '--Selecione--'
+        ${index}=    Evaluate    random.sample(range(0, ${lenght}),1)    random
+        ${opcao}=    Set Variable    ${listaTipoPedido[${index[0]}]}
+    END
     ${tipoPedido}=    Set Variable    ${listaTipoPedido[${index[0]}]}
     Log To Console    Tipo pedido selecionado: ${tipoPedido}
     SeleniumLibrary.Input Text    class=select2-search__field    ${tipoPedido}
@@ -237,10 +241,30 @@ Gravar pedido de venda
     SeleniumLibrary.Wait Until Page Contains Element    xpath=${popUpPedidoGravado.msgGravadoSucesso}
     SeleniumLibrary.Click Element    xpath=${popUpPedidoGravado.btnOk}
 
+Finalizar pedido de venda
+    [Documentation]    Esta keyword é responsável por finalizar o pedido de venda na tela de cadastro de pedido.
+
+    SeleniumLibrary.Click Element    id=${botaoFinalizarPedido}
+    SeleniumLibrary.Wait Until Element Is Visible    xpath=${popUpFinalizarPedido.divPopUp}
+    SeleniumLibrary.Wait Until Element Is Enabled    xpath=${popUpFinalizarPedido.btnSim}
+    SeleniumLibrary.Click Element    xpath=${popUpFinalizarPedido.btnSim}
+    SeleniumLibrary.Wait Until Element Is Visible    xpath=${popUpFinalizarPedido.msgFinalizadoSucesso}
+    SeleniumLibrary.Wait Until Element Is Enabled    xpath=${popUpFinalizarPedido.btnOk}
+    SeleniumLibrary.Click Element    xpath=${popUpFinalizarPedido.btnOk}
+
+    ${situacao}=    Retornar situacao do pedido    numeroPedido=${dadosPedido.numeroPedido}
+    IF  '${situacao}' == 'PP'
+        Log To Console    Pedido finalizado com sucesso.
+    ELSE
+        Log To Console    Pedido não encontra-se finalizado no banco de dados.
+        Fail
+    END
+
 Incluir itens no pedido
     [Documentation]    Keyword utilizada para realizar a inclusão de itens no pedido de venda.
     ...    \nA quantidade de itens inclusos irá respeitar a variável *quantideItensPedido*.
     [Tags]    Pedido-Itens
+    [Arguments]    ${edicao}=False
 
     SeleniumLibrary.Click Element    xpath=${carrinhoPedido.campoProduto}
     SeleniumLibrary.Wait Until Element Is Enabled    xpath=${carrinhoPedido.pesquisarProdutos}
@@ -250,7 +274,24 @@ Incluir itens no pedido
     ${countProdutos}=    Retorna quantidade de itens da tabela    ${dadosPedido.idTabelaPreco}
     ${randomProdutos}=    Evaluate    random.sample(range(0, ${countProdutos}), ${quantideItensPedido})    random
     ${produtos}=    Retorna produtos    @{randomProdutos}    tabelaPreco=${dadosPedido.idTabelaPreco}
+    ${controlador}=    Set Variable    ${1}
 
+    IF  '${edicao}' == 'True'
+        WHILE  ${controlador} == ${1}
+            FOR    ${produto}    IN    @{produtos}
+                ${result}    Collections.Count Values In List    ${produtosOriginais}    ${produto}
+                IF  ${result} != ${0}
+                    ${randomProdutos}=    Evaluate    random.sample(range(0, ${countProdutos}), ${quantideItensPedido})    random
+                    ${produtos}=    Retorna produtos    @{randomProdutos}    tabelaPreco=${dadosPedido.idTabelaPreco}
+                ELSE
+                    ${controlador}=    Set Variable    ${0}
+                END
+            END
+        END
+    END
+
+    Log To Console    Produtos selecionados: ${produtos}
+    
     FOR  ${I}  IN RANGE    ${quantideItensPedido}
         SeleniumLibrary.Input Text    id=${pesquisaProdutosCarrinho.codigoProduto}    ${produtos[${I}]}
         SeleniumLibrary.Click Element    id=${pesquisaProdutosCarrinho.pesquisaProduto}
@@ -278,3 +319,109 @@ Validar pedido no banco de dados
     Validar condicao de pagamento    ${dadosPedido.numeroPedido}    ${dadosPedido.idCondicaoPagamento}
     Validar tipo cobranca    ${dadosPedido.numeroPedido}    ${dadosPedido.idTipoCobranca}
     Log To Console    ...::: FIM DA VALIDAÇÃO DO PEDIDO NO BANCO DE DADOS :::...
+
+Excluir itens originais e incluir novos
+    [Documentation]    Esta keyword remove todos os produtos atuais do pedido de venda e inclui novos.
+
+    ${dadosProdutos}    Retornar informações dos produtos do pedido    ${dadosPedido.numeroPedido}
+    FOR    ${produto}    IN    @{dadosProdutos}
+        Append To List    ${produtosOriginais}    ${produto['codigo']}
+    END
+    Log To Console    Produtos orginais do pedido: ${produtosOriginais}.
+
+    SeleniumLibrary.Click Element    xpath=${carrinhoPedido.selecionarTodos}
+    SeleniumLibrary.Click Element    id=${carrinhoPedido.removerProdutos}
+    SeleniumLibrary.Wait Until Element Is Visible    xpath=${carrinhoPedido.confirmarRemocaoProduto}
+    SeleniumLibrary.Click Element    xpath=${carrinhoPedido.confirmarRemocaoProduto}
+    Sleep    0.5s
+
+    Incluir itens no pedido    edicao=True
+    Gravar pedido de venda
+
+    ${dadosProdutosedicao}    Retornar informações dos produtos do pedido    ${dadosPedido.numeroPedido}
+    FOR    ${produto}    IN    @{dadosProdutosedicao}
+        Append To List    ${produtosAlterados}    ${produto['codigo']}
+    END
+
+    Sleep    1s
+
+Verificar informações do pedido clonado
+    [Documentation]    Esta keyword verifica se os dados do pedido clonado estão de acordo com os dados do pedido original.
+    ...    \nO argumento *numeroPedidoOriginal* deve receber o valor do número do pedido original.
+    [Arguments]    ${numeroPedidoOriginal}
+
+    ${dadosPedidoOriginal}=    Retornar dados do pedido    ${numeroPedidoOriginal}    # Pedido original
+    Popula dicionario de dados do pedido    # Pedido clonado
+    
+    Log To Console    ...::: INÍCIO DA COMPARAÇÃO DOS DADOS DO PEDIDO CLONADO :::...
+    IF  ${dadosPedido.idParceiro} == ${dadosPedidoOriginal[0]['parceiro']}
+        Log To Console    Parceiro do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        Log To Console    Parceiro selecionado no pedido clonado está diferente do parceiro informado no pedido original.
+        Fail 
+    END
+    IF  ${dadosPedido.idLocalParceiro} == ${dadosPedidoOriginal[0]['local']}
+        Log To Console    Local do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        Log To Console    Local selecionado no pedido clonado está diferente do local informado no pedido original.
+        Fail 
+    END
+    IF  ${dadosPedido.idLocalFilial} == ${dadosPedidoOriginal[0]['filial']}
+        Log To Console    Filial do pedido clonado é a mesma que a do pedido original.
+    ELSE
+        Log To Console    Filial selecionada no pedido clonado está diferente da filial informada no pedido original.
+        Fail 
+    END
+    IF  ${dadosPedido.idTipoPedido} == ${dadosPedidoOriginal[0]['tipopedido']}
+        Log To Console    Tipo do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        Log To Console    Tipo de pedido clonado está diferente do tipo de pedido informado no pedido original.
+        Fail 
+    END
+    IF  ${dadosPedido.idTabelaPreco} == ${dadosPedidoOriginal[0]['tabelapreco']}
+        Log To Console    Tabela de preço do pedido clonado é a mesma que a do pedido original.
+    ELSE
+        Log To Console    Tabela de preço selecionada no pedido clonado está diferente da tabela de preço informada no pedido original.
+        Fail 
+    END
+    IF  ${dadosPedido.idCondicaoPagamento} == ${dadosPedidoOriginal[0]['condicaopagamento']}
+        Log To Console    Condição de pagamento do pedido clonado é a mesma que a do pedido original.
+    ELSE
+        Log To Console    Condição de pagamento selecionada no pedido clonado está diferente da condição de pagamento informada no pedido original.
+        Fail 
+    END
+    IF  ${dadosPedido.idTipoCobranca} == ${dadosPedidoOriginal[0]['tipocobranca']}
+        Log To Console    Tipo de cobrança do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        Log To Console    Tipo de cobrança selecionado no pedido clonado está diferente do tipo de cobrança informado no pedido original.
+        Fail 
+    END
+    Log To Console    ...::: FIM DA COMPARAÇÃO DOS DADOS DO PEDIDO CLONADO :::...
+    
+    Validar pedido no banco de dados
+
+    Log To Console    ...::: INÍCIO DA COMPARAÇÃO DOS PRODUTOS DO PEDIDO CLONADO :::...
+    ${dadosProdutoOriginal}    Retornar informações dos produtos do pedido    ${numeroPedidoOriginal}
+    ${dadosProdutoClonado}    Retornar informações dos produtos do pedido    ${dadosPedido.numeroPedido}
+
+    ${lenght}=    Get Length    ${dadosProdutoOriginal}
+
+    FOR  ${I}  IN RANGE    ${lenght}
+        IF  '${dadosProdutoOriginal[${I}]['codigo']}' == '${dadosProdutoClonado[${I}]['codigo']}'
+            IF  '${dadosProdutoOriginal[${I}]['quantidade']}' == '${dadosProdutoClonado[${I}]['quantidade']}'
+                IF  '${dadosProdutoOriginal[${I}]['precovenda']}' == '${dadosProdutoClonado[${I}]['precovenda']}'
+                    Log To Console    Produto ${dadosProdutoOriginal[${I}]['codigo']} ok!
+                ELSE
+                    Log To Console    Preço do produto ${dadosProdutoOriginal[${I}]['codigo']} está divergente.
+                    Fail
+                END
+            ELSE
+                Log To Console    Quantidade do produto ${dadosProdutoOriginal[${I}]['codigo']} está divergente.
+                Fail    
+            END
+        ELSE
+            Log To Console    Produto ${dadosProdutoOriginal[${I}]['codigo']} não foi encontrado no pedido clonado.
+            Fail
+        END   
+    END
+    Log To Console    ...::: FIM DA COMPARAÇÃO DOS PRODUTOS DO PEDIDO CLONADO :::...

@@ -9,6 +9,10 @@ Documentation    Arquivo utilizado para armazenar variáveis de dados que contri
 @{listaCondicaoPagamento}
 @{listaTipoCobranca}
 
+# Listas temporárias utilizadas ma validação do pedido
+@{produtosOriginais}
+@{produtosAlterados}
+
 # Dicionário de dados do pedido
 &{dadosPedido}
 ...    numeroPedido=

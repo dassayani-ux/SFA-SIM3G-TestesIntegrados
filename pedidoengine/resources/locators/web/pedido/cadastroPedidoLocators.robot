@@ -3,6 +3,7 @@ Documentation    Arquivo utilizado para armazenar os localizadores de elementos 
 
 *** Variables ***
 ${botaoGravarPedio}    btnGravar    #id
+${botaoFinalizarPedido}    btnFinalizar    #id
 
 &{cabecalhoPedido}
 ...    idCabecalho=panelCabecalho    #id
@@ -51,6 +52,9 @@ ${paceiroSelecionado}    //*[@id="inputPluginSearchCliente"]/div/a[1]    #xpath
 &{carrinhoPedido}
 ...    campoProduto=//*[@id="panelGridCarrinho"]/div/div[4]/div/div/div[2]    #xpath
 ...    pesquisarProdutos=//*[@id="panelGridCarrinho"]/div/div[4]/div/div/div[2]/a/span    #xpath
+...    selecionarTodos=//*[@id="panelGridCarrinho"]/div/div[1]/div/div[1]/span    #xpath
+...    removerProdutos=btnRemoverSelecao    #id
+...    confirmarRemocaoProduto=/html/body/div[3]/div/div[3]/button[2]    #xpath
 
 &{pesquisaProdutosCarrinho}
 ...    telaPesquisa=//*[@id="popup0"]/div/div    #xpath
@@ -65,4 +69,10 @@ ${paceiroSelecionado}    //*[@id="inputPluginSearchCliente"]/div/a[1]    #xpath
 &{popUpPedidoGravado}
 ...    divPopUp=/html/body/div[3]    #xpath
 ...    msgGravadoSucesso=/html/body/div[3]/div/div[2]/div[contains(text(),'Pedido gravado com sucesso!')]    #xpath
+...    btnOk=/html/body/div[3]/div/div[3]/button    #xpath
+
+&{popUpFinalizarPedido}
+...    divPopUp=/html/body/div[3]/div    #xpath
+...    btnSim=/html/body/div[3]/div/div[3]/button[2]    #xpath
+...    msgFinalizadoSucesso=/html/body/div[3]/div/div[2]/div[contains(text(),'Pedido finalizado com sucesso')]    #xpath
 ...    btnOk=/html/body/div[3]/div/div[3]/button    #xpath

@@ -108,3 +108,6 @@ https://guykisel.github.io/robotframework-faker/
 
 ### Cssselect
     pip install cssselect
+
+### Unidecode
+    pip install unidecode
