@@ -198,3 +198,7 @@ Teste 037 ::: Clonar pedido de venda
     Filtrar pedido por numero definido    ${numeroPedido}
     Clonar pedido de venda    ${numeroPedido}
     Verificar informações do pedido clonado    ${numeroPedido}
+
+Teste 038 ::: Realizar logoff
+    [Documentation]    DTSFASAPP-T79 (1.0) : https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/DTSFASAPP-T79
+    Realizar logoff
