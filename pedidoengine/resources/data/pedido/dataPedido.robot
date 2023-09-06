@@ -17,6 +17,17 @@ ${sqlPesquisaCabecalhoTipoCobranca}    select nivel.idwsconfigpedidonivel, nivel
     ...    and campo.nomeentidade = 'TIPO_COBRANCA' 
     ...    and campo.idnativo = 1
 
+${sqlUltimoPedidoNF}    select cast(p.numeropedido as integer) from pedido p
+    ...    inner join tiposituacaopedido tp on tp.idtiposituacaopedido = p.idtiposituacaopedido
+    ...    where tp.sgltiposituacaopedido = 'NF'
+    ...    order by p.datapedido desc, cast(p.numeropedido as integer) desc
+    ...    limit 1
+
+${sqlUltimoPedido}    select cast(p.numeropedido as integer)
+    ...    from pedido p
+    ...    order by p.datapedido desc, cast(p.numeropedido as integer) desc
+    ...    limit 1
+
 *** Keywords ***
 Retorna idTipoPedido
     [Documentation]    Irá retornar o ID do Tipo Pedido utilizando o campo *descricao* como argumento.
@@ -74,7 +85,6 @@ Retorna produtos
         Append To List    ${lista}    ${produtos[${listaAux[${I}]}][1]}
     END
 
-    Log To Console    Produtos selecionados: ${lista}
     Return From Keyword    @{lista}
 
 Validar parceiro do pedido
@@ -182,3 +192,73 @@ Validar tipo cobranca
         Log To Console    Tipo cobrança do pedido é diferente do Tipo cobrança salvo no database para o pedido número ${numeroPedido}. (Argumento: ${idTipoCobranca} / Database: ${data[0][0]})
         Fail
     END
+
+Retornar numero ultimo pedido NF
+    [Documentation]    Esta keyword retorna o número do último pedido lançado que possui situação = NÃO FINALIZADO.
+
+    ${numeroPedido}    Query    ${sqlUltimoPedidoNF} 
+
+    Log To Console    \nPedido número ${numeroPedido[0][0]}
+    Return From Keyword    ${numeroPedido[0][0]} 
+
+Retornar numero ultimo pedido
+    [Documentation]    Esta keyword retorna o número do último pedido lançado.
+
+    ${numeroPedido}    Query    ${sqlUltimoPedido} 
+
+    Log To Console    \nPedido número ${numeroPedido[0][0]}
+    Return From Keyword    ${numeroPedido[0][0]} 
+
+Retornar informações dos produtos do pedido
+    [Documentation]    Esta keyword retorna uma lista contendo informações do pedido de venda.
+    [Arguments]    ${numeroPedido}
+    
+    ${sql}=    Set Variable
+    ${sql}    Catenate    SEPARATOR=\n    
+    ...    select pro.idproduto, pro.codigo, pp.quantidade, pp.precovenda 
+    ...    from pedidoproduto pp
+    ...    inner join pedido p on p.idpedido = pp.idpedido
+    ...    inner join produto pro on pro.idproduto = pp.idproduto
+    ...    where p.numeropedido = '${numeroPedido}'
+    ...    order by pp.idproduto
+
+    ${produtos}    Query    ${sql}    returnAsDict=True
+    Return From Keyword    ${produtos}
+
+Retornar situacao do pedido
+    [Documentation]    Retorna a sigla do status do pedido passado como argumento.
+    [Arguments]    ${numeroPedido}=None
+
+    IF  '${numeroPedido}' != 'None'
+        ${sql}=    Set Variable
+        ${sql}    Catenate    SEPARATOR=\n
+        ...    select tp.sgltiposituacaopedido from pedido p
+        ...    inner join tiposituacaopedido tp on tp.idtiposituacaopedido = p.idtiposituacaopedido
+        ...    where p.numeropedido = '${numeroPedido}'
+    ELSE
+        Log To Console    Nenhum pedido foi passado como argumento.
+        Fail
+    END
+
+    ${situacaoPedido}    Query    ${sql}
+    Return From Keyword    ${situacaoPedido[0][0]}
+
+Retornar dados do pedido
+    [Documentation]    Esta keyword retorna um dicionário contendo alguns dados do pedido passado como argumento.
+    [Arguments]    ${numeroPedido}=None
+
+    IF  '${numeroPedido}' != 'None'
+        ${sql}=    Catenate    SEPARATOR=\n
+        ...    select p.idparceiro as parceiro, p.idlocal as local, 
+        ...    p.idlocalfilialvenda as filial,
+        ...    p.idtipopedido as tipoPedido, p.idtabelapreco as tabelaPreco,
+        ...    p.idcondicaopagamento as condicaoPagamento,
+        ...    p.idtipocobranca as tipoCobranca
+        ...    from pedido p where p.numeropedido = '${numeroPedido}'
+    ELSE
+        Log To Console    Nenhum pedido passado de argumento.
+        Fail
+    END
+    
+    ${dadosPedido}    Query    ${sql}    returnAsDict=True
+    Return From Keyword    ${dadosPedido}    

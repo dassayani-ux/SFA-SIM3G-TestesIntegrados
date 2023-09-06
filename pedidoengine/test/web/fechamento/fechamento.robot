@@ -10,7 +10,7 @@ Resource    ${EXECDIR}/resources/pages/web/atendimento/cadastroAtendimentoResour
 Resource    ${EXECDIR}/resources/pages/web/cliente/cadastroCLienteResource.robot
 Resource    ${EXECDIR}/resources/pages/web/pedido/cadastroPedidoResources.robot
 
-Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador
+Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    Inativar pesquisa de Tipo Cobraca
 Suite Teardown    Disconnect From Database
 
 *** Test Cases ***
@@ -37,7 +37,7 @@ Teste 005 ::: Cadastrar atendimento
     Acessa tela de cadastro de atendimento
     Preenche cabeçalho do atendimento
     Inicia atendimento
-    Inlcuir imagem no atendimento
+    #Inlcuir imagem no atendimento    -- Comentado pois o google possui um bug e, em alguns momentos, trava a aplicação quando realizada a inclusão de imagem.
     Finaliza atendimento
     Valida criacao do atendimento no bd    ${idAtendimento}
 
@@ -167,3 +167,34 @@ Teste 033 ::: Cadastrar novo pedido
     Incluir itens no pedido
     Gravar pedido de venda
     Validar pedido no banco de dados
+
+Teste 034 ::: Filtrar pedido, editar e finalizar
+    [Documentation]    DTSFASAPP-T705 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/DTSFASAPP-T705
+    Acessar tela de listagem de pedidos
+    ${numeroPedido}=    Retornar numero ultimo pedido NF
+    Filtrar pedido por numero definido    ${numeroPedido}
+    Editar pedido de venda    ${numeroPedido}
+    Excluir itens originais e incluir novos
+    Finalizar pedido de venda
+
+Teste 035 ::: Filtrar pedido e finalizar na listagem
+    [Documentation]    DTSFASAPP-T704 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/DTSFASAPP-T704 :: Passo 4
+    Acessar tela de listagem de pedidos
+    ${numeroPedido}=    Retornar numero ultimo pedido NF
+    Filtrar pedido por numero definido    ${numeroPedido}
+    Finalizar pedido de venda na listagem    ${numeroPedido}
+
+Teste 036 ::: Filtrar pedido e cancelar pela grid
+    [Documentation]    DTSFASAPP-T704 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/DTSFASAPP-T704 :: Passo 5
+    Acessar tela de listagem de pedidos
+    ${numeroPedido}=    Retornar numero ultimo pedido NF
+    Filtrar pedido por numero definido    ${numeroPedido}
+    Cancelar pedido de venda pela listagem    ${numeroPedido}
+
+Teste 037 ::: Clonar pedido de venda
+    [Documentation]    DTSFASAPP-T410 (1.0) : https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/DTSFASAPP-T410
+    Acessar tela de listagem de pedidos
+    ${numeroPedido}=    Retornar numero ultimo pedido
+    Filtrar pedido por numero definido    ${numeroPedido}
+    Clonar pedido de venda    ${numeroPedido}
+    Verificar informações do pedido clonado    ${numeroPedido}
