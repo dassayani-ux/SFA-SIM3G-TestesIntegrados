@@ -43,3 +43,11 @@ Login com usuario e senha invalidos
     Wait Until Page Contains Element    class=${MSG_LOGIN_INVALIDO}
     ${loginError}    SeleniumLibrary.Get Text    class=${MSG_LOGIN_INVALIDO}
     ${result}    Should Be Equal As Strings    ${loginError}    ${msgErro}
+
+Realizar logoff
+    [Documentation]    Realiza logoff na plataforma WEB.
+    
+    SeleniumLibrary.Click Element    id=${logoff.acoes}
+    Sleep    0.3s
+    SeleniumLibrary.Click Element    xpath=${logoff.sair}
+    SeleniumLibrary.Wait Until Element Is Visible    id=${formularioLogin}
