@@ -12,6 +12,7 @@ Resource    ${EXECDIR}/resources/pages/web/pedido/cadastroPedidoResources.robot
 Acessar tela de listagem de pedidos
     [Documentation]    Irá acessar a tela de listagem de clientes
 
+    SeleniumLibrary.Wait Until Element Is Enabled    id=${venda.menuVenda}
     SeleniumLibrary.Click Element    id=${venda.menuVenda}
     SeleniumLibrary.Wait Until Element Is Visible    id=${venda.subMenuPedido}
     SeleniumLibrary.Click Element    id=${venda.subMenuPedido}
@@ -44,6 +45,7 @@ Filtrar pedido por numero definido
     SeleniumLibrary.Click Element    id=${pesquisaRapidaPedido.btnLimpar}
     Ativa pesquisa avancada pedido de venda
     ${headerInicial}    SeleniumLibrary.Get Text    xpath=${gridListagemPedidos.headerGrid}
+    SeleniumLibrary.Scroll Element Into View    id=${pesquisaAvancadaPedido.numeroPedido}
     SeleniumLibrary.Input Text    id=${pesquisaAvancadaPedido.numeroPedido}    ${numeroPedido}
     Sleep    0.5s
     SeleniumLibrary.Click Element    id=${pesquisaRapidaPedido.btnPesquisar}

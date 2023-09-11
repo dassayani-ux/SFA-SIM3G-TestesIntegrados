@@ -23,6 +23,7 @@ Inativar pesquisa de Tipo Cobraca
 Acessar cadastro de novo pedido
     [Documentation]    Keyword utilizada para acessar a tela de novo pedido na web.
 
+    SeleniumLibrary.Wait Until Element Is Enabled    id=${venda.menuVenda}
     SeleniumLibrary.Click Element    id=${venda.menuVenda}
     SeleniumLibrary.Wait Until Element Is Visible    id=${venda.subMenuPedido}
     SeleniumLibrary.Click Element    id=${venda.subMenuPedido}
@@ -276,11 +277,11 @@ Incluir itens no pedido
     ${produtos}=    Retorna produtos    @{randomProdutos}    tabelaPreco=${dadosPedido.idTabelaPreco}
     ${controlador}=    Set Variable    ${1}
 
-    IF  '${edicao}' == 'True'
-        WHILE  ${controlador} == ${1}
-            FOR    ${produto}    IN    @{produtos}
+    IF  '${edicao}' == 'True'    # Verifica se a inclusão de itens será feita em uma edição de pedido, caso sim, executará os passos presentes nesse bloco.
+        WHILE  ${controlador} == ${1}    # Dentro desse laço de repetição será verificado se os novos produtos são idênticos aos informados no pedido original, caso sejam serão sorteados novos produtos.
+            FOR    ${produto}    IN    @{produtos}    # Verifica se os produtos novos são idênticos aos produtos originais excluídos.
                 ${result}    Collections.Count Values In List    ${produtosOriginais}    ${produto}
-                IF  ${result} != ${0}
+                IF  ${result} != ${0}    # Será executado caso o novo produto seja encontrado na lista dos produtos excluídos, caso seja verdadeiro irá sortear os produtos novamente.
                     ${randomProdutos}=    Evaluate    random.sample(range(0, ${countProdutos}), ${quantideItensPedido})    random
                     ${produtos}=    Retorna produtos    @{randomProdutos}    tabelaPreco=${dadosPedido.idTabelaPreco}
                 ELSE
@@ -354,48 +355,13 @@ Verificar informações do pedido clonado
     Popula dicionario de dados do pedido    # Pedido clonado
     
     Log To Console    ...::: INÍCIO DA COMPARAÇÃO DOS DADOS DO PEDIDO CLONADO :::...
-    IF  ${dadosPedido.idParceiro} == ${dadosPedidoOriginal[0]['parceiro']}
-        Log To Console    Parceiro do pedido clonado é o mesmo que o do pedido original.
-    ELSE
-        Log To Console    Parceiro selecionado no pedido clonado está diferente do parceiro informado no pedido original.
-        Fail 
-    END
-    IF  ${dadosPedido.idLocalParceiro} == ${dadosPedidoOriginal[0]['local']}
-        Log To Console    Local do pedido clonado é o mesmo que o do pedido original.
-    ELSE
-        Log To Console    Local selecionado no pedido clonado está diferente do local informado no pedido original.
-        Fail 
-    END
-    IF  ${dadosPedido.idLocalFilial} == ${dadosPedidoOriginal[0]['filial']}
-        Log To Console    Filial do pedido clonado é a mesma que a do pedido original.
-    ELSE
-        Log To Console    Filial selecionada no pedido clonado está diferente da filial informada no pedido original.
-        Fail 
-    END
-    IF  ${dadosPedido.idTipoPedido} == ${dadosPedidoOriginal[0]['tipopedido']}
-        Log To Console    Tipo do pedido clonado é o mesmo que o do pedido original.
-    ELSE
-        Log To Console    Tipo de pedido clonado está diferente do tipo de pedido informado no pedido original.
-        Fail 
-    END
-    IF  ${dadosPedido.idTabelaPreco} == ${dadosPedidoOriginal[0]['tabelapreco']}
-        Log To Console    Tabela de preço do pedido clonado é a mesma que a do pedido original.
-    ELSE
-        Log To Console    Tabela de preço selecionada no pedido clonado está diferente da tabela de preço informada no pedido original.
-        Fail 
-    END
-    IF  ${dadosPedido.idCondicaoPagamento} == ${dadosPedidoOriginal[0]['condicaopagamento']}
-        Log To Console    Condição de pagamento do pedido clonado é a mesma que a do pedido original.
-    ELSE
-        Log To Console    Condição de pagamento selecionada no pedido clonado está diferente da condição de pagamento informada no pedido original.
-        Fail 
-    END
-    IF  ${dadosPedido.idTipoCobranca} == ${dadosPedidoOriginal[0]['tipocobranca']}
-        Log To Console    Tipo de cobrança do pedido clonado é o mesmo que o do pedido original.
-    ELSE
-        Log To Console    Tipo de cobrança selecionado no pedido clonado está diferente do tipo de cobrança informado no pedido original.
-        Fail 
-    END
+    Verificar parceiro do pedido clonado    ${dadosPedidoOriginal[0]['parceiro']}
+    Verificar local do pedido clonado    ${dadosPedidoOriginal[0]['local']}
+    Verificar filial do pedido clonado    ${dadosPedidoOriginal[0]['filial']}
+    Verificar tipo do pedido clonado    ${dadosPedidoOriginal[0]['tipopedido']}
+    Verificar tabela de preco do pedido clonado    ${dadosPedidoOriginal[0]['tabelapreco']}
+    Verificar condicao de pagamento do pedido clonado    ${dadosPedidoOriginal[0]['condicaopagamento']}
+    Verificar tipo cobranca do pedido clonado    ${dadosPedidoOriginal[0]['tipocobranca']}
     Log To Console    ...::: FIM DA COMPARAÇÃO DOS DADOS DO PEDIDO CLONADO :::...
     
     Validar pedido no banco de dados
@@ -404,24 +370,139 @@ Verificar informações do pedido clonado
     ${dadosProdutoOriginal}    Retornar informações dos produtos do pedido    ${numeroPedidoOriginal}
     ${dadosProdutoClonado}    Retornar informações dos produtos do pedido    ${dadosPedido.numeroPedido}
 
-    ${lenght}=    Get Length    ${dadosProdutoOriginal}
+    Verificar código dos produtos no pedido clonado    produtosOriginais=${dadosProdutoOriginal}    produtosClonados=${dadosProdutoClonado}
+    Verificar quantidades dos produtos no pedido clonado    produtosOriginais=${dadosProdutoOriginal}    produtosClonados=${dadosProdutoClonado}
+    Verificar precos dos produtos no pedido clonado    produtosOriginais=${dadosProdutoOriginal}    produtosClonados=${dadosProdutoClonado}
+    Log To Console    ...::: FIM DA COMPARAÇÃO DOS PRODUTOS DO PEDIDO CLONADO :::...
+
+Verificar parceiro do pedido clonado
+    [Documentation]    Verifica se o parceiro do pedido clonado é o mesmo que o do pedido original.
+    [Tags]    Pedido-clonado-cabecalho
+    [Arguments]    ${parceiro}
+
+    IF  ${dadosPedido.idParceiro} == ${parceiro}
+        Log To Console    Parceiro do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        Log To Console    Parceiro selecionado no pedido clonado está diferente do parceiro informado no pedido original.
+        Fail 
+    END
+
+Verificar local do pedido clonado
+    [Documentation]    Verifica se o local do parceiro do pedido clonado é o mesmo que o do pedido original.
+    [Tags]    Pedido-clonado-cabecalho
+    [Arguments]    ${local}
+
+    IF  ${dadosPedido.idLocalParceiro} == ${local}
+        Log To Console    Local do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        Log To Console    Local selecionado no pedido clonado está diferente do local informado no pedido original.
+        Fail 
+    END
+
+Verificar filial do pedido clonado
+    [Documentation]    Verifica se a filial do pedido clonado é a mesma que a do pedido original.
+    [Tags]    Pedido-clonado-cabecalho
+    [Arguments]    ${filial}
+
+    IF  ${dadosPedido.idLocalFilial} == ${filial}
+        Log To Console    Filial do pedido clonado é a mesma que a do pedido original.
+    ELSE
+        Log To Console    Filial selecionada no pedido clonado está diferente da filial informada no pedido original.
+        Fail 
+    END
+
+Verificar tipo do pedido clonado
+    [Documentation]    Verifica se o tipo do pedido clonado é o mesmo que o do pedido original.
+    [Tags]    Pedido-clonado-cabecalho
+    [Arguments]    ${tipoPedido}
+
+    IF  ${dadosPedido.idTipoPedido} == ${tipoPedido}
+        Log To Console    Tipo do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        Log To Console    Tipo de pedido clonado está diferente do tipo de pedido informado no pedido original.
+        Fail 
+    END
+
+Verificar tabela de preco do pedido clonado
+    [Documentation]    Verifica se a tabela de preço do pedido clonado é a mesma que a do pedido original.
+    [Tags]    Pedido-clonado-cabecalho
+    [Arguments]    ${tabelaPreco}
+
+    IF  ${dadosPedido.idTabelaPreco} == ${tabelaPreco}
+        Log To Console    Tabela de preço do pedido clonado é a mesma que a do pedido original.
+    ELSE
+        Log To Console    Tabela de preço selecionada no pedido clonado está diferente da tabela de preço informada no pedido original.
+        Fail 
+    END
+
+Verificar condicao de pagamento do pedido clonado
+    [Documentation]    Verifica se a condição de pagamento do pedido clonado é a mesma que a do pedido original.
+    [Tags]    Pedido-clonado-cabecalho
+    [Arguments]    ${condicaoPagamento}
+
+    IF  ${dadosPedido.idCondicaoPagamento} == ${condicaoPagamento}
+        Log To Console    Condição de pagamento do pedido clonado é a mesma que a do pedido original.
+    ELSE
+        Log To Console    Condição de pagamento selecionada no pedido clonado está diferente da condição de pagamento informada no pedido original.
+        Fail 
+    END
+
+Verificar tipo cobranca do pedido clonado
+    [Documentation]    Verifica se o tipo de cobrança do pedido clonado é o mesmo que o do pedido original.
+    [Tags]    Pedido-clonado-cabecalho
+    [Arguments]    ${tipoCobranca}
+
+    IF  ${dadosPedido.idTipoCobranca} == ${tipoCobranca}
+        Log To Console    Tipo de cobrança do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        Log To Console    Tipo de cobrança selecionado no pedido clonado está diferente do tipo de cobrança informado no pedido original.
+        Fail 
+    END
+
+Verificar código dos produtos no pedido clonado
+    [Documentation]    Valida se os códigos dos produtos presentes no pedido clonado são os mesmos que o do pedido original.
+    [Tags]    Pedido-clonado-produtos
+    [Arguments]    ${produtosOriginais}    ${produtosClonados}
+
+    ${lenght}=    Get Length    ${produtosOriginais}
 
     FOR  ${I}  IN RANGE    ${lenght}
-        IF  '${dadosProdutoOriginal[${I}]['codigo']}' == '${dadosProdutoClonado[${I}]['codigo']}'
-            IF  '${dadosProdutoOriginal[${I}]['quantidade']}' == '${dadosProdutoClonado[${I}]['quantidade']}'
-                IF  '${dadosProdutoOriginal[${I}]['precovenda']}' == '${dadosProdutoClonado[${I}]['precovenda']}'
-                    Log To Console    Produto ${dadosProdutoOriginal[${I}]['codigo']} ok!
-                ELSE
-                    Log To Console    Preço do produto ${dadosProdutoOriginal[${I}]['codigo']} está divergente.
-                    Fail
-                END
-            ELSE
-                Log To Console    Quantidade do produto ${dadosProdutoOriginal[${I}]['codigo']} está divergente.
-                Fail    
-            END
+        IF  '${produtosOriginais[${I}]['codigo']}' == '${produtosClonados[${I}]['codigo']}'
+            Log To Console    Produto ${produtosClonados[${I}]['codigo']} está presente no pedido clonado.
         ELSE
-            Log To Console    Produto ${dadosProdutoOriginal[${I}]['codigo']} não foi encontrado no pedido clonado.
+            Log To Console    Produto ${produtosOriginais[${I}]['codigo']} não foi encontrado no pedido clonado.
             Fail
-        END   
+        END
     END
-    Log To Console    ...::: FIM DA COMPARAÇÃO DOS PRODUTOS DO PEDIDO CLONADO :::...
+
+Verificar quantidades dos produtos no pedido clonado
+    [Documentation]    Valida se as quantidades dos produtos presentes no pedido clonado são as mesmas que o do pedido original.
+    [Tags]    Pedido-clonado-produtos
+    [Arguments]    ${produtosOriginais}    ${produtosClonados}
+
+    ${lenght}=    Get Length    ${produtosOriginais}
+
+    FOR  ${I}  IN RANGE    ${lenght}
+        IF  '${produtosOriginais[${I}]['quantidade']}' == '${produtosClonados[${I}]['quantidade']}'
+            Log To Console    Produto ${produtosClonados[${I}]['codigo']} está com a quantidade correta no pedido clonado.
+        ELSE
+            Log To Console    Produto ${produtosOriginais[${I}]['codigo']} não está com a quantidade correta no pedido clonado.
+            Fail
+        END
+    END
+
+Verificar precos dos produtos no pedido clonado
+    [Documentation]    Valida se os preços dos produtos presentes no pedido clonado são os mesmos que o do pedido original.
+    [Tags]    Pedido-clonado-produtos
+    [Arguments]    ${produtosOriginais}    ${produtosClonados}
+
+    ${lenght}=    Get Length    ${produtosOriginais}
+
+    FOR  ${I}  IN RANGE    ${lenght}
+        IF  '${produtosOriginais[${I}]['precovenda']}' == '${produtosClonados[${I}]['precovenda']}'
+            Log To Console    Produto ${produtosClonados[${I}]['codigo']} está com o preço correto no pedido clonado.
+        ELSE
+            Log To Console    Produto ${produtosOriginais[${I}]['codigo']} não está com o preço correto no pedido clonado.
+            Fail
+        END
+    END
