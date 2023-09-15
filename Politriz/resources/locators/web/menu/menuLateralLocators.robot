@@ -1,3 +1,6 @@
+*** Settings ***
+Documentation    Arquivo utilizado para armazenar os localizadores de elementos necessários para manipular o menu lateral principal da web
+
 *** Variables ***
 
 &{venda}

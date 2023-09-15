@@ -1,3 +1,6 @@
+*** Settings ***
+Documentation    Arquivo utilizado para armazenar variaveis com informações de inscrição estadual necessárias no processo de cadastro de lead.
+
 *** Variables ***
 &{goias}
 ...    estado=GOIAS
@@ -133,4 +136,33 @@
 ...    estado=SERGIPE
 ...    cidade=Aracaju
 ...    inscricao=94243587-7
+   
 
+@{inscricoes}    
+...    ${rio_grande_do_sul}
+...    ${acre}
+...    ${alagoas}
+...    ${amapa}
+...    ${amazonas}
+...    ${bahia}
+...    ${ceara}
+...    ${distrito_federal}
+...    ${espirito_santo}
+...    ${goias}
+...    ${maranhao}
+...    ${mato_grosso}
+...    ${mato_grosso_do_sul}
+...    ${minas_gerais}
+...    ${para}
+...    ${paraiba}
+...    ${parana}
+...    ${pernambuco}
+...    ${piaui}
+...    ${rio_de_janeiro}
+...    ${rio_grande_do_norte}
+...    ${rondonia}
+...    ${roraima}
+...    ${santa_catarina}
+...    ${sao_paulo}
+...    ${sergipe}
+...    ${tocantins}

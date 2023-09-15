@@ -1,7 +1,9 @@
-*** Variables ***
+*** Settings ***
+Documentation    Arquivo utilizado para armazenar os localizadores de elementos necessários no processo de cadastro de lead.
 
+*** Variables ***
 ${UF}       //option[contains(text(), '{state}')]
-${CIDADE2}    //option[contains(text(), '{city}')]  
+${OPTION_CIDADE}    //option[contains(text(), '{city}')]  
 
 &{cabecalho}
 ...    razaoSocial=formLeadrazaoSocial     #id
@@ -25,6 +27,7 @@ ${CIDADE2}    //option[contains(text(), '{city}')]
 ...    opcaoBrasil=//li[contains(text(), 'BRASIL')]             #xpath
 ...    comboBoxEstado=//*[@id="select2-cmbUf-container"]    #xpath
 ...    inputEstado=/html/body/span/span/span[1]/input     #xpath
+...    labelCidade=//*[@id="formLead"]/div[1]/div[4]/ul/li[17]/label    #xpath
 ...    inputCidade=/html/body/span/span/span[1]/input    #xpath
 ...    comboBoxCidade=/html/body/div[1]/div[2]/div/main/div/div[2]/div/div/form/div[1]/div[4]/ul/li[17]/span/span[1]/span/span[2]         #xpath
 ...    labelLogradouro=//*[@id="formLead"]/div[1]/div[4]/ul/li[18]/label    #xpath
