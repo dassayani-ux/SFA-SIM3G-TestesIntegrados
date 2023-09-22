@@ -3,7 +3,7 @@ from lxml import etree, cssselect
 from variables.varLogin import usuario, senha
 
 # URL de login
-login_url = 'http://localhost:8080/automacao/login.logar.ws?redirecturl='
+login_url = 'http://localhost:9001/totvscrmsfa'
 
 # Criar uma sessão
 session = requests.Session()

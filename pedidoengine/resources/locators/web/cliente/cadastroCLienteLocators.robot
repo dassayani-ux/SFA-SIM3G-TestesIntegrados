@@ -43,6 +43,11 @@ ${tituloPaginaCadastroCLiente}    //*[@id="principal"]/div[1]/div/div[1]/h1[cont
 ${btnGravarCadastro}    btnGravar    #id
 ${btnCancelarCadastro}    btnCancelar    #id
 
+&{dadosIdentificacao}
+...    inscricaoEstadual=inscricao-estadual-input     #id
+...    inscricaoMunicipal=tipoidentificacao_local_inscricaomunicipal    #name
+...    inscricaoSuframa=tipoidentificacao_local_inscricaosuframa    #name
+
 &{localComplemento}
 ...    tipoLocal=cmbTipoLocal    #id
 ...    tipologia=cmbTipologia    #id
