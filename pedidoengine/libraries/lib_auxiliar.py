@@ -1,9 +1,9 @@
 import requests
 from lxml import etree, cssselect
-from variables.varLogin import usuario, senha
+from variables.varLogin import usuario, senha, urlLogin
 
 # URL de login
-login_url = 'http://localhost:9001/totvscrmsfa'
+login_url = urlLogin
 
 # Criar uma sessão
 session = requests.Session()
