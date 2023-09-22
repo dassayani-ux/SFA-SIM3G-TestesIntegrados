@@ -1,9 +1,9 @@
 import requests
 from lxml import etree, cssselect
-from variables.varLogin import usuario, senha
+from variables.varLogin import usuario, senha, urlLogin
 
 # URL de login
-login_url = 'http://localhost:8080/automacao/login.logar.ws?redirecturl='
+login_url = urlLogin
 
 # Criar uma sessão
 session = requests.Session()

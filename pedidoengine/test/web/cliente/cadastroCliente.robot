@@ -17,6 +17,7 @@ Teste 001 ::: Valida campos obrigatórios cadastro cliente
 
 Teste 002 ::: Cadastro de cliente
     [Documentation]    DTSFASAPP-T76 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/256534
+    Acessa tela de cadastro de cliente
     Cadastra cliente juridico
 
 Teste 003 ::: Valida tipo cobrança cliente
@@ -24,3 +25,7 @@ Teste 003 ::: Valida tipo cobrança cliente
     Acessa tela de listagem de clientes
     Ativa pesquisa avancada
     Valida tipo cobranca padrao
+
+Teste 004 ::: Cadastro de cliente - todas as incrições estaduais 
+    [Documentation]    DTSFASAPP-T815 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/DTSFASAPP-T815
+    Cadastra cliente juridico para cada inscrição estadual 

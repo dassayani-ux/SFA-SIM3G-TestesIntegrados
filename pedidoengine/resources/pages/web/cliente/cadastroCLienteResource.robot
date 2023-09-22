@@ -6,7 +6,8 @@ Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
 Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robot
 Resource    ${EXECDIR}/resources/locators/web/cliente/cadastroCLienteLocators.robot
 Resource    ${EXECDIR}/resources/variables/web/cliente/cadastroClienteVariables.robot
-Library    ${EXECDIR}/libraries/lib_auxiliar.py
+Resource    ${EXECDIR}/resources/variables/web/cliente/listaInscricoesEstaduais.robot
+Library     ${EXECDIR}/libraries/lib_auxiliar.py
 
 *** Variables ***
 ${nome}
@@ -24,6 +25,13 @@ Acessa tela de cadastro de cliente
     Wait Until Page Contains Element    xpath=${tituloPaginaCadastroCLiente}    10s
     Wait Until Element Is Visible    id=${cabecalhoCliente.idCabecalho}
     Capture Page Screenshot
+    # ajustar aqui 
+    # ${windowHandles}    Get Window Handles
+    # FOR    ${handle}    IN    @{windowHandles}
+    #     Switch Window    ${handle}
+    #     ${title}    Get Title
+    #     Run Keyword If    '${title}' == 'TOTVS CRM SFA | Dashboard'    Close Window
+    # END
 
 Cadastra cliente juridico
     [Documentation]    Irá cadastrar um novo cliente do tipo pessoa jurítica.
@@ -34,6 +42,19 @@ Cadastra cliente juridico
     Preenche dados complementares do local
     Grava cadastro de cliente
     Valida cliente listagem
+
+Cadastra cliente juridico para cada inscrição estadual 
+    [Documentation]    Irá cadastrar um novo cliente do tipo pessoa jurítica para cada incrição estadual salva em variaveis. 
+    FOR  ${i}  IN  @{inscricoes}
+        Acessa tela de cadastro de cliente
+        Preenche dados gerais pessoa jurídica
+        Preenche dados de complemento pessoa juidica
+        Prrenche dados gerais de local cliente juridico        ${i['estado']}    ${i['cidade']}
+        Preenche dados de identificação - inscrição estadual      ${i['inscricao']}
+        Preenche dados complementares do local
+        Grava cadastro de cliente
+        Valida cliente listagem
+    END
 
 Preenche dados gerais pessoa jurídica
     [Documentation]    Irá preencher os dados gerais do cliente levando em consideração que este se trata de pessoa jurídica.
@@ -74,14 +95,12 @@ Preenche dados de complemento pessoa juidica
 
 Prrenche dados gerais de local cliente juridico
     [Documentation]    Irá preencher os dados gerais do local levando em consideração que este se trata de local de pessoa jurídica.
+    [Arguments]    ${estadoArg}=${EMPTY}    ${cidadeArg}=${EMPTY}
 
     ${logradouro}=    FakerLibrary.Street Name
     ${numero}=    FakerLibrary.Building Number
     ${bairro}=    FakerLibrary.bairro
     ${cep}=    FakerLibrary.Postcode
-    ${estado}=    FakerLibrary.State
-    ${uf}    Convert To Upper Case    ${estado}
-    ${estadoFormat}=    Evaluate    unidecode.unidecode('${uf}')
     ${limteCredito}=    FakerLibrary.Random Number    digits=6
     ${telefone}=    FakerLibrary.Cellphone Number
     ${telefoneFormat}    Remove String    ${telefone}    +55    (    )    -    ${telefone[0:1]}
@@ -93,8 +112,35 @@ Prrenche dados gerais de local cliente juridico
     SeleniumLibrary.Input Text    name=${localGeralClienteJuridico.bairro}    ${bairro}
     SeleniumLibrary.Input Text    name=${localGeralClienteJuridico.cep}    ${cep}
     SeleniumLibrary.Click Element    id=${localGeralClienteJuridico.uf}
-    SeleniumLibrary.Click Element    xpath=//*[@id="${localGeralClienteJuridico.uf}"]/option[contains(text(),'${estadoFormat}')]
     
+    IF  "${estadoArg}" == "${EMPTY}" and "${cidadeArg}" == "${EMPTY}"
+        Selecionar cidade e estados aleatórios 
+    ELSE
+        Selecionar estado e cidade de acordo com o que foi passado como argumento    ${estadoArg}    ${cidadeArg}
+    END
+
+    SeleniumLibrary.Input Text    id=${localGeralClienteJuridico.limteCredito}    ${limteCredito} 
+    SeleniumLibrary.Input Text    id=${localGeralClienteJuridico.telefone}    ${telefoneFormat}
+    SeleniumLibrary.Input Text    id=${localGeralClienteJuridico.email}    ${email}
+    
+
+Selecionar estado e cidade de acordo com o que foi passado como argumento
+    [Documentation]    Irá selecionar a cidade e o estado que foram passados por argumento no cadastro de pessoa jurídica.
+    [Arguments]    ${estadoArg}    ${cidadeArg}
+    SeleniumLibrary.Click Element    xpath=//*[@id="${localGeralClienteJuridico.uf}"]/option[contains(text(),'${estadoArg}')] 
+
+    ${cidade}    Convert To Upper Case    ${cidadeArg}
+    ${cidadeFormat}=    Evaluate    unidecode.unidecode('${cidade}')
+    Sleep    0.5s
+    SeleniumLibrary.Click Element    xpath=//*[@id="${localGeralClienteJuridico.comboCidade}"]/option[contains(text(),'${cidadeFormat}')] 
+
+Selecionar cidade e estados aleatórios 
+    [Documentation]    Irá selecionar a cidade e o estado de modo aleatório no cadastro de pessoa jurídica.
+    ${estado}=    FakerLibrary.State
+    ${uf}    Convert To Upper Case    ${estado}
+    ${estadoFormat}=    Evaluate    unidecode.unidecode('${uf}')
+
+    SeleniumLibrary.Click Element    xpath=//*[@id="${localGeralClienteJuridico.uf}"]/option[contains(text(),'${estadoFormat}')]    
     ## Irá capturar a quantidade de opções no combo de cidade após informado o estado, e sorteará um index aleatório, selecionado
     ## assim a cidade que se encontra presente naquele index
     Sleep    0.5s
@@ -102,11 +148,6 @@ Prrenche dados gerais de local cliente juridico
     ${iCidade}=    Evaluate    random.sample(range(2, ${countCidades}-1), 1)    random
     SeleniumLibrary.Click Element    xpath=//*[@id="${localGeralClienteJuridico.comboCidade}"]/option[${iCidade[0]}]  
     ##
-
-    SeleniumLibrary.Input Text    id=${localGeralClienteJuridico.limteCredito}    ${limteCredito} 
-    SeleniumLibrary.Input Text    id=${localGeralClienteJuridico.telefone}    ${telefoneFormat}
-    SeleniumLibrary.Input Text    id=${localGeralClienteJuridico.email}    ${email}
-
 Preenche dados complementares do local
     [Documentation]    Irá preencher os dados complementares do local.
 
@@ -233,3 +274,9 @@ Valida tipo cobranca padrao
         Log To Console    Filtragem do cliente está inconsistênte.
         Fail
     END
+
+Preenche dados de identificação - inscrição estadual 
+    [Documentation]        irá preencher somente o campo de inscrição estadual
+    [Arguments]      ${INSCRICAO}=0121754832766
+    Wait Until Element Is Visible    id=${dadosIdentificacao.inscricaoEstadual}     timeout=30s
+    Press Keys      id=${dadosIdentificacao.inscricaoEstadual}     ${INSCRICAO}
