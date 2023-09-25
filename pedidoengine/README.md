@@ -45,6 +45,7 @@ senha = 'password'
 usuarioInvalido = '123'
 senhaInvalida = '123'
 msgErro = 'Informações preenchidas incorretamente'
+urlLogin = 'http://localhost:8080/automacao/login.logar.ws?redirecturl='
 ```
 
 # ❗Recomendação
