@@ -11,9 +11,10 @@ Library    Collections
 
 ${CLIENTE_ATIVO_SQL}
     ...    select
-    ...    distinct this_.idParceiro as y0_,
-    ...    this_.nomeParceiro as y1_,
-    ...    this_.nomeParceiroFantasia as y2_
+    ...    distinct this_.idParceiro as id,
+    ...    this_.nomeParceiro as nome,
+    ...    this_.nomeParceiroFantasia as fantasia,
+    ...    this_.numeromatricula as matricula
     ...    from
     ...    Parceiro this_ 
     ...    left outer join
@@ -511,3 +512,15 @@ Retorna idparceiro
     ${idParceiro}=    Query    select p.idparceiro from parceiro p where p.numeromatricula = '${maricula}' and p.nomeparceiro ilike '%${nomeParceiro}%'
 
     Return From Keyword    ${idParceiro[0][0]}
+
+Retornar cliente ativo
+    [Documentation]    Irá retornar uma lista contendo o id, nome, nome fantasia e número da matrícula de um cliente random com situação ativo.
+
+    ${count}    Row Count    ${CLIENTE_ATIVO_SQL}
+    ${listaClienteAtivo}    Query    ${CLIENTE_ATIVO_SQL}    returnAsDict=True
+    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
+    ${clienteAtivo}    Set Variable    ${listaClienteAtivo[${index[0]}]}
+
+    Log To Console    \nCliente selecionado: ${clienteAtivo['nome']}
+
+    Return From Keyword    ${clienteAtivo}

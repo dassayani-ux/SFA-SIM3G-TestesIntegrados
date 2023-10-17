@@ -12,7 +12,7 @@
 ...    novoCliente=menu.cliente.cadastrar.novo
 ...    menuClienteListar=menu.cliente.cadastrar.listar
 
-&{atendimento}
+&{menuAtendimento}
 ...    menuAtendimento=atendimento.modulo    #id
 ...    novoAtendimento=atendimento.modulo.cadastrar.novo    #id
 ...    listarAtendimento=atendimento.modulo.cadastrar.listar    #id

@@ -1,13 +1,74 @@
 *** Settings ***
-Documentation    Arquivo criado para armazenar as SQLs utilizadas para validar atendimentos.
+Documentation    Arquivo criado para armazenar as SQLs e palavras chaves utilizadas para validar atendimentos.
 
-*** Variables ***
-${TIPO_ATENDIMENTO_SQL}    select descricao from tipoatendimento t where idnativo = 1 and (tipoautenticacao = 0 or tipoautenticacao is null)
+Resource    ${EXECDIR}/resources/lib/web/lib.robot
 
-${JUSTIFICATIVA_SQL}    select descricao from tipojustificativa where idnativo = 1
+*** Keywords ***
+Retornar proximo atendimento
+    [Documentation]    Irá retornar o próximo ID que será criado na tabela atendimento.
 
-${PROXIMO_ATENDIMENTO_SQL}    select max(idatendimento)+1 from atendimento
+    ${sql}    Set Variable    select max(idatendimento)+1 from atendimento
+    ${proximoAtendimento}    Query    ${sql}
 
-${ULTIMO_ATENDIMENTO_SQL}    select max(idatendimento) from atendimento    
+    Return From Keyword    ${proximoAtendimento[0][0]}
 
-${DATA_HORA_FIM_SQL}    select datafim, horafim from atendimento where idatendimento =
+Retornar ultimo atendimento
+    [Documentation]    Irá retornar o maior ID salvo na tabela de atendimento.
+
+    ${sql}    Set Variable    select max(idatendimento) from atendimento
+    ${ultimoAtendimento}    Query    ${sql}
+
+    Return From Keyword    ${ultimoAtendimento[0][0]}
+
+Retornar descricao tipo atendimento
+    [Documentation]    Irá retornar a descrição de um tipo atendimento.
+    [Arguments]    ${idTipoAtendimento}=${EMPTY}
+    [Tags]    Not-autentication
+
+    IF  '${idTipoAtendimento}' == '${EMPTY}'
+        ${sql}    Set Variable    select descricao from tipoatendimento t where idnativo = 1 and (tipoautenticacao = 0 or tipoautenticacao is null)
+    ELSE
+        ${sql}    Set Variable    select descricao from tipoatendimento t where idtipoatendimento = ${idTipoAtendimento}
+    END
+
+    ${listaTipoAtendimento}    Query    ${sql}
+    ${count}    Row Count    ${sql}
+    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
+    ${tipoAtendimento}    Set Variable    ${listaTipoAtendimento[${index[0]}][0]}
+
+    Log To Console    Tipo de atendimento selecionado: ${tipoAtendimento}
+
+    Return From Keyword    ${tipoAtendimento}
+
+Retornar descricao justificativa atendimento
+    [Documentation]    Irá retornar a descricao de uma justificativa para preencher no atendimento.
+    [Arguments]    ${idJustificativa}=${EMPTY}
+
+    IF  '${idJustificativa}' == '${EMPTY}'
+        ${sql}    Set Variable    select descricao from tipojustificativa where idnativo = 1 and sglContexto='ATE'
+    ELSE
+        ${sql}    Set Variable    select descricao from tipojustificativa where sglContexto='ATE' and idtipojustificativa = ${idJustificativa}
+    END
+
+    ${listaJustificativa}    Query    ${sql}
+    ${count}    Row Count    ${sql}
+    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
+    ${justificativa}    Set Variable    ${listaJustificativa[${index[0]}][0]}
+
+    Log To Console    Justificativa selecionada: ${justificativa}
+
+    Return From Keyword    ${justificativa}
+
+Retornar data e hora fim do atendimento
+    [Documentation]    Retorna a data e a hora fim do atendimento passado no argumento _*${idAtendimento}*_.
+    [Arguments]    ${idAtendimento}=${EMPTY}
+
+    IF  '${idAtendimento}' == '${EMPTY}'
+        BuiltIn.Log To Console    Nenhum atendimento foi passado como argumento.
+        BuiltIn.Fail
+    ELSE
+        ${sql}    Set Variable    select datafim, horafim from atendimento where idatendimento = ${idAtendimento}
+        ${dataHoraFim}    Query    ${sql}    returnAsDict=True
+    END
+    
+    Return From Keyword    ${dataHoraFim[0]}

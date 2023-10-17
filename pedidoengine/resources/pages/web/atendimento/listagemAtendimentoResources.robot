@@ -7,17 +7,19 @@ Resource    ${EXECDIR}/resources/locators/web/atendimento/listagemAtendimentoLoc
 Resource    ${EXECDIR}/resources/locators/web/atendimento/cadastroAtendimentoLocators.robot
 
 *** Keywords ***
-Acessa listagem de atendimentos
+Acessar listagem de atendimentos
     [Documentation]    Irá acessar a tela de listagem de atendimentos.
 
-    Click Element    id=${atendimento.menuAtendimento}
-    Wait Until Element Is Visible    id=${atendimento.listarAtendimento}
-    Click Element    id=${atendimento.listarAtendimento}    
-    Wait Until Page Contains Element    xpath=${tituloListagemAtendimento}    20
-    Wait Until Element Is Visible    id=${listagem.gridListagem}    10s
-    Capture Page Screenshot
+    SeleniumLibrary.Click Element    id=${menuAtendimento.menuAtendimento}
+    SeleniumLibrary.Wait Until Element Is Visible    id=${menuAtendimento.listarAtendimento}
+    SeleniumLibrary.Click Element    id=${menuAtendimento.listarAtendimento}    
+    SeleniumLibrary.Wait Until Page Contains Element    xpath=${tituloListagemAtendimento}    20
+    SeleniumLibrary.Wait Until Element Is Visible    id=${listagem.gridListagem}    10s
 
-Edita Atendimento
+Editar Atendimento
     [Documentation]    Irá acionar a edição do primeiro registro listado no grid.
+
+    Sleep    1s
+    SeleniumLibrary.Scroll Element Into View    xpath=${listagem.editarAtendimento}
     SeleniumLibrary.Click Element    xpath=${listagem.editarAtendimento}
-    Wait Until Element Is Visible    id=${cabecalho.idCabecalho}
+    SeleniumLibrary.Wait Until Element Is Visible    id=${cabecalho.idCabecalho}    ${10}
