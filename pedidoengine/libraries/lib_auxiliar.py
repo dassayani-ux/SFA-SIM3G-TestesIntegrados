@@ -1,6 +1,9 @@
 import requests
 from lxml import etree, cssselect
 from variables.varLogin import usuario, senha, urlLogin
+from selenium.webdriver.common.by import By
+from robot.libraries.BuiltIn import BuiltIn
+from robot.api.deco import keyword, not_keyword
 
 # URL de login
 login_url = urlLogin
@@ -15,6 +18,7 @@ login_data = {
 }
 session.post(login_url, data=login_data)
 
+@keyword("Retornar xpath do elemento pai")
 def return_xpath_parent(css_class, url):
     """Utiliza a classe passada em *css_class* para retornar uma lista contendo o *xpath* do elemento pai de todos
     os elementos que possuem a classe passada como argumento."""
@@ -29,3 +33,12 @@ def return_xpath_parent(css_class, url):
         xpath = tree.getpath(parent_element)
         xpaths.append(xpath)
     return xpaths
+
+@keyword("Incluir imagem atendimento")
+def incluir_imagem_atendimento(url):
+    """Esta keyword realiza a inclusão de imagem no atendimento."""
+    selenium_lib = BuiltIn().get_library_instance('SeleniumLibrary')
+    driver = selenium_lib.driver
+    driver.get(url)
+    file_input = driver.find_element(By.ID, "imageUpload")
+    file_input.send_keys("C:/WS/Fontes/SFA-SIM3G-TestesIntegrados/pedidoengine/resources/elements/atendimento/imgAtendimento.jpg")

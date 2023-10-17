@@ -46,3 +46,29 @@ Retorna idLocalFilial
     ${idLocalFilial}=    Query    select idlocalfilial from localfilial l join local l2 on l2.idlocal = l.idlocal where l2.descricao ilike '%${descricao}%'
 
     Return From Keyword    ${idLocalFilial[0][0]}
+
+Retornar descricao local
+    [Documentation]    Irá retornar a descrição de um local de acordo com o parceiro passado como argumento.
+    [Arguments]    ${idParceiro}
+
+    ${idLocal}=    Retornar id local parceiro    ${idParceiro}
+    ${sqlDescricaoLocal}    Set Variable    select descricao from local where idlocal = ${idLocal}    
+    ${tuplaDescicaoLocal}    Query    ${sqlDescricaoLocal}
+    ${descricaoLocal}    Set Variable    ${tuplaDescicaoLocal[0][0]}   
+
+    Log To Console    Local selecionado: ${descricaoLocal}
+    
+    Return From Keyword    ${descricaoLocal}
+
+Retornar id local parceiro
+    [Documentation]    Irá retornar o id de um local de acordo com o parceiro passado como argumento.
+    [Arguments]    ${idParceiro}
+
+    ${sqlParceiroLocal}    Set Variable    select p.idlocal from parceirolocal p where idparceiro = ${idParceiro}
+    ${listaIdLocal}    Query    ${sqlParceiroLocal}
+    ${count}    Row Count    ${sqlParceiroLocal}    
+
+    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
+    ${idLocal}    Set Variable    ${listaIdLocal[${index[0]}][0]}
+
+    Return From Keyword    ${idLocal}

@@ -31,27 +31,26 @@ Teste 004 ::: Realizar login valido
 Teste 005 ::: Cadastrar atendimento
     [Documentation]    DTSFASAPP-T135 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/264681
 
-    ${idAtendimentoAux}=    Retorna proximo atendimento
-    Set Test Variable    ${idAtendimento}    ${idAtendimentoAux}
-
-    Acessa tela de cadastro de atendimento
-    Preenche cabeçalho do atendimento
-    Inicia atendimento
-    #Inlcuir imagem no atendimento    -- Comentado pois o google possui um bug e, em alguns momentos, trava a aplicação quando realizada a inclusão de imagem.
-    Finaliza atendimento
-    Valida criacao do atendimento no bd    ${idAtendimento}
+    ${idAtendimentoAux}=    Retornar proximo atendimento
+    ${idAtendimento}    Set Variable    ${idAtendimentoAux}
+    Acessar tela de lançamento de atendimento
+    Preencher cabeçalho do atentimento
+    Iniciar atendimento
+    Incluir imagem no atendimento
+    Finalizar atendimento
+    Validar criacao do atendimento no banco de dados    ${idAtendimento}
 
 Teste 006 ::: Editar atendimento
     [Documentation]    DTSFASAPP-T703 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/300860
 
-    ${idAtendimentoAux}=    Retorna ultimo atendimento
-    Set Test Variable    ${idAtendimento}    ${idAtendimentoAux}
-
-    Acessa listagem de atendimentos
-    Edita Atendimento
-    Altera data fim do atendimento    ${idAtendimento} 
-    Finaliza atendimento
-    Valida edicao do atendimento    ${idAtendimento}
+    ${idAtendimentoAux}=    Retornar ultimo atendimento
+    ${idAtendimento}    Set Variable    ${idAtendimentoAux}
+    Acessar listagem de atendimentos
+    Editar Atendimento
+    Alterar data fim do atendimento    ${idAtendimento} 
+    Finalizar atendimento
+    Sleep    2s
+    Validar edicao do atendimento    ${idAtendimento}
 
 Teste 007 ::: Validar campos obrigatórios no cadastro de cliente
     [Documentation]    https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/256241

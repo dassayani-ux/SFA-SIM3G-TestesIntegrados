@@ -213,7 +213,7 @@ Valida campos obrigatorios do cliente
     [Documentation]    Esta keyword é responsável por verificar se os campos tidos como obrigtórios estão preenchidos corretamente no cadastro do cliente.
 
     ${urlAtual}=    SeleniumLibrary.Get Location
-    ${listaXpath}    return_xpath_parent    css_class=requerido    url=${urlAtual}
+    ${listaXpath}    Retornar xpath do elemento pai    css_class=requerido    url=${urlAtual}
     ${lenght}    BuiltIn.Get Length    ${listaXpath}
 
     Log To Console    \nCampos orbigatórios:

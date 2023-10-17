@@ -12,9 +12,11 @@ ${tituloPaginaAtendimento}    //*[@id="principal"]/div[1]/div/div[1]/h1[contains
 ...    pesquisaTipoAtendimento=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[5]/div/a[1]    #xpath
 ...    pesquisaRapidaTipoAtendimento=termSelection_TIPOATENDIMENTO    #id
 ...    pesquisajustificativa=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[10]/div/a[1]    #xpath
+...    limpajustificativa=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[10]/div/a[2]    #xpath
 ...    pesquisaRapidaJustificativa=termSelection_TIPOJUSTIFICATIVA    #id
 ...    horaFim=txtHoraFim    #id
 ...    dataFim=txtDataFim    #id
+...    txtObservacao=observacao    #id
 
 ${iniciarAtendimento}    btnIniciar    #id
 
