@@ -6,6 +6,7 @@ Por motivos de segurança, o arquivo **sfa_variables.py**, que contem informaç�
 1. Realizar uma cópia do arquivo **sfa_variables.py.template** do direório: **pedidoengine/libraries/variables**;
 
 _Obs.: A cópia deve ser criada na mesma pasta do .template_
+
 2. Renomear esse novo arquivo criado para **sfa_variables.py**;
 3. Preencher as variáveis de acordo com os dados utilizados por você.
 
