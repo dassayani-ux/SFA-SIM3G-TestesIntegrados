@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation    Arquivo criado para armazenar as SQLs utilizadas para validar usuários.
 
-Library    DatabaseLibrary
+Resource    ${EXECDIR}/resources/lib/web/lib.robot
 
 *** Variables ***
 ${SQL_USUARIO}    select

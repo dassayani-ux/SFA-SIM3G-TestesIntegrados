@@ -10,6 +10,11 @@ Por motivos de segurança, arquivos que possuem dados de acesso à plataforma e 
     _Obs.: Após criar o aquivo seguindo o template abaixo, basta substituir as informações de acordo com os dados utilizados por você._
 ```
 *** Settings ***
+Documentation    Arquivo utilizado para realizar a configuraçao de aceesso ao banco de dados do Omni.
+...    Este arquivo não está presente no repositório, portanto necessário criá-lo e configurá-lo corretamente para rodar os testes.
+
+*** Variables ***
+*** Settings ***
 Documentation    Arquivo utilizado para armazenar variáveis globais que não possuem tipagem predefinida.
 
 *** Variables ***
@@ -23,6 +28,10 @@ ${DBPass}         password
 ${DBPort}         5432
 ${DBUser}         user
 ${DBDriver}       psycopg2
+
+
+## Imagens Sikuly
+${dirSikully}    ${EXECDIR}\\resources\\elements
 ```
 
 2. Criar um arquivo chamado **varLogin.py** no direório: **pedidoengine/libraries/variables**.
@@ -85,10 +94,11 @@ Documentation    Arquivo utilizado para armazenar variáveis necessárias para r
 ${ipServer}    192.1.1.1:40921
 ```
 
-# ❗Atenção
-Para  evitar conflitos em caminhos de diretórios, todos devem realizar o **pull** deste repositório na seguinte hierarquia de pasta:
+# ❗Recomendação
+Para tentar evitar conflitos em caminhos de diretórios, recomento que todos que façam o **pull** deste repositório o façam seguindo a mesma hierarquia de pasta, pois assim é mais
+difícil ocorrer problemas de referência.
 
-**C:\WS\Fontes\SFA-SIM3G-TestesIntegrados**
+Hierarquia sugerida:   **C:\WS\Fontes\SFA-SIM3G-TestesIntegrados**
 
 <p>
     --------------------------------------------------
@@ -131,6 +141,14 @@ https://github.com/appium/appium-desktop/releases
     pip install robotframework-databaselibrary
 _Não foi encontrado link com a documentação das keywords dessa biblioteca._
   
+### Sikuli Library 
+    pip install robotframework-SikuliLibrary
+https://rainmanwy.github.io/robotframework-SikuliLibrary/doc/SikuliLibrary.html
+  
+### Selenium Library
+    pip install robotframework-seleniumlibrary
+https://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
+
 ### Faker Library
     pip install robotframework-faker
 https://guykisel.github.io/robotframework-faker/

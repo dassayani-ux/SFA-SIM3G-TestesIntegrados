@@ -3,7 +3,7 @@ Documentation    Arquivo utilizado para armazenar keywords utilizadas no process
 
 Resource    ${EXECDIR}/resources/lib/android/lib.robot
 Resource    ${EXECDIR}/resources/locators/android/sincronizacao/syncLocators.robot
-Resource    ${EXECDIR}/resources/variables/android/sincronizacao/syncVariables.robot
+Variables    ${EXECDIR}/libraries/variables/sfa_variables.py
 
 *** Keywords ***
 Realizar primeira sincronizacao
@@ -12,11 +12,11 @@ Realizar primeira sincronizacao
     AppiumLibrary.Wait Until Page Contains    ${msgSyncInicial.txtMsg}
     AppiumLibrary.Click Element    id=${msgSyncInicial.btnDigitar}
     AppiumLibrary.Wait Until Element Is Visible    id=${inputServer}
-    AppiumLibrary.Input Text    id=${inputServer}    ${ipServer}
+    AppiumLibrary.Input Text    id=${inputServer}    ${sync_mobile.ipServer}
     AppiumLibrary.Wait Until Element Is Visible    id=${btnSincronizar}
     AppiumLibrary.Click Element    id=${btnSincronizar}
 
-    AppiumLibrary.Wait Until Element Is Visible    xpath=${msgSyncFinalizada.locatorMsg}    timeout=600
+    AppiumLibrary.Wait Until Element Is Visible    xpath=${msgSyncFinalizada.locatorMsg}    timeout=600    #10 minutos
     AppiumLibrary.Element Should Contain Text    xpath=${msgSyncFinalizada.locatorMsg}    ${msgSyncFinalizada.msg}
     AppiumLibrary.Click Element    id=${msgSyncFinalizada.btnOk}
     Sleep    1s

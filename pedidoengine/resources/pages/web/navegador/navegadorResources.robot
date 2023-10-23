@@ -2,10 +2,10 @@
 Documentation    Arquivo utilizado para realizar a abertura da aplicação web no navegador configurado.
 
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/variables/web/global/globalVariables.robot
+Variables    ${EXECDIR}/libraries/variables/sfa_variables.py
 
 *** Keywords ***
 Abre navegador
     [Documentation]    Irá abrir a aplicação web no navegador previamente informado.
-    Open Browser    ${WEB_URL}    ${NAVEGADOR}
+    Open Browser    ${aplicacao_web.urlWeb}    ${aplicacao_web.navegadorWeb}
     Maximize Browser Window
