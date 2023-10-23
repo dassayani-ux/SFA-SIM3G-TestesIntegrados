@@ -1,7 +1,7 @@
 Pasta utilizada para armazenar os casos de testes automatizados do produto padrão **PEDIDOENGINE**.
 
 # ⚠ IMPORTANTE
-Por motivos de segurança, o arquivo **sfa_variables.py**, que contem informações de acesso a aplicação e ao banco de dados é ignorado no commit, portanto, caso queira rodar o projeto em sua máquina é necessário seguir as instrução abaixo:
+Por motivos de segurança, o arquivo **sfa_variables.py**, que contem informações de acesso a aplicação e ao banco de dados é ignorado no commit, portanto, caso queira rodar o projeto em sua máquina é necessário seguir as instuções abaixo:
 
 1. Realizar uma cópia do arquivo **sfa_variables.py.template** do direório: **pedidoengine/libraries/variables**;
 _Obs.: A cópia deve ser criada na mesma pasta do .template_
@@ -10,6 +10,7 @@ _Obs.: A cópia deve ser criada na mesma pasta do .template_
 
 # Atenção
 Para evitar conflitos em caminhos de diretórios, todos devem realizar o **pull** deste repositório seguindo a hierarquia abaixo:
+
 **C:\WS\Fontes\SFA-SIM3G-TestesIntegrados**
 
 <p>
