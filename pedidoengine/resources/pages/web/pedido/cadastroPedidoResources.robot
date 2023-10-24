@@ -300,9 +300,10 @@ Incluir itens no pedido
     FOR  ${I}  IN RANGE    ${quantideItensPedido}
         SeleniumLibrary.Input Text    id=${pesquisaProdutosCarrinho.codigoProduto}    ${produtos[${I}]}
         SeleniumLibrary.Click Element    id=${pesquisaProdutosCarrinho.pesquisaProduto}
-        SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
-        SeleniumLibrary.Click Element    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
+        #SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
+        #SeleniumLibrary.Click Element    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
         ${qtde}=    Evaluate    random.sample(range(1, ${quantidadeMaximaProduto}), 1)    random    ## Randomiza a quantidade em um intervalo de 1 a ${quantidadeMaximaProduto}
+        SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaProdutosCarrinho.campoQuantidade}
         SeleniumLibrary.Press Keys    ${pesquisaProdutosCarrinho.campoQuantidade}    ${qtde[0]}
         SeleniumLibrary.Click Element    id=${pesquisaProdutosCarrinho.adicionarProduto}
         SeleniumLibrary.Clear Element Text    id=${pesquisaProdutosCarrinho.codigoProduto}

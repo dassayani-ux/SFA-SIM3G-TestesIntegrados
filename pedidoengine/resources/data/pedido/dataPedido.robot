@@ -33,7 +33,7 @@ Retorna idTipoPedido
     [Documentation]    Irá retornar o ID do Tipo Pedido utilizando o campo *descricao* como argumento.
     [Arguments]    ${descricao}
 
-    ${idTipoPedido}=    Query    select t.idtipopedido from tipopedido t where t.descricao = '${descricao}'
+    ${idTipoPedido}=    Query    select t.idtipopedido from tipopedido t where t.descricao = '${descricao}' and t.idnativo = 1
 
     Return From Keyword    ${idTipoPedido[0][0]}
 
@@ -41,7 +41,7 @@ Retorna idTabelaPreco
     [Documentation]    Irá retornar o ID da Tabela de Preço utilizando o campo *descricao* como argumento.
     [Arguments]    ${descricao}
 
-    ${idTabelaPreco}=    Query    select t.idtabelapreco from tabelapreco t where t.descricao = '${descricao}'
+    ${idTabelaPreco}=    Query    select t.idtabelapreco from tabelapreco t where t.descricao = '${descricao}' and t.idnativo = 1
 
     Return From Keyword    ${idTabelaPreco[0][0]}
 
