@@ -56,10 +56,6 @@ https://github.com/appium/appium-desktop/releases
     pip install robotframework-databaselibrary
 _Não foi encontrado link com a documentação das keywords dessa biblioteca._
   
-### Sikuli Library 
-    pip install robotframework-SikuliLibrary
-https://rainmanwy.github.io/robotframework-SikuliLibrary/doc/SikuliLibrary.html
-  
 ### Selenium Library
     pip install robotframework-seleniumlibrary
 https://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
