@@ -1,7 +1,6 @@
 *** Settings ***
 Documentation    Arquivo utilizado para armazenas as palavras chaves utilizadas no processo de cadastro de atendimento.
 
-Library     ${EXECDIR}/libraries/sfa_lib_web.py
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
 Resource    ${EXECDIR}/resources/data/local/dataLocal.robot
 Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot

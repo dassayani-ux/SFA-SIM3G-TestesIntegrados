@@ -4,6 +4,7 @@ from variables.sfa_variables import login_web, imagemWeb
 from selenium.webdriver.common.by import By
 from robot.libraries.BuiltIn import BuiltIn
 from robot.api.deco import keyword, not_keyword
+from selenium import webdriver
 
 # URL de login
 login_url = login_web.urlLoginWeb
@@ -42,3 +43,15 @@ def incluir_imagem_atendimento(url):
     driver.get(url)
     file_input = driver.find_element(By.ID, "imageUpload")
     file_input.send_keys(imagemWeb.dirImagemAtendimento)
+
+@keyword('Fechar guia de Dashboard')
+def fechar_guia_dashboard():
+    """Utilizada para fechar a guia Dashboard que é aberta constatemente pelo robot."""
+    selenium_lib = BuiltIn().get_library_instance('SeleniumLibrary')
+    driver = selenium_lib.driver
+    window_handles = driver.window_handles
+    for handle in window_handles:
+        driver.switch_to.window(handle)
+        title = driver.title
+        if title == 'TOTVS CRM SFA | Dashboard':
+            driver.close()

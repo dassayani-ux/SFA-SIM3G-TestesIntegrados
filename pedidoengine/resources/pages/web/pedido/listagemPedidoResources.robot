@@ -19,12 +19,7 @@ Acessar tela de listagem de pedidos
     SeleniumLibrary.Wait Until Element Is Visible    id=${venda.listarPedido}
     SeleniumLibrary.Click Element    id=${venda.listarPedido}
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${tituloPaginaListagemClientes}
-    ${windowHandles}    Get Window Handles
-    FOR    ${handle}    IN    @{windowHandles}
-        Switch Window    ${handle}
-        ${title}    Get Title
-        Run Keyword If    '${title}' == 'TOTVS CRM SFA | Dashboard'    Close Window
-    END
+    sfa_lib_web.Fechar guia de Dashboard
     SeleniumLibrary.Switch Window    TOTVS CRM SFA | Listagem de pedidos
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${msgCarregando}
     Sleep    0.5s

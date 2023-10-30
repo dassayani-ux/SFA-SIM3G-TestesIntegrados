@@ -7,7 +7,6 @@ Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robo
 Resource    ${EXECDIR}/resources/locators/web/cliente/cadastroCLienteLocators.robot
 Resource    ${EXECDIR}/resources/variables/web/cliente/cadastroClienteVariables.robot
 Resource    ${EXECDIR}/resources/variables/web/cliente/listaInscricoesEstaduais.robot
-Library     ${EXECDIR}/libraries/sfa_lib_web.py
 
 *** Variables ***
 ${nome}

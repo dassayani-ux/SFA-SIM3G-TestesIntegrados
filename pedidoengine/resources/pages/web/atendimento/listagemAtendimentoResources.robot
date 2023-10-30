@@ -15,6 +15,8 @@ Acessar listagem de atendimentos
     SeleniumLibrary.Click Element    id=${menuAtendimento.listarAtendimento}    
     SeleniumLibrary.Wait Until Page Contains Element    xpath=${tituloListagemAtendimento}    20
     SeleniumLibrary.Wait Until Element Is Visible    id=${listagem.gridListagem}    10s
+    sfa_lib_web.Fechar guia de Dashboard
+    SeleniumLibrary.Switch Window    TOTVS CRM SFA | Atendimento
 
 Editar Atendimento
     [Documentation]    Irá acionar a edição do primeiro registro listado no grid.

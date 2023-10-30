@@ -17,7 +17,8 @@ Acessa tela de listagem de clientes
     Wait Until Element Is Visible     id=${cliente.menuClienteListar}    5
     Click Element    id=${cliente.menuClienteListar}
     Wait Until Page Contains Element    ${tituloPaginaListagemCliente}    20
-    Capture Page Screenshot
+    sfa_lib_web.Fechar guia de Dashboard
+    SeleniumLibrary.Switch Window    TOTVS CRM SFA | Listagem de clientes
 
 Retorna cliente ativo
     [Documentation]    Irá retornar uma lista contenedo um id e um nome de cliente random ativo.
