@@ -42,6 +42,7 @@ Filtrar pedido por numero definido
     ...    \nO número do pedido deve ser passado no argumento *numeroPedido*.
     [Arguments]    ${numeroPedido}
     
+    SeleniumLibrary.Wait Until Element Is Enabled    id=${pesquisaRapidaPedido.btnLimpar}
     SeleniumLibrary.Click Element    id=${pesquisaRapidaPedido.btnLimpar}
     Ativa pesquisa avancada pedido de venda
     ${headerInicial}    SeleniumLibrary.Get Text    xpath=${gridListagemPedidos.headerGrid}

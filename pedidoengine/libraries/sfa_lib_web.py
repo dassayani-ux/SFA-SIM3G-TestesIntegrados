@@ -1,20 +1,20 @@
 import requests
 from lxml import etree, cssselect
-from variables.varLogin import usuario, senha, urlLogin
+from variables.sfa_variables import login_web, imagemWeb
 from selenium.webdriver.common.by import By
 from robot.libraries.BuiltIn import BuiltIn
 from robot.api.deco import keyword, not_keyword
 
 # URL de login
-login_url = urlLogin
+login_url = login_web.urlLoginWeb
 
 # Criar uma sessão
 session = requests.Session()
 
 # Realizar o login na sessão
 login_data = {
-    'usuario': usuario,
-    'senha': senha
+    'usuario': login_web.usuarioWeb,
+    'senha': login_web.senhaWeb
 }
 session.post(login_url, data=login_data)
 
@@ -41,4 +41,4 @@ def incluir_imagem_atendimento(url):
     driver = selenium_lib.driver
     driver.get(url)
     file_input = driver.find_element(By.ID, "imageUpload")
-    file_input.send_keys("C:/WS/Fontes/SFA-SIM3G-TestesIntegrados/pedidoengine/resources/elements/atendimento/imgAtendimento.jpg")
+    file_input.send_keys(imagemWeb.dirImagemAtendimento)

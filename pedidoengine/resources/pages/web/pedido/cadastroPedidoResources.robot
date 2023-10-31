@@ -237,6 +237,8 @@ Remove itens duplicados
 Gravar pedido de venda
     [Documentation]    Esta keyword é responsável por gravar o pedido de venda.
 
+    SeleniumLibrary.Scroll Element Into View    id=${botaoGravarPedio}
+    SeleniumLibrary.Wait Until Element Is Enabled    id=${botaoGravarPedio}
     SeleniumLibrary.Click Element    id=${botaoGravarPedio}
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${popUpPedidoGravado.divPopUp}
     SeleniumLibrary.Wait Until Page Contains Element    xpath=${popUpPedidoGravado.msgGravadoSucesso}
@@ -245,6 +247,8 @@ Gravar pedido de venda
 Finalizar pedido de venda
     [Documentation]    Esta keyword é responsável por finalizar o pedido de venda na tela de cadastro de pedido.
 
+    SeleniumLibrary.Scroll Element Into View    id=${botaoFinalizarPedido}
+    SeleniumLibrary.Wait Until Element Is Enabled    id=${botaoFinalizarPedido}
     SeleniumLibrary.Click Element    id=${botaoFinalizarPedido}
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${popUpFinalizarPedido.divPopUp}
     SeleniumLibrary.Wait Until Element Is Enabled    xpath=${popUpFinalizarPedido.btnSim}

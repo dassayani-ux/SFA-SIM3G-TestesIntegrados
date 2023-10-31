@@ -3,30 +3,30 @@ Documentation    Arquivo utilizado para armazenar keywords necessárias no proce
 
 Resource    ${EXECDIR}/resources/lib/android/lib.robot
 Resource    ${EXECDIR}/resources/locators/android/login/loginLocators.robot
-Resource    ${EXECDIR}/resources/variables/android/login/loginVariables.robot
+Variables    ${EXECDIR}/libraries/variables/sfa_variables.py
 
 *** Keywords ***
 Realizar primeiro login no app
     [Documentation]    Realiza o primeiro login no app Android.
 
     AppiumLibrary.Wait Until Element Is Visible    ${formLogin.inputProfissional}    ${20}
-    AppiumLibrary.Input Text    id=${formLogin.inputProfissional}    ${profissional}
-    AppiumLibrary.Input Text    id=${formLogin.inputSenha}    ${senha}
+    AppiumLibrary.Input Text    id=${formLogin.inputProfissional}    ${login_mobile.usuarioMobile}
+    AppiumLibrary.Input Text    id=${formLogin.inputSenha}    ${login_mobile.senhaMobile}
     AppiumLibrary.Click Element    id=${formLogin.btnEntrar}
 
 Realizar login no app
     [Documentation]    Esta keyowrd deve ser utilizada para realizar login no app Android após a primeira sincronização já ter sido realizada.
     
     AppiumLibrary.Wait Until Element Is Visible    ${formLogin.inputProfissional}    ${30}
-    ${login}=    AppiumLibrary.Get Text    id=${formLogin.inputProfissional}
-    IF  '${login}' == '${profissional}'
+    ${userLogado}=    AppiumLibrary.Get Text    id=${formLogin.inputProfissional}
+    IF  '${userLogado}' == '${login_mobile.usuarioMobile}'
         Log To Console    \nProfissional logado é o correto.
     ELSE    
         Log To Console    \nProfissional logado está diferente do profissional utilizado na sync.
         Fail
     END
     
-    AppiumLibrary.Input Text    id=${formLogin.inputSenha}    ${senha}
+    AppiumLibrary.Input Text    id=${formLogin.inputSenha}    ${login_mobile.senhaMobile}
     AppiumLibrary.Click Element    id=${formLogin.btnEntrar}
 
     Sleep    1s

@@ -1,8 +1,7 @@
 *** Settings ***
 Documentation    Arquivo criado para armazenar as SQLs utilizadas para validar clientes.
 
-Library    DatabaseLibrary
-Library    Collections
+Resource    ${EXECDIR}/resources/lib/web/lib.robot
 
 *** Variables ***
 

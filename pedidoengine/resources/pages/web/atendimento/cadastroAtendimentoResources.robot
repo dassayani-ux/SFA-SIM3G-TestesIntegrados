@@ -1,12 +1,11 @@
 *** Settings ***
 Documentation    Arquivo utilizado para armazenas as palavras chaves utilizadas no processo de cadastro de atendimento.
 
-Library     ${EXECDIR}/libraries/lib_auxiliar.py
+Library     ${EXECDIR}/libraries/sfa_lib_web.py
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
 Resource    ${EXECDIR}/resources/data/local/dataLocal.robot
 Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot
 Resource    ${EXECDIR}/resources/data/atendimento/dataAtendimento.robot
-Resource    ${EXECDIR}/resources/variables/web/global/globalVariables.robot
 Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
 Resource    ${EXECDIR}/resources/locators/web/atendimento/cadastroAtendimentoLocators.robot
 Resource    ${EXECDIR}/resources/variables/web/atendimento/cadastroAtendimentoVariables.robot
@@ -157,7 +156,7 @@ Incluir imagem no atendimento
     SeleniumLibrary.Wait Until Element Is Visible    ${imagem.guiaImagens}    ${10}
     SeleniumLibrary.Click Element    ${imagem.guiaImagens}
     ${urlAtendimento}    SeleniumLibrary.Get Location
-    lib_auxiliar.Incluir imagem atendimento    ${urlAtendimento}
+    sfa_lib_web.Incluir imagem atendimento    ${urlAtendimento}
 
 Alterar data fim do atendimento 
     [Documentation]    Irá alterar o valor da data fim do atendimento para a data e hora atual.

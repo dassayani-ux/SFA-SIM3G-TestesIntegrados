@@ -7,7 +7,7 @@ Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robo
 Resource    ${EXECDIR}/resources/locators/web/cliente/cadastroCLienteLocators.robot
 Resource    ${EXECDIR}/resources/variables/web/cliente/cadastroClienteVariables.robot
 Resource    ${EXECDIR}/resources/variables/web/cliente/listaInscricoesEstaduais.robot
-Library     ${EXECDIR}/libraries/lib_auxiliar.py
+Library     ${EXECDIR}/libraries/sfa_lib_web.py
 
 *** Variables ***
 ${nome}
@@ -24,14 +24,6 @@ Acessa tela de cadastro de cliente
     SeleniumLibrary.Click Element    id=${cliente.novoCliente}
     Wait Until Page Contains Element    xpath=${tituloPaginaCadastroCLiente}    10s
     Wait Until Element Is Visible    id=${cabecalhoCliente.idCabecalho}
-    Capture Page Screenshot
-    # ajustar aqui 
-    # ${windowHandles}    Get Window Handles
-    # FOR    ${handle}    IN    @{windowHandles}
-    #     Switch Window    ${handle}
-    #     ${title}    Get Title
-    #     Run Keyword If    '${title}' == 'TOTVS CRM SFA | Dashboard'    Close Window
-    # END
 
 Cadastra cliente juridico
     [Documentation]    Irá cadastrar um novo cliente do tipo pessoa jurítica.

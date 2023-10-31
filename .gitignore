@@ -1,8 +1,4 @@
 results*
-Sikuli_java*.txt
-pedidoengine/libraries/variables/varLogin.py
-pedidoengine/resources/variables/web/global/globalVariables.robot
 __pycache__*
-pedidoengine/resources/variables/Android/global/globalVariables.robot
-pedidoengine/resources/variables/Android/login/loginVariables.robot
-pedidoengine/resources/variables/Android/sincronizacao/syncVariables.robot
+Sikuli_java*.txt
+pedidoengine/libraries/variables/sfa_variables.py
