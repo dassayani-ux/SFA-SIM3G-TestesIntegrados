@@ -45,6 +45,6 @@ Retorna count Estado
     [Documentation]    Esta keyword irá retornar a quantidade de estados que possuem em sua descrição a palavra passada como argumento.
     [Arguments]    ${estado}
 
-    ${count}    Row Count    select * from unidadefederativa u where u.descricao ilike '%${estado}%';
+    ${count}    Row Count    select * from unidadefederativa u where u.descricao ilike '%${estado}%' and u.idnativo = 1;
     
     Return From Keyword    ${count}

@@ -6,7 +6,7 @@ Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
 Resource    ${EXECDIR}/resources/locators/web/cliente/listaClientesLocators.robot
 Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot
 Resource    ${EXECDIR}/resources/pages/web/local/localResources.robot
-Resource    ${EXECDIR}/resources/pages/web/usuario/usuarioResource.robot
+Resource    ${EXECDIR}/resources/data/usuario/dataUsuario.robot
 
 *** Keywords ***
 Acessa tela de listagem de clientes
@@ -19,26 +19,6 @@ Acessa tela de listagem de clientes
     Wait Until Page Contains Element    ${tituloPaginaListagemCliente}    20
     sfa_lib_web.Fechar guia de Dashboard
     SeleniumLibrary.Switch Window    TOTVS CRM SFA | Listagem de clientes
-
-Retorna cliente ativo
-    [Documentation]    Irá retornar uma lista contenedo um id e um nome de cliente random ativo.
-    ${COUNT}    Row Count    ${CLIENTE_ATIVO_SQL}
-    ${CLIENTE_ATIVO}    Query    ${CLIENTE_ATIVO_SQL}
-    ${Index}=    Evaluate    random.sample(range(0, ${COUNT}), 1)    random
-
-    Log To Console    \nCliente selecionado: ${CLIENTE_ATIVO[${Index[0]}][0]} - ${CLIENTE_ATIVO[${Index[0]}][1]}
-
-    Return From Keyword    ${CLIENTE_ATIVO[${Index[0]}][0]}    ${CLIENTE_ATIVO[${Index[0]}][1]}
-
-Retorna razao e matricula parceiro aleatorio
-    [Documentation]    Esta keyword retorna uma lista contendo a razão social e matrícula de um parceiro aletório, respectivamente.
-
-    ${count}    Row Count    ${SQL_PARCEIRO_MATRICULA}
-    ${parceiro}    Query    ${SQL_PARCEIRO_MATRICULA}
-    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
-
-    Log To Console    \nParceiro sorteado: ${parceiro[${index[0]}][1]} - ${parceiro[${index[0]}][0]}
-    Return From Keyword    ${parceiro[${index[0]}][0]}    ${parceiro[${index[0]}][1]}
 
 Filtra cliente especifico
     [Documentation]    Irá filtrar um cliente específico utilizando o nome e matrícula como argumentos.
@@ -89,6 +69,7 @@ Filtra cliente na pesquisa rapida por nome
     END
 
     SeleniumLibrary.Clear Element Text    name=${pesquisaRapida.inputPesquisa}
+
 Filtra cliente na pesquisa rapida por numero
     [Documentation]    Representa uma filtragem por número de matrícula do cliente.
 
@@ -442,24 +423,44 @@ Filtra cliente por logradouro
 Filtra cliente por estado
     [Documentation]    Irá realizar a consulta de clientes tendo como parâmetro o campo *UF*.
 
-    ${estadoUnformat}=    FakerLibrary.State
+    ${formatoDescricao}    DatabaseLibrary.Query    select AVG(LENGTH(descricao)) from unidadefederativa u where u.idnativo = 1;
+    IF  ${formatoDescricao[0][0]} == ${2}
+        ${estadoUnformat}=    FakerLibrary.State Abbr
+    ELSE
+        ${estadoUnformat}=    FakerLibrary.State
+    END
     ${format}    Convert To Upper Case    ${estadoUnformat}
     ${estadoFormat}=    Evaluate    unidecode.unidecode('${format}')
     ${countEstado}=    Retorna count Estado    ${estadoFormat}
     WHILE  ${countEstado} > ${1}    ## Por hora, só irá filtrar por estados que possuem nome único.
-        ${estadoUnformat}=    FakerLibrary.State
+        ${formatoDescricao}    DatabaseLibrary.Query    select AVG(LENGTH(descricao)) from unidadefederativa u where u.idnativo = 1;
+        IF  ${formatoDescricao[0][0]} == ${2}
+            ${estadoUnformat}=    FakerLibrary.State Abbr
+        ELSE
+            ${estadoUnformat}=    FakerLibrary.State
+        END
         ${format}    Convert To Upper Case    ${estadoUnformat}
         ${estadoFormat}=    Evaluate    unidecode.unidecode('${format}')
         ${countEstado}=    Retorna count Estado    ${estadoFormat}
     END
     ${countRegistros}=    SQL Pesquisa Avancada    estadoUF=${estadoFormat}
     WHILE  ${countRegistros} == ${0}
-        ${estadoUnformat}=    FakerLibrary.State
+        ${formatoDescricao}    DatabaseLibrary.Query    select AVG(LENGTH(descricao)) from unidadefederativa u where u.idnativo = 1;
+        IF  ${formatoDescricao[0][0]} == ${2}
+            ${estadoUnformat}=    FakerLibrary.State Abbr
+        ELSE
+            ${estadoUnformat}=    FakerLibrary.State
+        END
         ${format}    Convert To Upper Case    ${estadoUnformat}
         ${estadoFormat}=    Evaluate    unidecode.unidecode('${format}')
         ${countEstado}=    Retorna count Estado    ${estadoFormat}
         WHILE  ${countEstado} > ${1}    ## Por hora, só irá filtrar por estados que possuem nome único.
-            ${estadoUnformat}=    FakerLibrary.State
+            ${formatoDescricao}    DatabaseLibrary.Query    select AVG(LENGTH(descricao)) from unidadefederativa u where u.idnativo = 1;
+            IF  ${formatoDescricao[0][0]} == ${2}
+                ${estadoUnformat}=    FakerLibrary.State Abbr
+            ELSE
+                ${estadoUnformat}=    FakerLibrary.State
+            END
             ${format}    Convert To Upper Case    ${estadoUnformat}
             ${estadoFormat}=    Evaluate    unidecode.unidecode('${format}')
             ${countEstado}=    Retorna count Estado    ${estadoFormat}
@@ -546,10 +547,10 @@ Filtra cliente por cidade
 Filtra cliente por profissional
     [Documentation]    Irá realizar a consulta de clientes tendo como parâmetro o campo *Profissonal*.
 
-    ${usuario}=    Retorna usuario aleatorio
+    ${usuario}=    Retornar usuario aleatorio
     ${countRegistros}=    SQL Pesquisa Avancada    usuario=${usuario[0]}
     WHILE  ${countRegistros} == ${0}
-        ${usuario}=    Retorna usuario aleatorio
+        ${usuario}=    Retornar usuario aleatorio
         ${countRegistros}=    SQL Pesquisa Avancada    usuario=${usuario[0]}
     END
 

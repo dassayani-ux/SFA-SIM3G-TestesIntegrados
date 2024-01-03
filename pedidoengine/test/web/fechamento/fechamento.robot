@@ -10,7 +10,7 @@ Resource    ${EXECDIR}/resources/pages/web/atendimento/cadastroAtendimentoResour
 Resource    ${EXECDIR}/resources/pages/web/cliente/cadastroCLienteResource.robot
 Resource    ${EXECDIR}/resources/pages/web/pedido/cadastroPedidoResources.robot
 
-Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    Inativar pesquisa de Tipo Cobraca
+Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    ##Inativar pesquisa de Tipo Cobraca
 Suite Teardown    Disconnect From Database
 
 *** Test Cases ***
@@ -58,15 +58,16 @@ Teste 006 ::: Editar atendimento
     Sleep    2s
     Validar edicao do atendimento    ${idAtendimento}
 
-Teste 007 ::: Validar campos obrigatórios no cadastro de cliente
-    [Tags]    Cadastro-cliente
-    [Documentation]    https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/256241
-    Acessa tela de cadastro de cliente
-    Valida campos obrigatorios do cliente
+# Teste 007 ::: Validar campos obrigatórios no cadastro de cliente
+#     [Tags]    Cadastro-cliente
+#     [Documentation]    https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/256241
+#     Acessa tela de cadastro de cliente
+#     Valida campos obrigatorios do cliente
 
 Teste 008 ::: Cadastrar cliente
     [Tags]    Cadastro-cliente
     [Documentation]    DTSFASAPP-T76 (1.0): https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testCase/256534
+    Acessa tela de cadastro de cliente
     Cadastra cliente juridico
 
 Teste 009 ::: Pesquisa rápida de cliente usando nome

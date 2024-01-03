@@ -5,14 +5,14 @@ ${tituloPaginaAtendimento}    //*[@id="principal"]/div[1]/div/div[1]/h1[contains
 #CABEÇALHO
 &{cabecalho}
 ...    idCabecalho=cabecalhoAtendimento    #id
-...    pesquisaCliente=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[3]/div/a[1]    #xpath
+...    pesquisaCliente=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[2]/div/a[1]    #xpath
 ...    pesquisaRapidaCliente=termSelection_TERMO    #id
-...    pesquisaLocal=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[4]/div/a[1]    #xpath
+...    pesquisaLocal=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[3]/div/a[1]    #xpath
 ...    pesquisaRapidaLocal=termSelection_LOCAL    #id
-...    pesquisaTipoAtendimento=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[5]/div/a[1]    #xpath
+...    pesquisaTipoAtendimento=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[4]/div/a[1]    #xpath
 ...    pesquisaRapidaTipoAtendimento=termSelection_TIPOATENDIMENTO    #id
-...    pesquisajustificativa=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[10]/div/a[1]    #xpath
-...    limpajustificativa=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[10]/div/a[2]    #xpath
+...    pesquisajustificativa=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[8]/div/a[1]    #xpath
+...    limpajustificativa=//*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[8]/div/a[2]    #xpath
 ...    pesquisaRapidaJustificativa=termSelection_TIPOJUSTIFICATIVA    #id
 ...    horaFim=txtHoraFim    #id
 ...    dataFim=txtDataFim    #id

@@ -53,5 +53,5 @@ def fechar_guia_dashboard():
     for handle in window_handles:
         driver.switch_to.window(handle)
         title = driver.title
-        if title == 'TOTVS CRM SFA | Dashboard':
+        if title == 'TOTVS CRM SFA | Dashboard' or title == 'TOTVS CRM SFA | Gestao de Clientes':
             driver.close()

@@ -21,9 +21,9 @@ Acessar tela de listagem de pedidos
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${tituloPaginaListagemClientes}
     sfa_lib_web.Fechar guia de Dashboard
     SeleniumLibrary.Switch Window    TOTVS CRM SFA | Listagem de pedidos
-    SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${msgCarregando}
+    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...
     Sleep    0.5s
-    SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${msgCarregando}
+    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...
     Sleep    0.5s
 
 Ativa pesquisa avancada pedido de venda

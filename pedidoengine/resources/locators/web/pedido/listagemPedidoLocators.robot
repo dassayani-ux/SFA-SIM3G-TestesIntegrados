@@ -17,10 +17,10 @@ ${msgCarregando}    //*[@id="loading"]/div[2]/div[contains(text(),'Carregando...
 &{gridListagemPedidos}
 ...    numeroPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[1]    #xpath
 ...    headerGrid=//*[@id="principal"]/div[2]/div/div/div[2]/div[1]/span    #xpath
-...    editarPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[21]/a    #xpath
-...    finalizarPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[23]/a    #xpath
-...    removerPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[24]/a    #xpath
-...    clonarPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[22]/a    #xpath
+...    editarPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[14]/a    #xpath
+...    finalizarPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[16]/a    #xpath
+...    removerPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[17]/a    #xpath
+...    clonarPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[15]/a    #xpath
 
 &{popUpFinalizarPedidoListagem}
 ...    divPopUp=/html/body/div[4]/div    #xpath

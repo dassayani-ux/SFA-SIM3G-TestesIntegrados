@@ -28,7 +28,7 @@ Cadastra cliente juridico
     [Documentation]    Irá cadastrar um novo cliente do tipo pessoa jurítica.
 
     Preenche dados gerais pessoa jurídica
-    Preenche dados de complemento pessoa juidica
+    Preenche dados de complemento pessoa juridica
     Prrenche dados gerais de local cliente juridico
     Preenche dados complementares do local
     Grava cadastro de cliente
@@ -39,7 +39,7 @@ Cadastra cliente juridico para cada inscrição estadual
     FOR  ${i}  IN  @{inscricoes}
         Acessa tela de cadastro de cliente
         Preenche dados gerais pessoa jurídica
-        Preenche dados de complemento pessoa juidica
+        Preenche dados de complemento pessoa juridica
         Prrenche dados gerais de local cliente juridico        ${i['estado']}    ${i['cidade']}
         Preenche dados de identificação - inscrição estadual      ${i['inscricao']}
         Preenche dados complementares do local
@@ -62,10 +62,10 @@ Preenche dados gerais pessoa jurídica
     SeleniumLibrary.Input Text    name=${geralCliente.fantasiaCliente}    ${nomeParceiro}
     SeleniumLibrary.Input Text    name=${geralCliente.numeroMatricula}    ${numeroMatricula}
     SeleniumLibrary.Click Element    name=${geralCliente.expandeClassificacao}
-    SeleniumLibrary.Click Element    xpath=${geralCliente.classificacaoConsumidorFinal}
+    #SeleniumLibrary.Click Element    xpath=${geralCliente.classificacaoConsumidorFinal}
     SeleniumLibrary.Input Text    name=${geralCliente.homepage}    ${homepage}
 
-Preenche dados de complemento pessoa juidica
+Preenche dados de complemento pessoa juridica
     [Documentation]    Irá preencher os dados complementares do cliente levando em consideração que este se trata de pessoa jurídica.
 
     ${cnpj}=    FakerLibrary.cnpj
@@ -76,7 +76,8 @@ Preenche dados de complemento pessoa juidica
     ${valorCapitalSubscrito}=    FakerLibrary.Random Number    digits=7
     ${valorCapitalIntegral}=    FakerLibrary.Random Number    digits=7
 
-    SeleniumLibrary.Input Text    name=${complementoClienteJuridico.cnpj}    ${cnpj}  
+    ${campoCnpj}=    BuiltIn.Run Keyword And Ignore Error    SeleniumLibrary.Page Should Contain Element    name=${complementoClienteJuridico.cnpj}
+    BuiltIn.Run Keyword If    '${campoCnpj[0]}' == 'PASS'    SeleniumLibrary.Input Text    name=${complementoClienteJuridico.cnpj}    ${cnpj}
     SeleniumLibrary.Input Text    name=${complementoClienteJuridico.numeroFuncionarios}    ${numeroFuncionarios}
     SeleniumLibrary.Input Text    name=${complementoClienteJuridico.dataFundacao}    ${dataFundacao}
     SeleniumLibrary.Press Keys    name=${complementoClienteJuridico.valorFaturamento}    ${valorFaturamento}
@@ -96,8 +97,11 @@ Prrenche dados gerais de local cliente juridico
     ${telefone}=    FakerLibrary.Cellphone Number
     ${telefoneFormat}    Remove String    ${telefone}    +55    (    )    -    ${telefone[0:1]}
     ${email}=    FakerLibrary.Email
+    ${cnpj}=    FakerLibrary.cnpj
 
     SeleniumLibrary.Input Text    name=${localGeralClienteJuridico.descricao}    ${logradouro}, ${numero} - ${bairro}
+    ${campoCnpj}=    BuiltIn.Run Keyword And Ignore Error    SeleniumLibrary.Page Should Contain Element    name=${localGeralClienteJuridico.documento}
+    BuiltIn.Run Keyword If    '${campoCnpj[0]}' == 'PASS'    SeleniumLibrary.Input Text    name=${localGeralClienteJuridico.documento}    ${cnpj}
     SeleniumLibrary.Input Text    name=${localGeralClienteJuridico.logradouro}    ${logradouro}
     SeleniumLibrary.Input Text    name=${localGeralClienteJuridico.numero}    ${numero}
     SeleniumLibrary.Input Text    name=${localGeralClienteJuridico.bairro}    ${bairro}
@@ -127,7 +131,14 @@ Selecionar estado e cidade de acordo com o que foi passado como argumento
 
 Selecionar cidade e estados aleatórios 
     [Documentation]    Irá selecionar a cidade e o estado de modo aleatório no cadastro de pessoa jurídica.
-    ${estado}=    FakerLibrary.State
+    
+    ${formatoDescricao}    DatabaseLibrary.Query    select AVG(LENGTH(descricao)) from unidadefederativa u where u.idnativo = 1;
+    IF  ${formatoDescricao[0][0]} == ${2}
+        ${estado}=    FakerLibrary.State Abbr
+    ELSE
+        ${estado}=    FakerLibrary.State
+    END
+    
     ${uf}    Convert To Upper Case    ${estado}
     ${estadoFormat}=    Evaluate    unidecode.unidecode('${uf}')
 
@@ -155,8 +166,10 @@ Preenche dados complementares do local
     END
     
     ${CountRegiao}    Get Element Count    xpath=//*[@id="${localComplemento.regiao}"]/option
-    ${regiao}=    Evaluate    random.sample(range(2, ${CountRegiao}-1), 1)    random
-    SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.regiao}"]/option[${regiao[0]}]  
+    IF  ${CountRegiao} > 2
+        ${regiao}=    Evaluate    random.sample(range(2, ${CountRegiao}-1), 1)    random
+        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.regiao}"]/option[${regiao[0]}]  
+    END
 
     ${coutSegmento}    Get Element Count    xpath=//*[@id="${localComplemento.segmento}"]/option
     IF  ${coutSegmento} > 2
@@ -207,7 +220,7 @@ Valida campos obrigatorios do cliente
     ${listaXpath}    Retornar xpath do elemento pai    css_class=requerido    url=${urlAtual}
     ${lenght}    BuiltIn.Get Length    ${listaXpath}
 
-    Log To Console    \nCampos orbigatórios:
+    Log To Console    \nCampos obrigatórios:
     FOR  ${i}  IN RANGE    ${lenght}
         ${campo}=    SeleniumLibrary.Get Text    xpath=${listaXpath[${i}]}/label
         ${campoStr}=    String.Remove String    ${campo}    :
