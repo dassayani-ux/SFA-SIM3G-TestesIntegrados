@@ -2,13 +2,14 @@
 Documentation    Arquivo utilizado para armazenar as keywords utilizadas no processo de cadastro de pedido de venda.
 
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
+Resource    ${EXECDIR}/resources/data/pedido/dataPedido.robot
+Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot
+Resource    ${EXECDIR}/resources/data/produto/dataProduto.robot
 Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
 Resource    ${EXECDIR}/resources/locators/web/pedido/cadastroPedidoLocators.robot
 Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robot
-Resource    ${EXECDIR}/resources/data/pedido/dataPedido.robot
 Resource    ${EXECDIR}/resources/variables/web/pedido/cadastroPedidoVariables.robot
 Resource    ${EXECDIR}/resources/pages/web/pedido/listagemPedidoResources.robot
-Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot
 
 *** Keywords ***
 Inativar pesquisa de Tipo Cobraca
@@ -349,7 +350,9 @@ Incluir itens no pedido
         SeleniumLibrary.Click Element    id=${pesquisaProdutosCarrinho.pesquisaProduto}
         #SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
         #SeleniumLibrary.Click Element    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
-        ${qtde}=    Evaluate    random.sample(range(1, ${quantidadeMaximaProduto}), 1)    random    ## Randomiza a quantidade em um intervalo de 1 a ${quantidadeMaximaProduto}
+        ${qtdApresentacao}=    Retornar quantidade apresentacao produto    codigoProduto=${produtos[${I}]}
+        ${qtdApresentacao}=    BuiltIn.Convert To Integer    ${qtdApresentacao}
+        ${qtde}=    Evaluate    random.randint(1, round(${quantidadeMaximaProduto}/${qtdApresentacao})) * ${qtdApresentacao}    random    #Randomiza uma quantidade múltipla da quantidade de apresentação do produto, em um intervalor de 1 a ${quantidadeMaximaProduto}.
         SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaProdutosCarrinho.campoQuantidade}
         SeleniumLibrary.Click Element    ${pesquisaProdutosCarrinho.campoQuantidade}
         SeleniumLibrary.Wait Until Element Is Visible   ${pesquisaProdutosCarrinho.inputCampoQuantidade}
