@@ -23,17 +23,14 @@ ${sqlUltimoPedidoNF}    select cast(p.numeropedido as integer) from pedido p
     ...    order by p.datapedido desc, cast(p.numeropedido as integer) desc
     ...    limit 1
 
-${sqlUltimoPedido}    select cast(p.numeropedido as integer)
-    ...    from pedido p
-    ...    order by p.datapedido desc, cast(p.numeropedido as integer) desc
-    ...    limit 1
+${sqlUltimoPedido}    select p.numeropedido from pedido p order by p.datapedido desc, p.numeropedido desc limit 1
 
 *** Keywords ***
 Retorna idTipoPedido
     [Documentation]    Irá retornar o ID do Tipo Pedido utilizando o campo *descricao* como argumento.
     [Arguments]    ${descricao}
 
-    ${idTipoPedido}=    Query    select t.idtipopedido from tipopedido t where t.descricao = '${descricao}'
+    ${idTipoPedido}=    Query    select t.idtipopedido from tipopedido t where t.descricao = '${descricao}' and t.idnativo = 1
 
     Return From Keyword    ${idTipoPedido[0][0]}
 
@@ -41,7 +38,7 @@ Retorna idTabelaPreco
     [Documentation]    Irá retornar o ID da Tabela de Preço utilizando o campo *descricao* como argumento.
     [Arguments]    ${descricao}
 
-    ${idTabelaPreco}=    Query    select t.idtabelapreco from tabelapreco t where t.descricao = '${descricao}'
+    ${idTabelaPreco}=    Query    select t.idtabelapreco from tabelapreco t where t.descricao = '${descricao}' and t.idnativo = 1
 
     Return From Keyword    ${idTabelaPreco[0][0]}
 
@@ -261,4 +258,21 @@ Retornar dados do pedido
     END
     
     ${dadosPedido}    Query    ${sql}    returnAsDict=True
-    Return From Keyword    ${dadosPedido}    
+    Return From Keyword    ${dadosPedido}
+
+Retornar situacao de campo do cabecalho
+    [Documentation]    Retorna o valor do campo idnativo para a entidade passada no argumento *entidade*.
+    [Arguments]    ${entidade}
+
+    ${sql}=    BuiltIn.Set Variable    select idwsconfigpedidocampo as id, idnativo from wsconfigpedidocampo where contexto = 'CABECALHO' and nomeentidade = '${entidade}' 
+    ${situacao}    DatabaseLibrary.Query    selectStatement=${sql}    returnAsDict=True
+    Return From Keyword    ${situacao[0]}
+
+Retornar id parceiro do Pedido
+    [Documentation]    Retorna o id do parceiro vinculdo ao pedido passado no argumento *numeroPedido*.
+    [Arguments]    ${numeroPedido}
+
+    ${sql}=    BuiltIn.Set Variable    select idparceiro from pedido where numeropedido = '${numeroPedido}'
+    ${parceiro}=    DatabaseLibrary.Query    ${sql}
+
+    BuiltIn.Return From Keyword    ${parceiro[0][0]}

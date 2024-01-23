@@ -1,6 +1,8 @@
 from robot.api.deco import keyword, not_keyword
 from libraries.variables.sfa_variables import login_mobile, banco_de_dados
 import psycopg2
+from AppiumLibrary import AppiumLibrary
+from robot.libraries.BuiltIn import BuiltIn
 
 @not_keyword
 def retorna_lista_ordem_menu_mobile():

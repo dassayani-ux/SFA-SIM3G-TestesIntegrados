@@ -8,6 +8,7 @@ Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robo
 Resource    ${EXECDIR}/resources/data/pedido/dataPedido.robot
 Resource    ${EXECDIR}/resources/variables/web/pedido/cadastroPedidoVariables.robot
 Resource    ${EXECDIR}/resources/pages/web/pedido/listagemPedidoResources.robot
+Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot
 
 *** Keywords ***
 Inativar pesquisa de Tipo Cobraca
@@ -34,18 +35,21 @@ Acessar cadastro de novo pedido
 Preenche cabecalho pedido
     [Documentation]    Keyword responsável por preencher os dados de cabeçalho do pedido de venda.
     Cabecalho - Parceiro
+    Cabecalho - Local Parceiro
     Cabecalho - Filial
     Cabecalho - Tipo pedido
     Cabecalho - Tabela de preco
-    Cabecalho - Condicao Pagamento
-    Cabecalho - Tipo Cobranca
+    ${campoCondicaoPagamento}=    BuiltIn.Run Keyword And Ignore Error    SeleniumLibrary.Page Should Contain Element    id=${cabecalhoPedido.comboboxCondicaoPagamento}
+    BuiltIn.Run Keyword If    '${campoCondicaoPagamento[0]}' == 'PASS'    Cabecalho - Condicao Pagamento
+    #Cabecalho - Tipo Cobranca    --Comentado por hora pois na base utilizada o campo está ativo mas não editável.
+    Cabecalho - Data de vencimento
     Popula dicionario de dados do pedido
 
 Cabecalho - Parceiro
     [Documentation]    Preenche a infomação de *Parceiro* no cabeçalho do pedido
     [Tags]    Pedido-Cabecalho
 
-    ${parceiro}=    Retorna razao e matricula parceiro aleatorio
+    ${parceiro}=    Retornar razao, matricula e id de parceiro aleatorio
     SeleniumLibrary.Click Element    xpath=${cabecalhoPedido.pesquisaCliente}
     SeleniumLibrary.Wait Until Element Does Not Contain    xpath=${pesquisaCliente.headerGridPedidos}    (0) Registros
     SeleniumLibrary.Click Element    class=${pesquisaCliente.pesquisaAvancada}
@@ -53,8 +57,32 @@ Cabecalho - Parceiro
     SeleniumLibrary.Input Text    id=${pesquisaCliente.razaoSocial}    ${parceiro[0]}
     SeleniumLibrary.Input Text    id=${pesquisaCliente.matricula}    ${parceiro[1]}
     SeleniumLibrary.Click Element    xpath=${pesquisaCliente.btnPesquisar}
-    SeleniumLibrary.Wait Until Page Contains    Carregando...
-    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...    15s
+    ${dadosPedido.idParceiro}=    Set Variable    ${parceiro[2]}
+    BuiltIn.Sleep    2s
+
+Cabecalho - Local Parceiro
+    [Documentation]    Preenche a informação de *local* no cabeçalho do pedido.
+    [Tags]    Pedido-Cabecalho
+
+    SeleniumLibrary.Wait Until Element Is Enabled    id=${cabecalhoPedido.comboboxLocal}
+    SeleniumLibrary.Click Element    id=${cabecalhoPedido.comboboxLocal}
+    SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaLocalParceiroPedido.idComboboxLocal}
+    ${countLocal}    Get Element Count    xpath=${pesquisaLocalParceiroPedido.itensLocal}
+    IF  ${countLocal} == ${1}
+        BuiltIn.Fail    Não há local disponível para seleção!
+    END
+    FOR  ${I}  IN RANGE    ${2}    ${countLocal}+1
+        ${valor}    SeleniumLibrary.Get Text    xpath=//*[@id="${pesquisaLocalParceiroPedido.idComboboxLocal}"]/li[${I}]    
+        Collections.Append To List    ${listaLocais}    ${valor}
+    END
+    ${listaLocais}=    Remove itens duplicados    @{listaLocais}
+
+    ${lenght}=    Get Length    ${listaLocais}
+    ${index}=    Evaluate    random.sample(range(0, ${lenght}),1)    random
+    ${local}=    Set Variable    ${listaLocais[${index[0]}]}
+    BuiltIn.Log To Console    Local selecionado: ${local}
+    SeleniumLibrary.Input Text    class=select2-search__field    ${local}
+    SeleniumLibrary.Click Element    xpath=//*[@id="${pesquisaLocalParceiroPedido.idComboboxLocal}"]/li[contains(text(),'${local}')]
 
 Cabecalho - Filial
     [Documentation]    Preenche a informação de *Filial* no cabeçalho do pedido.
@@ -64,11 +92,13 @@ Cabecalho - Filial
     SeleniumLibrary.Click Element    id=${cabecalhoPedido.comboboxFilial}
     SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaFilial.idComboboxFilial}
     ${countFilial}    Get Element Count    xpath=${pesquisaFilial.itensFilial}
+    IF  ${countFilial} == ${1} 
+        BuiltIn.Fail    Não há filial disponível para seleção!
+    END
     FOR  ${I}  IN RANGE    ${2}    ${countFilial}+1
         ${valor}    SeleniumLibrary.Get Text    xpath=//*[@id="${pesquisaFilial.idComboboxFilial}"]/li[${I}]    
         Collections.Append To List    ${listaFiliais}    ${valor}
     END
-    
     ${listaFiliais}=    Remove itens duplicados    @{listaFiliais}
 
     ${lenght}=    Get Length    ${listaFiliais}
@@ -85,6 +115,9 @@ Cabecalho - Tipo pedido
     SeleniumLibrary.Click Element    id=${cabecalhoPedido.comboboxTipoPedido}
     SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaTipoPedido.idComboboxTipoPedido}
     ${countTipoPedido}    Get Element Count    xpath=${pesquisaTipoPedido.itensTipoPedido}
+    IF  ${countTipoPedido} == ${1} 
+        BuiltIn.Fail    Não há tipo pedido disponível para seleção!
+    END
     FOR  ${I}  IN RANGE    ${2}    ${countTipoPedido}+1
         ${valor}    SeleniumLibrary.Get Text    xpath=//*[@id="${pesquisaTipoPedido.idComboboxTipoPedido}"]/li[${I}]    
         Collections.Append To List    ${listaTipoPedido}    ${valor}
@@ -110,6 +143,9 @@ Cabecalho - Tabela de preco
     SeleniumLibrary.Click Element    id=${cabecalhoPedido.comboboxTabelaPreco}
     SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaTabelaPreco.idComboboxTabelaPreco}
     ${countTabelaPreco}    Get Element Count    xpath=${pesquisaTabelaPreco.itensTabelaPreco}
+    IF  ${countTabelaPreco} == ${1} 
+        BuiltIn.Fail    Não há tabela de preço disponível para seleção!
+    END
     FOR  ${I}  IN RANGE    ${2}    ${countTabelaPreco}+1
         ${valor}    SeleniumLibrary.Get Text    xpath=//*[@id="${pesquisaTabelaPreco.idComboboxTabelaPreco}"]/li[${I}]    
         Collections.Append To List    ${listaTabelaPreco}    ${valor}
@@ -141,6 +177,9 @@ Cabecalho - Condicao Pagamento
     SeleniumLibrary.Click Element    id=${cabecalhoPedido.comboboxCondicaoPagamento}
     SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaCondicaoPagamento.idComboboxCondicaoPagamento}
     ${countCondicaoPagamento}    Get Element Count    xpath=${pesquisaCondicaoPagamento.itensCondicaoPagamento}
+    IF  ${countCondicaoPagamento} == ${1} 
+        BuiltIn.Fail    Não há condição de pagamento disponível para seleção!
+    END
     FOR  ${I}  IN RANGE    ${2}    ${countCondicaoPagamento}+1
         ${valor}    SeleniumLibrary.Get Text    xpath=//*[@id="${pesquisaCondicaoPagamento.idComboboxCondicaoPagamento}"]/li[${I}]    
         Collections.Append To List    ${listaCondicaoPagamento}    ${valor}
@@ -154,7 +193,7 @@ Cabecalho - Condicao Pagamento
     Log To Console    Condição de pagamento selecionada: ${condicaoPagamento}
     SeleniumLibrary.Input Text    class=select2-search__field    ${condicaoPagamento}
     SeleniumLibrary.Click Element    xpath=//*[@id="${pesquisaCondicaoPagamento.idComboboxCondicaoPagamento}"]/li[contains(text(),'${condicaoPagamento}')]
-    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...    15s
+    BuiltIn.Sleep    1s
 
 Cabecalho - Tipo Cobranca
     [Documentation]    Preenche a informação de *Tipo Cobrança* no cabeçalho do pedido.
@@ -178,6 +217,14 @@ Cabecalho - Tipo Cobranca
         SeleniumLibrary.Click Element    xpath=//*[@id="${pesquisaTipoCobranca.idComboboxTipoCobranca}"]/li[contains(text(),'${tipoCobranca}')]
     END
 
+Cabecalho - Data de vencimento
+    [Documentation]    Preenche a informação de *Data de vencimento* no cabeçalho do pedido.
+    [Tags]    Pedido-Cabecalho
+
+    ${currentdate}=    Get Current Date    result_format=%d-%m-%Y
+    SeleniumLibrary.Input Text    id=${cabecalhoPedido.campoDataVencimento}    ${currentdate}
+    SeleniumLibrary.Press Keys    None    TAB
+
 Popula dicionario de dados do pedido
     [Documentation]    Está keyword irá popular o dicionário *\&{dadosPedido}* com informações úteis para a manipulação do pedido.
     [Tags]    Pedido-Dados
@@ -186,10 +233,9 @@ Popula dicionario de dados do pedido
     ${remove}=    String.Remove String    ${txtNumeroPedido}    [    ]    Pedido
     ${dadosPedido.numeroPedido}    Set Variable    ${remove[1:]}
 
-    ${txtParceiro}=    SeleniumLibrary.Get Text    xpath=${paceiroSelecionado}
-    ${removeVirgulaParceiro}=    String.Remove String    ${txtParceiro}    ;
-    ${splitParceiro}=    String.Split String    ${removeVirgulaParceiro}    -
-    ${dadosPedido.idParceiro}=    Retorna idparceiro    ${splitParceiro[0][0:-1]}    ${splitParceiro[2][1:]}
+    IF  '${dadosPedido.idParceiro}' == ''
+        ${dadosPedido.idParceiro}=    Retornar id parceiro do Pedido    ${dadosPedido.numeroPedido}
+    END
 
     ${txtParceiroLocal}=    SeleniumLibrary.Get Text    id=${cabecalhoPedido.comboboxLocal}
     ${dadosPedido.idLocalParceiro}=    Retorna idlocal    ${txtParceiroLocal}    ${dadosPedido.idParceiro}
@@ -208,7 +254,7 @@ Popula dicionario de dados do pedido
 
     ${txtTipoCobranca}=    SeleniumLibrary.Get Text    id=${cabecalhoPedido.comboboxTipoCobranca}
     ${dadosPedido.idTipoCobranca}=    Retorna idTipoCobranca    ${txtTipoCobranca}
-
+    
 Remove itens duplicados
     [Documentation]    Esta keyword irá remover todos os itens da lista que possuem mais de uma ocorrência.
     [Arguments]    @{lista}
@@ -275,6 +321,7 @@ Incluir itens no pedido
     SeleniumLibrary.Wait Until Element Is Enabled    xpath=${carrinhoPedido.pesquisarProdutos}
     SeleniumLibrary.Click Element    xpath=${carrinhoPedido.pesquisarProdutos}
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${pesquisaProdutosCarrinho.telaPesquisa}    10s
+    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...    60s
 
     ${countProdutos}=    Retorna quantidade de itens da tabela    ${dadosPedido.idTabelaPreco}
     ${randomProdutos}=    Evaluate    random.sample(range(0, ${countProdutos}), ${quantideItensPedido})    random
@@ -300,10 +347,14 @@ Incluir itens no pedido
     FOR  ${I}  IN RANGE    ${quantideItensPedido}
         SeleniumLibrary.Input Text    id=${pesquisaProdutosCarrinho.codigoProduto}    ${produtos[${I}]}
         SeleniumLibrary.Click Element    id=${pesquisaProdutosCarrinho.pesquisaProduto}
-        SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
-        SeleniumLibrary.Click Element    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
+        #SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
+        #SeleniumLibrary.Click Element    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
         ${qtde}=    Evaluate    random.sample(range(1, ${quantidadeMaximaProduto}), 1)    random    ## Randomiza a quantidade em um intervalo de 1 a ${quantidadeMaximaProduto}
-        SeleniumLibrary.Press Keys    ${pesquisaProdutosCarrinho.campoQuantidade}    ${qtde[0]}
+        SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaProdutosCarrinho.campoQuantidade}
+        SeleniumLibrary.Click Element    ${pesquisaProdutosCarrinho.campoQuantidade}
+        SeleniumLibrary.Wait Until Element Is Visible   ${pesquisaProdutosCarrinho.inputCampoQuantidade}
+        SeleniumLibrary.Clear Element Text    ${pesquisaProdutosCarrinho.inputCampoQuantidade}
+        SeleniumLibrary.Press Keys    ${pesquisaProdutosCarrinho.inputCampoQuantidade}    ${qtde[0]}
         SeleniumLibrary.Click Element    id=${pesquisaProdutosCarrinho.adicionarProduto}
         SeleniumLibrary.Clear Element Text    id=${pesquisaProdutosCarrinho.codigoProduto}
     END

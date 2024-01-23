@@ -4,4 +4,7 @@ ${tituloListagemAtendimento}    //*[@id="principal"]/div[1]/div/div[1]/h1[contai
 
 &{listagem}
 ...    gridListagem=grid_atendimento    #id
-...    editarAtendimento=//*[@id="grid_atendimento"]/div[5]/div/div[3]/div[13]
+...    editarAtendimento=
+...    campos=//*[@id="grid_atendimento"]/div[2]/div/div    #xpath
+
+${btnPesquisa}    btnPesquisar    #id

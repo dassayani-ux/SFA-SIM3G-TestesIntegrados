@@ -39,6 +39,7 @@ ${tituloPaginaCadastroCLiente}    //*[@id="principal"]/div[1]/div/div[1]/h1[cont
 ...    limteCredito=local_limitesugerido    #id
 ...    telefone=txtTelefoneLocal    #id
 ...    email=txtEmailLocal    #id
+...    documento=local_documentoidentificacao    #name
 
 ${btnGravarCadastro}    btnGravar    #id
 ${btnCancelarCadastro}    btnCancelar    #id

@@ -2,6 +2,7 @@
 Documentation    Arquivo criado para armazenar as SQLs e palavras chaves utilizadas para validar atendimentos.
 
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
+Resource    ${EXECDIR}/resources/data/usuario/dataUsuario.robot
 
 *** Keywords ***
 Retornar proximo atendimento
@@ -72,3 +73,22 @@ Retornar data e hora fim do atendimento
     END
     
     Return From Keyword    ${dataHoraFim[0]}
+
+Retornar dados de campos da config atendimento
+    [Documentation]    Utilizada para retornar informações a respeito de campos/abas exibidos no atendimento.
+    ...    _Obs.:_ Retorna os dados da config atendimento vinculada ao usuário logado.
+
+    ${idUsuario}=    Retornar id usuario logado web
+    ${sql}=    BuiltIn.Set Variable
+    ${sql}=    BuiltIn.Catenate    SEPARATOR=\n
+    ...    select ac.idnexibecontato as contato, 
+    ...    ac.idnexibeoutprof as outro_prof,
+    ...    ac.idnexibejustweb as justificativa
+    ...    from perfilacesso pa
+    ...    inner join usuario u on u.idperfilacesso = pa.idperfilacesso
+    ...    inner join atendimentoconfig ac on ac.idatendimentoconfig = pa.idatendimentoconfig
+    ...    where u.idusuario = ${idUsuario};
+
+    ${result}    DatabaseLibrary.Query    ${sql}    returnAsDict=True
+
+    BuiltIn.Return From Keyword    ${result[0]}

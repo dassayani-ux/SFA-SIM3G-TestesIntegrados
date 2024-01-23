@@ -3,6 +3,7 @@ Documentation    Arquivo utilizado para armazenar variáveis de dados que contri
 
 *** Variables ***
 # Listas temporárias utilizadas no cabeçalho do pedido
+@{listaLocais}
 @{listaFiliais}
 @{listaTipoPedido}
 @{listaTabelaPreco}

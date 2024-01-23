@@ -1,7 +1,6 @@
 *** Settings ***
 Documentation    Arquivo utilizado para armazenas as palavras chaves utilizadas no processo de cadastro de atendimento.
 
-Library     ${EXECDIR}/libraries/sfa_lib_web.py
 Resource    ${EXECDIR}/resources/lib/web/lib.robot
 Resource    ${EXECDIR}/resources/data/local/dataLocal.robot
 Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot
@@ -23,10 +22,29 @@ Preencher cabeçalho do atentimento
     [Documentation]    Esta keyword preenche os campos do cabeçalho do atendimento.
     [Tags]    atendimento-cabecalho
     
+    ${config}=    Retornar dados de campos da config atendimento
+    IF  '${config['outro_prof']}' == '${1}'
+        BuiltIn.Set Test Variable    ${cabecalho.pesquisaCliente}    //*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[3]/div/a[1]
+        BuiltIn.Set Test Variable    ${cabecalho.pesquisaLocal}    //*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[4]/div/a[1]
+        BuiltIn.Set Test Variable    ${cabecalho.pesquisaTipoAtendimento}    //*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[5]/div/a[1]
+        IF  '${config['contato']}' == '${1}'
+            BuiltIn.Set Test Variable    ${cabecalho.limpajustificativa}    //*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[10]/div/a[2]
+            BuiltIn.Set Test Variable    ${cabecalho.pesquisajustificativa}    //*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[10]/div/a[1]
+        ELSE
+            BuiltIn.Set Test Variable    ${cabecalho.limpajustificativa}    //*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[9]/div/a[2]
+            BuiltIn.Set Test Variable    ${cabecalho.pesquisajustificativa}    //*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[9]/div/a[1]
+        END
+    ELSE
+        IF  '${config['contato']}' == '${1}'
+            BuiltIn.Set Test Variable    ${cabecalho.limpajustificativa}    //*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[9]/div/a[2]
+            BuiltIn.Set Test Variable    ${cabecalho.pesquisajustificativa}    //*[@id="principal"]/div[2]/div/div/div[3]/div[3]/form/ul/li[9]/div/a[1]
+        END
+    END
+    
     Preencher cliente no cabecalho do atendimento
     Preencher local do cliente no cabecalho do atendimento
     Preencher tipo atendimento no cabecalho do atendimento
-    Preencher jutstificativa no cabecalho do atendimento
+    BuiltIn.Run Keyword If    '${config['justificativa']}' == '${1}'    Preencher jutstificativa no cabecalho do atendimento
     Preencher observacao no cabecalho do atendimento
 
 Preencher cliente no cabecalho do atendimento
@@ -63,7 +81,7 @@ Preencher local do cliente no cabecalho do atendimento
     SeleniumLibrary.Wait Until Element Is Visible    id=${cabecalho.pesquisaRapidaLocal}
     SeleniumLibrary.Input Text    id=${cabecalho.pesquisaRapidaLocal}    ${descricaoLocal}
     SeleniumLibrary.Press Keys    None    ENTER
-    FOR  ${I}  IN RANGE    ${4}
+    FOR  ${I}  IN RANGE    ${5}
         SeleniumLibrary.Press Keys    None    TAB
     END
     SeleniumLibrary.Press Keys    None    ENTER
@@ -104,7 +122,7 @@ Preencher jutstificativa no cabecalho do atendimento
     SeleniumLibrary.Wait Until Element Is Visible    id=${cabecalho.pesquisaRapidaJustificativa}
     SeleniumLibrary.Input Text    id=${cabecalho.pesquisaRapidaJustificativa}    ${justificativa}
     SeleniumLibrary.Press Keys    None    ENTER
-    FOR  ${I}  IN RANGE    ${4}
+    FOR  ${I}  IN RANGE    ${5}
         SeleniumLibrary.Press Keys    None    TAB
     END
     SeleniumLibrary.Press Keys    None    ENTER

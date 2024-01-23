@@ -9,6 +9,7 @@ ${botaoFinalizarPedido}    btnFinalizar    #id
 ...    idCabecalho=panelCabecalho    #id
 ...    pesquisaCliente=//*[@id="panelCabecalho"]/div[2]/div/ul/li[@id="2"]/div/a[1]/span    #xpath
 ...    limpaPesquisaCLiente=//*[@id="panelCabecalho"]/div[2]/div/ul/li[@id="2"]/div/a[2]/span    #xpath
+...    comboboxLocal=select2-cmbLocal-container    #id
 ...    comboboxFilial=select2-cmbFilial-container    #id
 ...    comboboxTipoPedido=select2-cmbTipoPedido-container    #id
 ...    comboboxTabelaPreco=select2-cmbTabelaPreco-container    #id
@@ -17,6 +18,7 @@ ${botaoFinalizarPedido}    btnFinalizar    #id
 ...    comboboxLocal=select2-cmbLocal-container    #id
 ...    numeroPedido=//*[@id="principal"]/div[1]/div/div[1]/h1    #xpath
 ...    msgCarregando=//*[@class="jGrowl-message"][contains(text(),'Carregando...')]    #xpath
+...    campoDataVencimento=dtCabecalhoDataPrevistaFaturamento    #id
 
 &{pesquisaCliente}
 ...    headerGridPedidos=//*[@id="popup0"]/div/div/div[2]/div/div/div/div[1]    #xpath
@@ -30,6 +32,10 @@ ${botaoFinalizarPedido}    btnFinalizar    #id
 &{pesquisaFilial}
 ...    idComboboxFilial=select2-cmbFilial-results    #id
 ...    itensFilial=//*[@id="select2-cmbFilial-results"]/li    #xpath
+
+&{pesquisaLocalParceiroPedido}
+...    idComboboxLocal=select2-cmbLocal-results    #id
+...    itensLocal=//*[@id="select2-cmbLocal-results"]/li    #xpath
 
 &{pesquisaTipoPedido}
 ...    idComboboxTipoPedido=select2-cmbTipoPedido-results    #id
@@ -54,7 +60,7 @@ ${paceiroSelecionado}    //*[@id="inputPluginSearchCliente"]/div/a[1]    #xpath
 ...    pesquisarProdutos=//*[@id="panelGridCarrinho"]/div/div[4]/div/div/div[2]/a/span    #xpath
 ...    selecionarTodos=//*[@id="panelGridCarrinho"]/div/div[1]/div/div[1]/span    #xpath
 ...    removerProdutos=btnRemoverSelecao    #id
-...    confirmarRemocaoProduto=/html/body/div[3]/div/div[3]/button[2]    #xpath
+...    confirmarRemocaoProduto=/html/body/div[4]/div/div[3]/button[2]    #xpath
 
 &{pesquisaProdutosCarrinho}
 ...    telaPesquisa=//*[@id="popup0"]/div/div    #xpath
@@ -63,16 +69,16 @@ ${paceiroSelecionado}    //*[@id="inputPluginSearchCliente"]/div/a[1]    #xpath
 ...    adicionarProduto=btnAdicionar    #id
 ...    confirmarProdutos=btnConfirmar    #id
 ...    selecionarProduto=//*[@id="pesquisaProdutos"]/div[2]/div[4]/div/div/div[1]/input    #xpath
-...    campoQuantidade=//*[@id="pesquisaProdutos"]/div[2]/div[4]/div/div/div[6]    #xpath
-...    inputCampoQuantidade= //*[@id="pesquisaProdutos"]/div[2]/div[4]/div/div/div[6]/input    #xpath
+...    campoQuantidade=//*[@id="pesquisaProdutos"]/div[2]/div[4]/div/div/div[7]    #xpath
+...    inputCampoQuantidade=//*[@id="pesquisaProdutos"]/div[2]/div[4]/div/div/div[7]/input    #xpath
 
 &{popUpPedidoGravado}
-...    divPopUp=/html/body/div[3]    #xpath
-...    msgGravadoSucesso=/html/body/div[3]/div/div[2]/div[contains(text(),'Pedido gravado com sucesso!')]    #xpath
-...    btnOk=/html/body/div[3]/div/div[3]/button    #xpath
+...    divPopUp=/html/body/div[4]    #xpath
+...    msgGravadoSucesso=/html/body/div[4]/div/div[2]/div[contains(text(),'Pedido gravado com sucesso!')]    #xpath
+...    btnOk=/html/body/div[4]/div/div[3]/button    #xpath
 
 &{popUpFinalizarPedido}
-...    divPopUp=/html/body/div[3]/div    #xpath
-...    btnSim=/html/body/div[3]/div/div[3]/button[2]    #xpath
-...    msgFinalizadoSucesso=/html/body/div[3]/div/div[2]/div[contains(text(),'Pedido finalizado com sucesso')]    #xpath
-...    btnOk=/html/body/div[3]/div/div[3]/button    #xpath
+...    divPopUp=/html/body/div[4]/div    #xpath
+...    btnSim=/html/body/div[4]/div/div[3]/button[2]    #xpath
+...    msgFinalizadoSucesso=/html/body/div[4]/div/div[2]/div[contains(text(),'Pedido finalizado com sucesso')]    #xpath
+...    btnOk=/html/body/div[4]/div/div[3]/button    #xpath
