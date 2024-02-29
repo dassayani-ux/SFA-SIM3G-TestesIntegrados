@@ -2,7 +2,7 @@
 Documentation    Arquivo utilizado para armazenar keywords utilizadas para realizar ações no menu do App mobile.
 
 Resource    ${EXECDIR}/resources/lib/android/lib.robot
-Resource    ${EXECDIR}/resources/locators/android/cliente/clienteLocators.robot
+Resource    ${EXECDIR}/resources/locators/android/cliente/listagemclienteandroidLocators.robot
 Resource    ${EXECDIR}/resources/locators/android/menu/menuLateralLocators.robot
 
 

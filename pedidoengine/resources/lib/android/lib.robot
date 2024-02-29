@@ -5,3 +5,4 @@ Library    AppiumLibrary
 Library    Collections
 Library    String
 Library    ${EXECDIR}/libraries/sfa_lib_mobile.py
+Library    DateTime

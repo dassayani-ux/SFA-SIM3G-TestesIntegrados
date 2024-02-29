@@ -13,6 +13,14 @@ Retornar id usuario logado web
 
     BuiltIn.Return From Keyword    ${result[0][0]}
 
+Retornar id usuario logado mobile
+    [Documentation]    Retorna o id do usuário utilizado em *usuarioWeb* do arquivo de variáveis.
+    
+    ${sql}=    BuiltIn.Set Variable    select idusuario from usuario where login = '${login_mobile.usuarioMobile}' and idnativo = 1
+    ${result}=    DatabaseLibrary.Query    ${sql}
+
+    BuiltIn.Return From Keyword    ${result[0][0]}
+
 Retornar usuario aleatorio
     [Documentation]    Irá retornar uma lista contendo um *ID* e *NOME* de usuário aleatório.
 

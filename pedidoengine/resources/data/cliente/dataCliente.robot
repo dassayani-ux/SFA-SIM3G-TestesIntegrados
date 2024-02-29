@@ -472,9 +472,17 @@ Retornar cliente ativo
 
 Retornar razao, matricula e id de parceiro aleatorio
     [Documentation]    Esta keyword retorna uma lista contendo a razão social e matrícula de um parceiro aletório, respectivamente.
+    [Arguments]    ${ambiente}=Web
 
-    ${usuario}=    Retornar id usuario logado web
-    ${filial}=    Retornar id filial do usuario
+    IF  '${ambiente}' == 'Web'
+        ${usuario}=    Retornar id usuario logado web
+        ${filial}=    Retornar id filial do usuario
+    ELSE IF  '${ambiente}' == 'Mobile'
+        ${usuario}=    Retornar id usuario logado mobile
+        ${filial}=    Retornar id filial do usuario    usuario=${usuario}
+    END
+    
+    
     ${sql}=    Catenate    SEPARATOR=\n
     ...    select distinct this_.nomeParceiro, this_.numeroMatricula, this_.idparceiro
     ...    from Parceiro this_
