@@ -136,8 +136,9 @@ Incluir produtos no pedido - Android
         AppiumLibrary.Click Element    xpath=${cardProdutoListagem.expandirCard}
         ${qtdApresentacao}=    Retornar quantidade apresentacao produto    codigoProduto=${produtos[${I}]}
         ${qtdApresentacao}=    BuiltIn.Convert To Integer    ${qtdApresentacao}
-        ${qtde}=    Evaluate    random.randint(1, round(${quantidadeMaxima}/${qtdApresentacao})) * ${qtdApresentacao}    random    #Randomiza a quantidade em um intervalo de 1 a ${quantidadeMaxima}, desde
-        ${qtde}=    BuiltIn.Convert To String    ${qtde}                                                                   #que a quantidade seja múltipla da quantidade de apresentação.
+        ${qtde}=    Evaluate    round(random.randint(1, round(${quantidadeMaxima}/${qtdApresentacao})) * ${qtdApresentacao})    random    #Randomiza a quantidade em um intervalo de 1 a ${quantidadeMaxima}, desde
+        ${qtde}=    BuiltIn.Convert To String    ${qtde}                                                                                  #que a quantidade seja múltipla da quantidade de apresentação.
+        BuiltIn.Log To Console    Quantidade sorteada para o produto ${produtos[${I}]} = ${qtde}
         ${lenQtd}=    BuiltIn.Get Length    ${qtde}
         AppiumLibrary.Wait Until Element Is Visible    xpath=${cardProdutoListagem.btnCampoQuantidade}
         AppiumLibrary.Click Element    xpath=${cardProdutoListagem.btnCampoQuantidade}
@@ -175,8 +176,8 @@ Gravar pedido de venda - Android
     BuiltIn.Run Keyword If    '${statusGuiaResumo}' == 'False'     Acessar guia de resumo - Android
     AppiumLibrary.Wait Until Element Is Visible    xpath=${guiaResumoPedidoAndroid.btnGravar}
     AppiumLibrary.Click Element    xpath=${guiaResumoPedidoAndroid.btnGravar}
-    AppiumLibrary.Wait Until Element Is Visible    class=${guiaResumoPedidoAndroid.msg}
-    AppiumLibrary.Element Text Should Be    class=${guiaResumoPedidoAndroid.msg}    Pedido gravado com sucesso!
+    AppiumLibrary.Wait Until Element Is Visible    xpath=${guiaResumoPedidoAndroid.msg}    timeout=10s
+    AppiumLibrary.Element Text Should Be    xpath=${guiaResumoPedidoAndroid.msg}    Pedido gravado com sucesso!
     AppiumLibrary.Click Element    id=${guiaResumoPedidoAndroid.btnOk}
     BuiltIn.Log To Console    \nPedido ${dadosPedidoAndroid.numeroPedido} gravado com sucesso!
 
