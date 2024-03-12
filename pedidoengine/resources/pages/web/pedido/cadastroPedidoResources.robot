@@ -352,12 +352,12 @@ Incluir itens no pedido
         #SeleniumLibrary.Click Element    xpath=${pesquisaProdutosCarrinho.selecionarProduto}
         ${qtdApresentacao}=    Retornar quantidade apresentacao produto    codigoProduto=${produtos[${I}]}
         ${qtdApresentacao}=    BuiltIn.Convert To Integer    ${qtdApresentacao}
-        ${qtde}=    Evaluate    random.randint(1, round(${quantidadeMaximaProduto}/${qtdApresentacao})) * ${qtdApresentacao}    random    #Randomiza uma quantidade múltipla da quantidade de apresentação do produto, em um intervalor de 1 a ${quantidadeMaximaProduto}.
+        ${qtde}=    Evaluate    round(random.randint(1, round(${quantidadeMaximaProduto}/${qtdApresentacao})) * ${qtdApresentacao})    random    #Randomiza uma quantidade múltipla da quantidade de apresentação do produto, em um intervalor de 1 a ${quantidadeMaximaProduto}.
         SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaProdutosCarrinho.campoQuantidade}
         SeleniumLibrary.Click Element    ${pesquisaProdutosCarrinho.campoQuantidade}
         SeleniumLibrary.Wait Until Element Is Visible   ${pesquisaProdutosCarrinho.inputCampoQuantidade}
         SeleniumLibrary.Clear Element Text    ${pesquisaProdutosCarrinho.inputCampoQuantidade}
-        SeleniumLibrary.Press Keys    ${pesquisaProdutosCarrinho.inputCampoQuantidade}    ${qtde[0]}
+        SeleniumLibrary.Press Keys    ${pesquisaProdutosCarrinho.inputCampoQuantidade}    ${qtde}
         SeleniumLibrary.Click Element    id=${pesquisaProdutosCarrinho.adicionarProduto}
         SeleniumLibrary.Clear Element Text    id=${pesquisaProdutosCarrinho.codigoProduto}
     END

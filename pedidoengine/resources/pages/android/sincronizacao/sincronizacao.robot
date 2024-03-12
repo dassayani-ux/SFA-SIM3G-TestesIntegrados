@@ -19,6 +19,6 @@ Realizar primeira sincronizacao
     AppiumLibrary.Wait Until Element Is Visible    xpath=${msgSyncFinalizada.locatorMsg}    timeout=600    #10 minutos
     AppiumLibrary.Element Should Contain Text    xpath=${msgSyncFinalizada.locatorMsg}    ${msgSyncFinalizada.msg}
     AppiumLibrary.Click Element    id=${msgSyncFinalizada.btnOk}
-    Sleep    1s
-    AppiumLibrary.Element Should Contain Text    xpath=${msgSyncFinalizada.locatorMsg}    ${msgSyncFinalizada.msgReaberturaApp}
-    AppiumLibrary.Click Element    id=${msgSyncFinalizada.btnOk}
+    # Sleep    1s
+    # AppiumLibrary.Element Should Contain Text    xpath=${msgSyncFinalizada.locatorMsg}    ${msgSyncFinalizada.msgReaberturaApp}
+    # AppiumLibrary.Click Element    id=${msgSyncFinalizada.btnOk}

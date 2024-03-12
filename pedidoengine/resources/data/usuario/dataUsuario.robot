@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation    Arquivo criado para armazenar as SQLs utilizadas para validar usuários.
 
-Resource    ${EXECDIR}/resources/lib/web/lib.robot
+Library    DatabaseLibrary
 Variables    ${EXECDIR}/libraries/variables/sfa_variables.py
 
 *** Keywords ***

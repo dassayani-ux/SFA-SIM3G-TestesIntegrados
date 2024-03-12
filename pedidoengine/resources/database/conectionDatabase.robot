@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation    Arquivo utilizado para realizar a conexão com o banco de dados de acordo com os dador fornecidos.
 
-Resource    ${EXECDIR}/resources/lib/web/lib.robot
+Library    DatabaseLibrary
 Variables    ${EXECDIR}/libraries/variables/sfa_variables.py
 
 *** Keywords ***

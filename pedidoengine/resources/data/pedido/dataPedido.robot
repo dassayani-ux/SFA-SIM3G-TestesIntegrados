@@ -1,7 +1,8 @@
 *** Settings ***
 Documentation    Arquivo criado para armazenar as SQLs utilizadas para validar pedido.
 
-Resource    ${EXECDIR}/resources/lib/web/lib.robot
+Library    DatabaseLibrary
+Library    Collections
 
 *** Variables ***
 ${itensTabelaPreco_SQL}    select p.idproduto, p.codigo, p.descricao, tpp.preco 
