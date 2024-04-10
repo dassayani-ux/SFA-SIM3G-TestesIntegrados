@@ -131,7 +131,8 @@ Incluir produtos no pedido - Android
 
     FOR  ${I}  IN RANGE    ${quantidadeItens}
         AppiumLibrary.Input Text    class=${guiaProdutoPedidoAndroid.campoPesquisa}    ${produtos[${I}]}
-        AppiumLibrary.Click Element    xpath=${guiaProdutoPedidoAndroid.btnPesquisaProduto}
+        BuiltIn.Sleep    1s
+        AppiumLibrary.Wait Until Page Does Not Contain Element    id=${painelMsgCarregando}    timeout=60s
         AppiumLibrary.Wait Until Element Is Visible    xpath=${cardProdutoListagem.expandirCard}    timeout=60s
         AppiumLibrary.Click Element    xpath=${cardProdutoListagem.expandirCard}
         ${qtdApresentacao}=    Retornar quantidade apresentacao produto    codigoProduto=${produtos[${I}]}
@@ -171,9 +172,11 @@ Gravar pedido de venda - Android
     [Documentation]    Utilizada para acessar gravar o pedido Android.
     ...    \nPor enquanto vai ficar responsável também por acessar a guia de complemento e posteriormente a guia de resumo.
 
-    ${statusGuiaResumo}    BuiltIn.Run Keyword And Return Status    AppiumLibrary.Element Should Be Visible    xpath=${guiaResumoPedidoAndroid.guia}
-    BuiltIn.Run Keyword If    '${statusGuiaResumo}' == 'False'     Acessar guia de complemento - Android
-    BuiltIn.Run Keyword If    '${statusGuiaResumo}' == 'False'     Acessar guia de resumo - Android
+    ${tituloGuia}=    AppiumLibrary.Get Text    xpath=${guiaResumoPedidoAndroid.guia}
+    BuiltIn.Run Keyword If    '${tituloGuia}' != 'RESUMO'     Acessar guia de complemento - Android
+    BuiltIn.Run Keyword If    '${tituloGuia}' != 'RESUMO'     Acessar guia de resumo - Android
+    BuiltIn.Run Keyword If    '${tituloGuia}' == 'RESUMO'     Acessar guia de resumo - Android
+
     AppiumLibrary.Wait Until Element Is Visible    xpath=${guiaResumoPedidoAndroid.btnGravar}
     AppiumLibrary.Click Element    xpath=${guiaResumoPedidoAndroid.btnGravar}
     AppiumLibrary.Wait Until Element Is Visible    xpath=${guiaResumoPedidoAndroid.msg}    timeout=10s
