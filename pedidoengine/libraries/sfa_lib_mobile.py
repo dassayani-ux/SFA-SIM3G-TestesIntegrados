@@ -37,6 +37,10 @@ def retorna_lista_ordem_menu_mobile():
             ordenacaoFormat.append('Relatório')
         if  elemento == 'sync.label.status':
             ordenacaoFormat.append('Sincronização')
+        if  elemento == 'notificacao':
+            ordenacaoFormat.append('Notificação')
+        if  elemento == 'atendimento.registro.horario':
+            ordenacaoFormat.append('Resumo mensal')
         
     return ordenacaoFormat
 
