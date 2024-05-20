@@ -11,7 +11,7 @@ class login_web:
 
 # --- Acesso aplicação WEB -----
 class aplicacao_web:
-    navegadorWeb='Chrome'
+    navegadorWeb=''
     urlWeb='http://web:8080/pedidoengine'
 
 # --- Imagens Web -----
