@@ -8,5 +8,5 @@ Variables    ${EXECDIR}/libraries/variables/sfa_variables.py
 Abre navegador
     [Documentation]    Irá abrir a aplicação web no navegador previamente informado.
     Start Virtual Display    1920    1080
-    Open Browser    ${aplicacao_web.urlWeb}
+    Open Browser    ${aplicacao_web.urlWeb}    ${aplicacao_web.navegadorWeb}
     Maximize Browser Window
