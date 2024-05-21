@@ -7,12 +7,12 @@ class login_web:
     senhaWeb = 'ws18012001'
     usuarioInvalidoWeb = 'REP01'
     senhaInvalidaWeb = 'REP01'
-    urlLoginWeb = 'http://web:8080/pedidoengine'
+    urlLoginWeb = 'http://web:8080/sfa'
 
 # --- Acesso aplicação WEB -----
 class aplicacao_web:
     navegadorWeb='firefox'
-    urlWeb='http://web:8080/pedidoengine'
+    urlWeb='http://web:8080/sfa'
 
 # --- Imagens Web -----
 class imagemWeb:
