@@ -13,9 +13,9 @@ Abre navegador
     ${ENVIRONMENT}  Set variable if  ${status}==${FALSE}  local  ${ENVIRONMENT}
 
     IF    "${ENVIRONMENT}" == "pipeline" 
-        Start Virtual Display 1920 1080
+        Start Virtual Display    1920    1080
         Open Browser    ${url_ms}    ${aplicacao_web.urlWeb}    ${aplicacao_web.navegadorWeb}
-        Set Window Size 1920 1080
+        Set Window Size    1920    1080
     ELSE
         Open Browser    ${aplicacao_web.urlWeb}    ${aplicacao_web.navegadorWeb}
     END
