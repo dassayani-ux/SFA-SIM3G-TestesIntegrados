@@ -135,6 +135,15 @@ Incluir produtos no pedido - Android
         AppiumLibrary.Wait Until Page Does Not Contain Element    id=${painelMsgCarregando}    timeout=60s
         AppiumLibrary.Wait Until Element Is Visible    xpath=${cardProdutoListagem.expandirCard}    timeout=60s
         AppiumLibrary.Click Element    xpath=${cardProdutoListagem.expandirCard}
+        ${precoProduto}=    Retornar preco de tabela do produto    tabelaPreco=${dadosPedidoAndroid.idTabelaPreco}    codigoProduto=${produtos[${I}]}
+        ${getPrecoVendaCard}=    AppiumLibrary.Get Text    xpath=${cardProdutoListagem.precoVenda}
+        ${precoVendaCard}=    Substituir virgula por ponto ou vice versa    ${getPrecoVendaCard}
+        IF  '${precoProduto}' == '${precoVendaCard}'
+            BuiltIn.Log To Console    Preço apresentado em tela está de acordo.
+        ELSE
+            BuiltIn.Log To Console    Preço apresentado em tela está divergente. R$(${precoVendaCard})
+            BuiltIn.Fail
+        END
         ${qtdApresentacao}=    Retornar quantidade apresentacao produto    codigoProduto=${produtos[${I}]}
         ${qtdApresentacao}=    BuiltIn.Convert To Integer    ${qtdApresentacao}
         ${qtde}=    Evaluate    round(random.randint(1, round(${quantidadeMaxima}/${qtdApresentacao})) * ${qtdApresentacao})    random    #Randomiza a quantidade em um intervalo de 1 a ${quantidadeMaxima}, desde
@@ -149,6 +158,16 @@ Incluir produtos no pedido - Android
         END
         AppiumLibrary.Click Element    id=${cardProdutoListagem.btnConfirmarQuantidade}
         AppiumLibrary.Wait Until Element Is Visible    class=${guiaProdutoPedidoAndroid.campoPesquisa}    timeout=60s
+        BuiltIn.Log To Console    Preco = ${precoProduto}, Qtde = ${qtde}
+        ${valorTotalItemCalculado}=    BuiltIn.Evaluate    ${precoProduto}*${qtde}
+        ${getValorTotalItemCard}=    AppiumLibrary.Get Text    xpath=${cardProdutoListagem.valorTotal}
+        ${valorTotalItemCard}=    Substituir virgula por ponto ou vice versa    ${getValorTotalItemCard}
+        IF  '${valorTotalItemCalculado}' == '${valorTotalItemCard}'
+            BuiltIn.Log To Console    Valor total calculado está correto (R$${valorTotalItemCalculado})
+        ELSE
+            BuiltIn.Log To Console    Valor total calculado está incorreto (R$${valorTotalItemCalculado})
+            BuiltIn.Fail
+        END
         AppiumLibrary.Clear Text    class=${guiaProdutoPedidoAndroid.campoPesquisa}
     END
 
@@ -156,6 +175,8 @@ Acessar guia de produtos - Android
     [Documentation]    Utilizada para acessar a guia de listagem de produtos no pedido Android.
 
     AppiumLibrary.Click Element    xpath=${guiaProdutoPedidoAndroid.guiaProduto}
+    BuiltIn.Sleep    0.7s
+    AppiumLibrary.Wait Until Page Does Not Contain Element    id=${painelMsgCarregando}    timeout=60s
 
 Acessar guia de complemento - Android
     [Documentation]    Utilizada para acessar a guia de informações complementares no pedido Android.
@@ -198,3 +219,23 @@ Finalizar pedido de venda - Android
     AppiumLibrary.Click Element    id=${guiaResumoPedidoAndroid.btnOk}
     AppiumLibrary.Wait Until Page Does Not Contain Element    xpath=${guiaResumoPedidoAndroid.guia}    timeout=10s
     BuiltIn.Log To Console    \nPedido ${dadosPedidoAndroid.numeroPedido} finalizado com sucesso!
+
+Substituir virgula por ponto ou vice versa
+    [Documentation]    Utilizada para substituir a vírgula de determinado número por ponto ou vice-versa.
+    [Arguments]    ${numeral}=${EMPTY}    ${isVirgula}=${1}    ##Se valor 1 significa que irá substituir vírgula por ponto. Se valor 0 é ao contrário.
+
+    IF  '${numeral}' != '${EMPTY}'
+        IF  ${isVirgula} == 1
+            ${final}=    String.Replace String    ${numeral}    ,    .
+        ELSE IF  ${isVirgula} == 0
+            ${final}=    String.Replace String    ${numeral}    .    ,
+        ELSE
+            BuiltIn.Log To Console    Valor ${isVirgula} não suportado para o argumento *isVirgula*.
+            BuiltIn.Fail
+        END
+    ELSE
+        BuiltIn.Log To Console    [ERRO] Nenhum valor passado.
+        BuiltIn.Fail
+    END
+    
+    BuiltIn.Return From Keyword    ${final}

@@ -11,7 +11,7 @@ Resource    ${EXECDIR}/resources/pages/android/cliente/listagemClienteAndroidRes
 Resource    ${EXECDIR}/resources/pages/android/cliente/tela360ClienteAndroid.Resources.robot
 
 Suite Setup    Run Keywords    Conecta ao banco de dados    Abrir aplicativo    Realizar login no app
-Suite Teardown    Disconnect From Database
+Suite Teardown    Run Keywords    Disconnect From Database    Close Application
 
 *** Test Cases ***
 Teste 001 ::: Lançar pedido pela tela 360° do cliente, gravar e finalizar
