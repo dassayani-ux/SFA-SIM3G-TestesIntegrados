@@ -12,7 +12,7 @@ Resource    ${EXECDIR}/resources/pages/android/cliente/listagemClienteAndroidRes
 Resource    ${EXECDIR}/resources/pages/android/cliente/tela360ClienteAndroid.Resources.robot
 
 Suite Setup    Run Keywords    Conecta ao banco de dados    Abrir aplicativo
-Suite Teardown    Disconnect From Database
+Suite Teardown    Run Keywords    Disconnect From Database    Close Application
 
 *** Test Cases ***
 Teste 001 ::: Realizar login válido para sincronização inicial

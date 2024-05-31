@@ -6,8 +6,8 @@ Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
 Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
 Resource    ${EXECDIR}/resources/pages/web/pedido/cadastroPedidoResources.robot
 
-Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    Realiza login na plataforma web    Inativar pesquisa de Tipo Cobraca
-Suite Teardown    Run Keywords    Realizar logoff    Disconnect From Database
+Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    Realiza login na plataforma web    #Inativar pesquisa de Tipo Cobraca
+Suite Teardown    Run Keywords    Realizar logoff    Close Browser    Disconnect From Database
 
 *** Test Cases ***
 Teste 001 ::: Cadastra novo pedido
