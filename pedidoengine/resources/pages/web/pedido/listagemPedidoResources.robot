@@ -21,10 +21,10 @@ Acessar tela de listagem de pedidos
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${tituloPaginaListagemClientes}
     sfa_lib_web.Fechar guia de Dashboard
     SeleniumLibrary.Switch Window    TOTVS CRM SFA | Listagem de pedidos
-    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...
-    Sleep    0.5s
-    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...
-    Sleep    0.5s
+    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...    15s
+    BuiltIn.Sleep    0.5s
+    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...    15s
+    BuiltIn.Sleep    0.5s
 
 Ativa pesquisa avancada pedido de venda
     [Documentation]    Keyword responsável por ativar a pesquisa avançada na tela de listagem de pedidos de venda.  
