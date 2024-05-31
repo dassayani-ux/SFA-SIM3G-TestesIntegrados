@@ -3,6 +3,8 @@ Documentation    Arquivo utilizado para armazenar a localização dos componente
 
 *** Variables ***
 ${tituloPaginaCadastroCLiente}    //*[@id="principal"]/div[1]/div/div[1]/h1[contains(text(),'Cadastro de cliente')]    #xpath
+${msgCarregando}    //*[@id="loading"]/div[2]/div[contains(text(),'Carregando...')]    #xpath
+${telaLoading}    minimalist-loading-background    #class
 
 &{cabecalhoCliente}
 ...    idCabecalho=cabecalhoCliente    #id

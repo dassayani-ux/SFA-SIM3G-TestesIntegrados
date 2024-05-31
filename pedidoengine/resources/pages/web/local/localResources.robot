@@ -22,6 +22,12 @@ Retorna bairro aleatorio
     ${queryLocal}    Query    ${SQL_LOCAL}
     ${index}=    Evaluate    random.sample(range(0, ${countLocal}), 1)    random
 
+    WHILE  '${queryLocal[${index[0]}][1]}' == 'None'
+        ${countLocal}    Row Count    ${SQL_LOCAL}
+        ${queryLocal}    Query    ${SQL_LOCAL}
+        ${index}=    Evaluate    random.sample(range(0, ${countLocal}), 1)    random
+    END
+    
     Return From Keyword    ${queryLocal[${index[0]}][1]}
 
 Retorna logradouro aleatorio
@@ -45,6 +51,28 @@ Retorna count Estado
     [Documentation]    Esta keyword irá retornar a quantidade de estados que possuem em sua descrição a palavra passada como argumento.
     [Arguments]    ${estado}
 
-    ${count}    Row Count    select * from unidadefederativa u where u.descricao ilike '%${estado}%' and u.idnativo = 1;
+    ${usuario}=    Retornar id usuario logado web
+
+    ${sql}=    BuiltIn.Catenate    SEPARATOR=\n
+    ...    select *
+    ...    from UnidadeFederativa uf
+    ...    where(uf.idUnidadeFederativa in(
+    ...    	select c.idUnidadeFederativa from Cidade c
+    ...    	where c.idCidade in(
+    ...    		select l.idCidade from Local l
+    ...    		where l.idLocal in(
+    ...    			select ul.idLocal from UsuarioLocal ul
+    ...    			where ul.idUsuario in(
+    ...    				select u.idUsuario from Usuario u
+    ...                    left outer join UsuarioHierarquia uh on u.idUsuario = uh.idUsuario
+    ...                    left outer join Usuario up on uh.idUsuarioSuperior = up.idUsuario
+    ...                    where (u.idUsuario=${usuario} or up.idUsuario=${usuario})
+    ...                )
+    ...            )
+    ...    	)
+    ...    )
+    ...    and uf.descricao ilike '%${estado}%' and uf.idnAtivo=1)
+
+    ${count}    Row Count    ${sql}
     
     Return From Keyword    ${count}

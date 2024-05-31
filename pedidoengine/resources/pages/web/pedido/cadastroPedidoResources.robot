@@ -318,11 +318,12 @@ Incluir itens no pedido
     [Tags]    Pedido-Itens
     [Arguments]    ${edicao}=False
 
+    BuiltIn.Sleep    1s
     SeleniumLibrary.Click Element    xpath=${carrinhoPedido.campoProduto}
     SeleniumLibrary.Wait Until Element Is Enabled    xpath=${carrinhoPedido.pesquisarProdutos}
     SeleniumLibrary.Click Element    xpath=${carrinhoPedido.pesquisarProdutos}
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${pesquisaProdutosCarrinho.telaPesquisa}    10s
-    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...    60s
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}
 
     ${countProdutos}=    Retorna quantidade de itens da tabela    ${dadosPedido.idTabelaPreco}
     ${randomProdutos}=    Evaluate    random.sample(range(0, ${countProdutos}), ${quantideItensPedido})    random

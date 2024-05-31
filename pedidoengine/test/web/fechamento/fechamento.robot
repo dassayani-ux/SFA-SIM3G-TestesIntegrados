@@ -11,7 +11,7 @@ Resource    ${EXECDIR}/resources/pages/web/cliente/cadastroCLienteResource.robot
 Resource    ${EXECDIR}/resources/pages/web/pedido/cadastroPedidoResources.robot
 
 Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    ##Inativar pesquisa de Tipo Cobraca
-Suite Teardown    Disconnect From Database
+Suite Teardown    Run Keywords    Disconnect From Database    Close Browser
 
 *** Test Cases ***
 Teste 001 ::: Realizar login com usuario invalido

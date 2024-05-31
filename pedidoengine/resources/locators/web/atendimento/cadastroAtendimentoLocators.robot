@@ -1,6 +1,8 @@
 *** Variables ***
 
 ${tituloPaginaAtendimento}    //*[@id="principal"]/div[1]/div/div[1]/h1[contains(text(),'Atendimento')]
+${msgCarregando}    //*[@id="loading"]/div[2]/div[contains(text(),'Carregando...')]    #xpath
+${loading}    minimalist-loading-background    #class
 
 #CABEÇALHO
 &{cabecalho}
@@ -27,3 +29,7 @@ ${finalizarAtendimento}    btnFinalizar    #id
 &{imagem}
 ...    guiaImagens=imagem-a    #id
 ...    incluirImagem=adicionarImagem    #id
+
+&{popUpAtendimentosNaoFinalizados}
+...    idPopUp=popup0    #id
+...    btnCancelar=btnCancelar    #id

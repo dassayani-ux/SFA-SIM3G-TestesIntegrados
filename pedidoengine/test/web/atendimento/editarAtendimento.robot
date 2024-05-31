@@ -8,7 +8,7 @@ Resource    ${EXECDIR}/resources/pages/web/atendimento/listagemAtendimentoResour
 Resource    ${EXECDIR}/resources/pages/web/atendimento/cadastroAtendimentoResources.robot
 
 Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    Realiza login na plataforma web
-Suite Teardown    Disconnect From Database
+Suite Teardown    Run Keywords    Disconnect From Database    Close Browser
 
 *** Test Cases ***
 Teste 001 ::: Editar atendimento
