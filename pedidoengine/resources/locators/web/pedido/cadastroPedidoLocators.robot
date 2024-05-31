@@ -2,6 +2,8 @@
 Documentation    Arquivo utilizado para armazenar os localizadores de elementos necessários no processo de cadastro de pedido.
 
 *** Variables ***
+${loading}    minimalist-loading-background    #class
+
 ${botaoGravarPedio}    btnGravar    #id
 ${botaoFinalizarPedido}    btnFinalizar    #id
 

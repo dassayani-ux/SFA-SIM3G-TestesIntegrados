@@ -1,104 +1,19 @@
 Pasta utilizada para armazenar os casos de testes automatizados do produto padrão **PEDIDOENGINE**.
 
 # ⚠ IMPORTANTE
-Por motivos de segurança, arquivos que possuem dados de acesso à plataforma e ao banco de dados são ignorados no commit, portanto, caso queira rodar o projeto em sua máquina é necessário seguir as instruções abaixo:
+Por motivos de segurança, o arquivo **sfa_variables.py**, que contem informações de acesso a aplicação e ao banco de dados é ignorado no commit, portanto, caso queira rodar o projeto em sua máquina é necessário seguir as instuções abaixo:
 
-1. Criar um arquivo chamado **globalVariables.robot** no direório: **pedidoengine/resources/variables/web/global**.
+1. Realizar uma cópia do arquivo **sfa_variables.py.template** do direório: **pedidoengine/libraries/variables**;
 
-    Usar o seguinte template como exemplo:
+_Obs.: A cópia deve ser criada na mesma pasta do .template_
 
-    _Obs.: Após criar o aquivo seguindo o template abaixo, basta substituir as informações de acordo com os dados utilizados por você._
-```
-*** Settings ***
-Documentation    Arquivo utilizado para realizar a configuraçao de aceesso ao banco de dados do Omni.
-...    Este arquivo não está presente no repositório, portanto necessário criá-lo e configurá-lo corretamente para rodar os testes.
+2. Renomear esse novo arquivo criado para **sfa_variables.py**;
+3. Preencher as variáveis de acordo com os dados utilizados por você.
 
-*** Variables ***
-*** Settings ***
-Documentation    Arquivo utilizado para armazenar variáveis globais que não possuem tipagem predefinida.
+# Atenção
+Para evitar conflitos em caminhos de diretórios, todos devem realizar o **pull** deste repositório seguindo a hierarquia abaixo:
 
-*** Variables ***
-${NAVEGADOR}    Chrome
-${WEB_URL}    http://localhost:8080/automacao
-
-# Acesso ao banco de dados
-${DBHost}         localhost
-${DBName}         automacao
-${DBPass}         password
-${DBPort}         5432
-${DBUser}         user
-${DBDriver}       psycopg2
-
-
-## Imagens Sikuly
-${dirSikully}    ${EXECDIR}\\resources\\elements
-```
-
-2. Criar um arquivo chamado **varLogin.py** no direório: **pedidoengine/libraries/variables**.
-
-    Usar o seguinte template como exemplo:
-
-    _Obs.: Após criar o aquivo seguindo o template abaixo, basta substituir variáveis **usuario** e **senha** de acordo com os dados utilizados por você._
-```
-usuario = 'user'    
-senha = 'password'
-usuarioInvalido = '123'
-senhaInvalida = '123'
-msgErro = 'Informações preenchidas incorretamente'
-urlLogin = 'http://localhost:8080/automacao/login.logar.ws?redirecturl='
-```
-
-3. Criar um arquivo chamado **globalVariables.robot** no direório **pedidoengine/resources/variables/android/global**.
-    Usar o seguinte template como exemplo:
-
-    _Obs.: Após criar o aquivo seguindo o template abaixo, basta substituir as informações de acordo com os dados utilizados por você._
-```
-*** Settings ***
-Documentation    Arquivo utilizado para armazenar variáveis globais que não possuem tipagem predefinida.
-
-*** Variables ***
-&{capabilities}    # Utilizados para inicializar a conexão com o Appium Server
-...    urlAppium=http://localhost:4723/wd/hub
-...    automationName=UiAutomator2
-...    platformName=Android
-...    deviceName=Emulador
-...    app=C:/Users/paulo.hvargas/Documents/Versoes/AUTOMACAO/dev/android/sim3g.cliente.pedidoengine.android.apk-pedidoEngine-release.apk
-...    udid=RQ8MB06FLHV
-...    autoGrantPermissions=true
-...    appWaitActivity=com.wealthsystems.sim3g.modulo.controleacesso.android.api.LoginActivity
-...    noReset=true
-```
-
-4. Criar um arquivo chamado **loginVariables.robot** no direório **pedidoengine/resources/variables/android/login**.
-    Usar o seguinte template como exemplo:
-
-    _Obs.: Após criar o aquivo seguindo o template abaixo, basta substituir as informações de acordo com os dados utilizados por você._
-```
-*** Settings ***
-Documentation    Arquivo utilizado para armazenar variáveis utilizadas no login.
-
-*** Variables ***
-${profissional}    123
-${senha}    123
-```
-
-5. Criar um arquivo chamado **syncVariables.robot** no direório **pedidoengine/resources/variables/android/sincronizacao**.
-    Usar o seguinte template como exemplo:
-
-    _Obs.: Após criar o aquivo seguindo o template abaixo, basta substituir as informações de acordo com os dados utilizados por você._
-```
-*** Settings ***
-Documentation    Arquivo utilizado para armazenar variáveis necessárias para realizar a sync no app Android.
-
-*** Variables ***
-${ipServer}    192.1.1.1:40921
-```
-
-# ❗Recomendação
-Para tentar evitar conflitos em caminhos de diretórios, recomento que todos que façam o **pull** deste repositório o façam seguindo a mesma hierarquia de pasta, pois assim é mais
-difícil ocorrer problemas de referência.
-
-Hierarquia sugerida:   **C:\WS\Fontes\SFA-SIM3G-TestesIntegrados**
+**C:\WS\Fontes\SFA-SIM3G-TestesIntegrados**
 
 <p>
     --------------------------------------------------
@@ -140,10 +55,6 @@ https://github.com/appium/appium-desktop/releases
 ### Database Library
     pip install robotframework-databaselibrary
 _Não foi encontrado link com a documentação das keywords dessa biblioteca._
-  
-### Sikuli Library 
-    pip install robotframework-SikuliLibrary
-https://rainmanwy.github.io/robotframework-SikuliLibrary/doc/SikuliLibrary.html
   
 ### Selenium Library
     pip install robotframework-seleniumlibrary

@@ -147,7 +147,7 @@ Selecionar cidade e estados aleatórios
     ## assim a cidade que se encontra presente naquele index
     Sleep    0.5s
     ${countCidades}    Get Element Count    xpath=//*[@id="${localGeralClienteJuridico.comboCidade}"]/option
-    ${iCidade}=    Evaluate    random.sample(range(2, ${countCidades}-1), 1)    random
+    ${iCidade}=    Evaluate    random.sample(range(2, ${countCidades}), 1)    random
     SeleniumLibrary.Click Element    xpath=//*[@id="${localGeralClienteJuridico.comboCidade}"]/option[${iCidade[0]}]  
     ##
 Preenche dados complementares do local
@@ -202,6 +202,7 @@ Grava cadastro de cliente
     SeleniumLibrary.Click Element    id=${btnGravarCadastro}
 
     SeleniumLibrary.Wait Until Element Is Visible    id=${cadastroBemSucedido}
+    BuiltIn.Sleep    1s
     SeleniumLibrary.Element Should Contain    id=${cadastroBemSucedido}    ${msgCadastroBemSucedido}
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${popUpAcoes.popUp}    10s
     SeleniumLibrary.Capture Page Screenshot
@@ -262,8 +263,10 @@ Valida tipo cobranca padrao
 
     IF  ${intQtdeRegistros} == ${1}
         SeleniumLibrary.Click Element    ${gridClientes.btnEditar}
+        SeleniumLibrary.Wait Until Element Is Not Visible    class=${telaLoading}    15s
         SeleniumLibrary.Wait Until Element Is Enabled    xpath=${edicaoCliente.edicaoLocal}
         SeleniumLibrary.Click Element    xpath=${edicaoCliente.edicaoLocal}
+        SeleniumLibrary.Wait Until Element Is Not Visible    class=${telaLoading}    15s
         SeleniumLibrary.Wait Until Element Is Enabled    id=${localComplemento.tipoCobranca}
         ${valor}=    SeleniumLibrary.Get Value   id=${localComplemento.tipoCobranca}    
         ${tipoCobranca}=    SeleniumLibrary.Get Text    xpath=//*[@id="${localComplemento.tipoCobranca}"]/option[@value="${valor}"]

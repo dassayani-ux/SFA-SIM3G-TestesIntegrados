@@ -432,7 +432,7 @@ Filtra cliente por estado
     ${format}    Convert To Upper Case    ${estadoUnformat}
     ${estadoFormat}=    Evaluate    unidecode.unidecode('${format}')
     ${countEstado}=    Retorna count Estado    ${estadoFormat}
-    WHILE  ${countEstado} > ${1}    ## Por hora, só irá filtrar por estados que possuem nome único.
+    WHILE  ${countEstado} > ${1} or ${countEstado} == ${0}    ## Por hora, só irá filtrar por estados que possuem nome único.
         ${formatoDescricao}    DatabaseLibrary.Query    select AVG(LENGTH(descricao)) from unidadefederativa u where u.idnativo = 1;
         IF  ${formatoDescricao[0][0]} == ${2}
             ${estadoUnformat}=    FakerLibrary.State Abbr

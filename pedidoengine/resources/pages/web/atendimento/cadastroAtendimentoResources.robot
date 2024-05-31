@@ -65,6 +65,9 @@ Preencher cliente no cabecalho do atendimento
     SeleniumLibrary.Press Keys    None    ENTER
     SeleniumLibrary.Wait Until Element Is Not Visible    id=${cabecalho.pesquisaRapidaCliente}    ${10}
 
+    ${popUp}=    BuiltIn.Run Keyword And Ignore Error    SeleniumLibrary.Page Should Contain Element    id=${popUpAtendimentosNaoFinalizados.idPopUp}
+    BuiltIn.Run Keyword If    '${popUp[0]}' == 'PASS'    SeleniumLibrary.Click Element    id=${popUpAtendimentosNaoFinalizados.btnCancelar}
+
 Preencher local do cliente no cabecalho do atendimento
     [Documentation]    Irá preencher o campo de local do cliente no cabeçalho do Atendimento.
     [Arguments]    ${descricaoLocal}=${EMPTY}
@@ -83,6 +86,11 @@ Preencher local do cliente no cabecalho do atendimento
     SeleniumLibrary.Press Keys    None    ENTER
     FOR  ${I}  IN RANGE    ${5}
         SeleniumLibrary.Press Keys    None    TAB
+    END
+    IF  '${aplicacao_web.navegadorWeb}' == 'Firefox'
+        FOR  ${I}  IN RANGE    ${2}
+            SeleniumLibrary.Press Keys    None    TAB
+        END
     END
     SeleniumLibrary.Press Keys    None    ENTER
     SeleniumLibrary.Wait Until Element Is Not Visible    id=${cabecalho.pesquisaRapidaLocal}
@@ -125,6 +133,11 @@ Preencher jutstificativa no cabecalho do atendimento
     FOR  ${I}  IN RANGE    ${5}
         SeleniumLibrary.Press Keys    None    TAB
     END
+    IF  '${aplicacao_web.navegadorWeb}' == 'Firefox'
+        FOR  ${I}  IN RANGE    ${2}
+            SeleniumLibrary.Press Keys    None    TAB
+        END
+    END
     SeleniumLibrary.Press Keys    None    ENTER
     SeleniumLibrary.Wait Until Element Is Not Visible    id=${cabecalho.pesquisaRapidaJustificativa}
 
@@ -142,17 +155,19 @@ Preencher observacao no cabecalho do atendimento
 Iniciar atendimento
     [Documentation]    Irá iniciar o atendimento clicando no botão _"Iniciar"_.
 
+    SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${msgCarregando}    15s
     SeleniumLibrary.Click Element    id=${iniciarAtendimento}
 
 Gravar atendimento
     [Documentation]    Irá gravar o atendimento em aberto.
 
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    15s
     SeleniumLibrary.Click Element    id=${gravarAtendimento}
 
 Finalizar atendimento
     [Documentation]    Irá finalizar o lançamento/edição do atendimento.
-
-    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...
+    
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    15s
     SeleniumLibrary.Click Element    id=${finalizarAtendimento}
 
 Validar criacao do atendimento no banco de dados
@@ -171,10 +186,14 @@ Validar criacao do atendimento no banco de dados
 Incluir imagem no atendimento
     [Documentation]    Irá vincular uma imagem ao atendimento.
 
-    SeleniumLibrary.Wait Until Element Is Visible    ${imagem.guiaImagens}    ${10}
-    SeleniumLibrary.Click Element    ${imagem.guiaImagens}
-    ${urlAtendimento}    SeleniumLibrary.Get Location
-    sfa_lib_web.Incluir imagem atendimento    ${urlAtendimento}
+    IF  '${aplicacao_web.navegadorWeb}' != 'Firefox'
+        SeleniumLibrary.Wait Until Element Is Visible    ${imagem.guiaImagens}    ${10}
+        SeleniumLibrary.Click Element    ${imagem.guiaImagens}
+        ${urlAtendimento}    SeleniumLibrary.Get Location
+        sfa_lib_web.Incluir imagem atendimento    ${urlAtendimento}
+    ELSE IF  '${aplicacao_web.navegadorWeb}' == 'Firefox'
+        BuiltIn.Log To Console    Para o navegador Firefox não há tratamento na inclusão de imagem no atendimento.
+    END
 
 Alterar data fim do atendimento 
     [Documentation]    Irá alterar o valor da data fim do atendimento para a data e hora atual.
