@@ -55,3 +55,12 @@ def fechar_guia_dashboard():
         title = driver.title
         if title == 'TOTVS CRM SFA | Dashboard' or title == 'TOTVS CRM SFA | Gestao de Clientes':
             driver.close()
+
+@keyword('Limpar dicionario')
+def clean_dictionary(data):
+    if not isinstance(data, dict):
+        raise ValueError("O tipo de dado deve ser um dicionário.")
+
+    # Limpa todos os valores, mantendo as chaves
+    cleaned_data = {k: "" for k, v in data.items()}
+    return cleaned_data

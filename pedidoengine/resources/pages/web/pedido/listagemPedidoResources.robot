@@ -78,7 +78,8 @@ Editar pedido de venda
         Log to Console    Tela de edição não corresponde ao pedido editado.
         Fail
     END
-    
+
+    sfa_lib_web.Limpar dicionario    data=${dadosPedido}    #Limpa o dicionário antes para garantir que não há lixo de pedidos anteriores.
     Popula dicionario de dados do pedido
 
 Finalizar pedido de venda na listagem

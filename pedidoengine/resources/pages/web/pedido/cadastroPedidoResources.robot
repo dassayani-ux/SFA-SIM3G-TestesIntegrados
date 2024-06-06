@@ -234,7 +234,7 @@ Popula dicionario de dados do pedido
     ${remove}=    String.Remove String    ${txtNumeroPedido}    [    ]    Pedido
     ${dadosPedido.numeroPedido}    Set Variable    ${remove[1:]}
 
-    IF  '${dadosPedido.idParceiro}' == ''
+    IF  '${dadosPedido.idParceiro}' == ''    # Esse if existe pois quando o pedido está sendo lançado, é setado o id parceiro já, mas em edições não passa pelo processo do cabeçalho, então nesses casos esse IF preenche o idparceiro.
         ${dadosPedido.idParceiro}=    Retornar id parceiro do Pedido    ${dadosPedido.numeroPedido}
     END
 
