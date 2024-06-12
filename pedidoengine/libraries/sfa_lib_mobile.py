@@ -149,3 +149,57 @@ def retorna_ordem_menu_mobile():
 
     menus.append('Sair')
     return menus
+
+@keyword("Retornar casas decimais valores monetarios")
+def return_decimals_monetario():
+    """Esta keyword retorna o valor para o parâmetro QTD_CASAS_DECIMAIS_MONETARIO"""
+
+    sql = f"select p.valor from parametro p where p.chave = 'QTD_CASAS_DECIMAIS_MONETARIO';"
+    casas = executar_sql(sql)
+    casas_str = casas[0][0]
+    casas_int = int(casas_str)
+
+    return casas_int
+
+@keyword("Formatar valor monetario")
+def format_valor_monetario(value):
+    """Esta keyword recebe um valor e remove pontos, vírgulas, R$ e espaços. 
+    Feito isso, adiciona a vírgula seguindo o valor do parêmetro que define a quantidade de casas decimais monetárias (QTD_CASAS_DECIMAIS_MONETARIO)"""
+
+    value_str = str(value)
+    casas = return_decimals_monetario()
+
+    valueRemove = value_str.replace(".","").replace(",","").replace("R$","").replace(" ","")
+
+    # Inserir a vírgula na posição correta
+    parte_inteira = valueRemove[:-casas]
+    parte_decimal = valueRemove[-casas:]
+
+    print(f"Valor sem vírgula: [", valueRemove, "]")
+    print(f"Parte inteira: [", parte_inteira, "]")
+    print(f"Parte decimal: [", parte_decimal, "]")
+    
+    value_final= f"{parte_inteira},{parte_decimal}"
+    return value_final
+
+@keyword("Rolar tela")
+def scroll_screan(direction='down', duration=1000):
+    """
+    Rola a tela do dispositivo móvel usando o driver do Appium criado pelo Robot Framework.
+
+    :param direction: Direção do scroll, 'up' para cima e 'down' para baixo.
+    :param duration: Duração do scroll em milissegundos.
+    """
+    appium_lib = BuiltIn().get_library_instance('AppiumLibrary')
+    driver = appium_lib._current_application()
+    
+    window_rect = driver.get_window_rect()
+    width = window_rect['width']
+    height = window_rect['height']
+
+    start_x = width // 2
+    start_y = height * 0.8 if direction == 'down' else height * 0.3
+    end_x = width // 2
+    end_y = height * 0.2 if direction == 'down' else height * 0.8
+
+    driver.swipe(start_x, start_y, end_x, end_y, duration)
