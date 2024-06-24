@@ -360,6 +360,8 @@ Incluir itens no pedido
         SeleniumLibrary.Clear Element Text    ${pesquisaProdutosCarrinho.inputCampoQuantidade}
         SeleniumLibrary.Press Keys    ${pesquisaProdutosCarrinho.inputCampoQuantidade}    ${qtde}
         SeleniumLibrary.Click Element    id=${pesquisaProdutosCarrinho.adicionarProduto}
+        BuiltIn.Sleep    1s
+        SeleniumLibrary.Wait Until Page Does Not Contain Element    xpath=${msgCarregandoItemPedido}    60s
         SeleniumLibrary.Clear Element Text    id=${pesquisaProdutosCarrinho.codigoProduto}
     END
     
