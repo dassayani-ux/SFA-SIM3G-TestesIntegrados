@@ -166,8 +166,14 @@ Incluir produtos no pedido - Android
             ${qtdApresentacao}=    BuiltIn.Convert To Integer    ${qtdApresentacao}
         END
         
-        ${qtde}=    Evaluate    round(random.randint(1, round(${quantidadeMaxima}/${qtdApresentacao})) * ${qtdApresentacao})    random    #Randomiza a quantidade em um intervalo de 1 a ${quantidadeMaxima}, desde
-        ${qtde}=    BuiltIn.Convert To String    ${qtde}                                                                                  #que a quantidade seja múltipla da quantidade de apresentação.
+        IF  ${qtdApresentacao} > ${quantidadeMaxima}
+            ${qtde}=    BuiltIn.Set Variable    ${qtdApresentacao}
+        ELSE
+            #Randomiza a quantidade em um intervalo de 1 a ${quantidadeMaxima}, desde que a quantidade seja múltipla da quantidade de apresentação.
+            ${qtde}=    Evaluate    round(random.randint(1, round(${quantidadeMaxima}/${qtdApresentacao})) * ${qtdApresentacao})    random
+        END
+
+        ${qtde}=    BuiltIn.Convert To String    ${qtde}
         BuiltIn.Log To Console    Quantidade sorteada para o produto ${produtos[${IP}]} = ${qtde}
         ${lenQtd}=    BuiltIn.Get Length    ${qtde}
         AppiumLibrary.Wait Until Element Is Visible    xpath=${cardProdutoListagem.btnCampoQuantidade}
