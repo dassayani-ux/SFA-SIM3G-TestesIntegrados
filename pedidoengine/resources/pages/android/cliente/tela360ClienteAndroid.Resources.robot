@@ -31,8 +31,10 @@ Selecionar local atendimento
     IF  ${countOpcoes} == ${1}
         BuiltIn.Fail    Não há locais disponíveis para seleção.
     END
-    ${opcao}=    BuiltIn.Evaluate    random.sample(range(2, ${countOpcoes}), 1)    random
-    AppiumLibrary.Click Element    xpath=${popUpLocalAtendimento.itens}${opcao}
+    ${opcao}=    BuiltIn.Evaluate    random.randint(2, ${countOpcoes})    random
+    ${xpath}    BuiltIn.Set Variable
+    ${xpath}    BuiltIn.Catenate    ${popUpLocalAtendimento.itens}    [${opcao}]
+    AppiumLibrary.Click Element    xpath=${xpath}
     ${local}=    AppiumLibrary.Get Text    xpath=${cabecalhoAtendimento.comboboxLocal}
     BuiltIn.Log To Console    Local selecionado: ${local}
 

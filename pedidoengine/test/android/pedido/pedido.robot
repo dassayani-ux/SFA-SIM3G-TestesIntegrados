@@ -22,5 +22,6 @@ Teste 001 ::: Lançar pedido pela tela 360° do cliente, gravar e finalizar
     Preencher cabecalho pedido - Android
     Incluir produtos no pedido - Android
     Gravar pedido de venda - Android
+    Validar informacoes da guia resumo
     Finalizar pedido de venda - Android
     Finalizar atendimento tela 360

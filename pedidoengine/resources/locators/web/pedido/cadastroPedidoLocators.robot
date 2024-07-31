@@ -3,6 +3,7 @@ Documentation    Arquivo utilizado para armazenar os localizadores de elementos 
 
 *** Variables ***
 ${loading}    minimalist-loading-background    #class
+${msgCarregandoItemPedido}    /html/body/div[4]/div/div[2]/span    #class
 
 ${botaoGravarPedio}    btnGravar    #id
 ${botaoFinalizarPedido}    btnFinalizar    #id

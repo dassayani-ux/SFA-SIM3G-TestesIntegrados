@@ -78,9 +78,9 @@ Cabecalho - Local Parceiro
     END
     ${listaLocais}=    Remove itens duplicados    @{listaLocais}
 
-    ${lenght}=    Get Length    ${listaLocais}
-    ${index}=    Evaluate    random.sample(range(0, ${lenght}),1)    random
-    ${local}=    Set Variable    ${listaLocais[${index[0]}]}
+    ${lenght}=    BuiltIn.Get Length    ${listaLocais}
+    ${index}=    BuiltIn.Evaluate    random.sample(range(0, ${lenght}),1)    random
+    ${local}=    BuiltIn.Set Variable    ${listaLocais[${index[0]}]}
     BuiltIn.Log To Console    Local selecionado: ${local}
     SeleniumLibrary.Input Text    class=select2-search__field    ${local}
     SeleniumLibrary.Click Element    xpath=//*[@id="${pesquisaLocalParceiroPedido.idComboboxLocal}"]/li[contains(text(),'${local}')]
@@ -102,9 +102,9 @@ Cabecalho - Filial
     END
     ${listaFiliais}=    Remove itens duplicados    @{listaFiliais}
 
-    ${lenght}=    Get Length    ${listaFiliais}
-    ${index}=    Evaluate    random.sample(range(0, ${lenght}),1)    random
-    ${filial}=    Set Variable    ${listaFiliais[${index[0]}]}
+    ${lenght}=    BuiltIn.Get Length    ${listaFiliais}
+    ${index}=    BuiltIn.Evaluate    random.sample(range(0, ${lenght}),1)    random
+    ${filial}=    BuiltIn.Set Variable    ${listaFiliais[${index[0]}]}
     Log To Console    Filial selecionada: ${filial}
     SeleniumLibrary.Input Text    class=select2-search__field    ${filial}
     SeleniumLibrary.Click Element    xpath=//*[@id="${pesquisaFilial.idComboboxFilial}"]/li[contains(text(),'${filial}')]
@@ -129,8 +129,8 @@ Cabecalho - Tipo pedido
     ${lenght}=    Get Length    ${listaTipoPedido}
     ${opcao}=    Set Variable    --Selecione--
     WHILE  '${opcao}' == '--Selecione--'
-        ${index}=    Evaluate    random.sample(range(0, ${lenght}),1)    random
-        ${opcao}=    Set Variable    ${listaTipoPedido[${index[0]}]}
+        ${index}=    BuiltIn.Evaluate    random.sample(range(0, ${lenght}),1)    random
+        ${opcao}=    BuiltIn.Set Variable    ${listaTipoPedido[${index[0]}]}
     END
     ${tipoPedido}=    Set Variable    ${listaTipoPedido[${index[0]}]}
     Log To Console    Tipo pedido selecionado: ${tipoPedido}
@@ -154,13 +154,13 @@ Cabecalho - Tabela de preco
 
     ${listaTabelaPreco}=    Remove itens duplicados    @{listaTabelaPreco}
 
-    ${lenght}=    Get Length    ${listaTabelaPreco}
-    ${index}=    Evaluate    random.sample(range(0, ${lenght}),1)    random
+    ${lenght}=    BuiltIn.Get Length    ${listaTabelaPreco}
+    ${index}=    BuiltIn.Evaluate    random.sample(range(0, ${lenght}),1)    random
     ${idTabela}=    Retorna idTabelaPreco    ${listaTabelaPreco[${index[0]}]}
     ${qtdProdutos}=    Retorna quantidade de itens da tabela    ${idTabela}
 
     WHILE  ${qtdProdutos} < ${quantideItensPedido}
-        ${index}=    Evaluate    random.sample(range(0, ${lenght}),1)    random
+        ${index}=    BuiltIn.Evaluate    random.sample(range(0, ${lenght}),1)    random
         ${idTabela}=    Retorna idTabelaPreco    ${listaTabelaPreco[${index[0]}]}
         ${qtdProdutos}=    Retorna quantidade de itens da tabela    ${idTabela}
     END
@@ -188,9 +188,9 @@ Cabecalho - Condicao Pagamento
 
     ${listaCondicaoPagamento}=    Remove itens duplicados    @{listaCondicaoPagamento}
 
-    ${lenght}=    Get Length    ${listaCondicaoPagamento}
-    ${index}=    Evaluate    random.sample(range(0, ${lenght}),1)    random
-    ${condicaoPagamento}=    Set Variable    ${listaCondicaoPagamento[${index[0]}]}
+    ${lenght}=    BuiltIn.Get Length    ${listaCondicaoPagamento}
+    ${index}=    BuiltIn.Evaluate    random.sample(range(0, ${lenght}),1)    random
+    ${condicaoPagamento}=    BuiltIn.Set Variable    ${listaCondicaoPagamento[${index[0]}]}
     Log To Console    Condição de pagamento selecionada: ${condicaoPagamento}
     SeleniumLibrary.Input Text    class=select2-search__field    ${condicaoPagamento}
     SeleniumLibrary.Click Element    xpath=//*[@id="${pesquisaCondicaoPagamento.idComboboxCondicaoPagamento}"]/li[contains(text(),'${condicaoPagamento}')]
@@ -210,9 +210,9 @@ Cabecalho - Tipo Cobranca
 
         ${listaTipoCobranca}=    Remove itens duplicados    @{listaTipoCobranca}
 
-        ${lenght}=    Get Length    ${listaTipoCobranca}
-        ${index}=    Evaluate    random.sample(range(0, ${lenght}),1)    random
-        ${tipoCobranca}=    Set Variable    ${listaTipoCobranca[${index[0]}]}
+        ${lenght}=    BuiltIn.Get Length    ${listaTipoCobranca}
+        ${index}=    BuiltIn.Evaluate    random.sample(range(0, ${lenght}),1)    random
+        ${tipoCobranca}=    BuiltIn.Set Variable    ${listaTipoCobranca[${index[0]}]}
         Log To Console    Tipo de Cobrança selecionado: ${tipoCobranca}
         SeleniumLibrary.Input Text    class=select2-search__field    ${tipoCobranca}
         SeleniumLibrary.Click Element    xpath=//*[@id="${pesquisaTipoCobranca.idComboboxTipoCobranca}"]/li[contains(text(),'${tipoCobranca}')]
@@ -360,6 +360,8 @@ Incluir itens no pedido
         SeleniumLibrary.Clear Element Text    ${pesquisaProdutosCarrinho.inputCampoQuantidade}
         SeleniumLibrary.Press Keys    ${pesquisaProdutosCarrinho.inputCampoQuantidade}    ${qtde}
         SeleniumLibrary.Click Element    id=${pesquisaProdutosCarrinho.adicionarProduto}
+        BuiltIn.Sleep    1s
+        SeleniumLibrary.Wait Until Page Does Not Contain Element    xpath=${msgCarregandoItemPedido}    60s
         SeleniumLibrary.Clear Element Text    id=${pesquisaProdutosCarrinho.codigoProduto}
     END
     

@@ -146,53 +146,54 @@ Selecionar cidade e estados aleatórios
     ## Irá capturar a quantidade de opções no combo de cidade após informado o estado, e sorteará um index aleatório, selecionado
     ## assim a cidade que se encontra presente naquele index
     Sleep    0.5s
-    ${countCidades}    Get Element Count    xpath=//*[@id="${localGeralClienteJuridico.comboCidade}"]/option
-    ${iCidade}=    Evaluate    random.sample(range(2, ${countCidades}), 1)    random
-    SeleniumLibrary.Click Element    xpath=//*[@id="${localGeralClienteJuridico.comboCidade}"]/option[${iCidade[0]}]  
-    ##
+    ${countCidades}    SeleniumLibrary.Get Element Count    xpath=//*[@id="${localGeralClienteJuridico.comboCidade}"]/option
+    ${iCidade}=    BuiltIn.Evaluate    random.randint(2, ${countCidades})    random
+    SeleniumLibrary.Click Element    xpath=//*[@id="${localGeralClienteJuridico.comboCidade}"]/option[${iCidade}]  
+    
 Preenche dados complementares do local
     [Documentation]    Irá preencher os dados complementares do local.
 
-    ${coutTipoLocal}    Get Element Count    xpath=//*[@id="${localComplemento.tipoLocal}"]/option
+    ${coutTipoLocal}    SeleniumLibrary.Get Element Count    xpath=//*[@id="${localComplemento.tipoLocal}"]/option
     IF  ${coutTipoLocal} > 2
-        ${tipoLocal}=    Evaluate    random.sample(range(2, ${coutTipoLocal}-1), 1)    random   
-        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.tipoLocal}"]/option[${tipoLocal[0]}] 
+        ${tipoLocal}=    BuiltIn.Evaluate    random.randint(2, ${coutTipoLocal})    random
+        SeleniumLibrary.Wait Until Element Is Not Visible    class=${telaLoading}    15s
+        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.tipoLocal}"]/option[${tipoLocal}] 
     END
 
-    ${coutTipologia}    Get Element Count    xpath=//*[@id="${localComplemento.tipologia}"]/option
+    ${coutTipologia}    SeleniumLibrary.Get Element Count    xpath=//*[@id="${localComplemento.tipologia}"]/option
     IF  ${coutTipologia} > 2
-        ${tipologia}=    Evaluate    random.sample(range(2, ${coutTipologia}-1), 1)    random   
-        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.tipologia}"]/option[${tipologia[0]}] 
+        ${tipologia}=    BuiltIn.Evaluate    random.randint(2, ${coutTipologia})    random
+        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.tipologia}"]/option[${tipologia}] 
     END
     
-    ${CountRegiao}    Get Element Count    xpath=//*[@id="${localComplemento.regiao}"]/option
+    ${CountRegiao}    SeleniumLibrary.Get Element Count    xpath=//*[@id="${localComplemento.regiao}"]/option
     IF  ${CountRegiao} > 2
-        ${regiao}=    Evaluate    random.sample(range(2, ${CountRegiao}-1), 1)    random
-        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.regiao}"]/option[${regiao[0]}]  
+        ${regiao}=    BuiltIn.Evaluate    random.randint(2, ${CountRegiao})    random
+        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.regiao}"]/option[${regiao}]  
     END
 
-    ${coutSegmento}    Get Element Count    xpath=//*[@id="${localComplemento.segmento}"]/option
+    ${coutSegmento}    SeleniumLibrary.Get Element Count    xpath=//*[@id="${localComplemento.segmento}"]/option
     IF  ${coutSegmento} > 2
-        ${segmento}=    Evaluate    random.sample(range(2, ${coutSegmento}-1), 1)    random   
-        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.segmento}"]/option[${segmento[0]}] 
+        ${segmento}=    BuiltIn.Evaluate    random.randint(2, ${coutSegmento})    random
+        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.segmento}"]/option[${segmento}] 
     END
 
-    ${coutTabelaPreco}    Get Element Count    xpath=//*[@id="${localComplemento.tabelaPreco}"]/option
+    ${coutTabelaPreco}    SeleniumLibrary.Get Element Count    xpath=//*[@id="${localComplemento.tabelaPreco}"]/option
     IF  ${coutTabelaPreco} > 2
-        ${tabelaPreco}=    Evaluate    random.sample(range(2, ${coutTabelaPreco}-1), 1)    random   
-        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.tabelaPreco}"]/option[${tabelaPreco[0]}] 
+        ${tabelaPreco}=    BuiltIn.Evaluate    random.randint(2, ${coutTabelaPreco})    random
+        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.tabelaPreco}"]/option[${tabelaPreco}] 
     END
 
-    ${coutCondicaoPagamento}    Get Element Count    xpath=//*[@id="${localComplemento.condicaoPagamento}"]/option
+    ${coutCondicaoPagamento}    SeleniumLibrary.Get Element Count    xpath=//*[@id="${localComplemento.condicaoPagamento}"]/option
     IF  ${coutCondicaoPagamento} > 2
-        ${condicaoPagamento}=    Evaluate    random.sample(range(2, ${coutCondicaoPagamento}-1), 1)    random   
-        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.condicaoPagamento}"]/option[${condicaoPagamento[0]}] 
+        ${condicaoPagamento}=    BuiltIn.Evaluate    random.randint(2, ${coutCondicaoPagamento})    random
+        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.condicaoPagamento}"]/option[${condicaoPagamento}] 
     END
 
-    ${coutTipoCobranca}    Get Element Count    xpath=//*[@id="${localComplemento.tipoCobranca}"]/option
+    ${coutTipoCobranca}    SeleniumLibrary.Get Element Count    xpath=//*[@id="${localComplemento.tipoCobranca}"]/option
     IF  ${coutTipoCobranca} > 2
-        ${tipoCobranca}=    Evaluate    random.sample(range(2, ${coutTipoCobranca}-1), 1)    random   
-        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.tipoCobranca}"]/option[${tipoCobranca[0]}] 
+        ${tipoCobranca}=    BuiltIn.Evaluate    random.randint(2, ${coutTipoCobranca})    random
+        SeleniumLibrary.Click Element    xpath=//*[@id="${localComplemento.tipoCobranca}"]/option[${tipoCobranca}] 
     END
 
     SeleniumLibrary.Input Text    ${localComplemento.observacao}    Cliente cadastrado por meio de teste automatizado.

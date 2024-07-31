@@ -13,6 +13,7 @@ Resource    ${EXECDIR}/resources/variables/web/atendimento/cadastroAtendimentoVa
 *** Keywords ***
 Acessar tela de lançamento de atendimento
     [Documentation]    Utilizada para acessar a tela de cadastro de novo atendimento.
+    SeleniumLibrary.Wait Until Element Is Visible    id=${menuAtendimento.menuAtendimento}
     SeleniumLibrary.Click Element    id=${menuAtendimento.menuAtendimento}
     SeleniumLibrary.Wait Until Element Is Visible    id=${menuAtendimento.novoAtendimento}
     SeleniumLibrary.Click Element    id=${menuAtendimento.novoAtendimento}
@@ -155,7 +156,7 @@ Preencher observacao no cabecalho do atendimento
 Iniciar atendimento
     [Documentation]    Irá iniciar o atendimento clicando no botão _"Iniciar"_.
 
-    SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${msgCarregando}    15s
+    SeleniumLibrary.Wait Until Element Is Not Visible    class=${loading}    60s
     SeleniumLibrary.Click Element    id=${iniciarAtendimento}
 
 Gravar atendimento
