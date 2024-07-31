@@ -5,6 +5,8 @@ Resource    ${EXECDIR}/resources/pages/android/login/login.robot
 Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
 Resource    ${EXECDIR}/resources/pages/android/menu/menuAndroid.robot
 Resource    ${EXECDIR}/resources/pages/android/aplicacao/aplicacao.robot
+Resource    ${EXECDIR}/resources/pages/android/consulta/consultaGeral.robot
+Resource    ${EXECDIR}/resources/pages/android/consulta/consultaPedido.robot
 Resource    ${EXECDIR}/resources/pages/android/sincronizacao/sincronizacao.robot
 Resource    ${EXECDIR}/resources/pages/android/pedido/cadastroPedidoAndroidResources.robot
 Resource    ${EXECDIR}/resources/pages/android/cliente/listagemClienteAndroidResources.robot
@@ -25,3 +27,10 @@ Teste 001 ::: Lançar pedido pela tela 360° do cliente, gravar e finalizar
     Validar informacoes da guia resumo
     Finalizar pedido de venda - Android
     Finalizar atendimento tela 360
+
+Teste 002 ::: Filtrar pedido na listagem e editar
+    Acessar a guia de consulta no menu
+    Acessar a consulta de pedidos
+    Abrir a pesquisa avancada na consulta de pedidos
+    Filtrar pedido por numero    numeroPedido=${dadosPedidoAndroid.numeroPedido}
+    Visualizar pedido de venda
