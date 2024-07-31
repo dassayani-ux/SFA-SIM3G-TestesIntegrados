@@ -29,9 +29,17 @@ Acessar a guia de consulta no menu
     [Documentation]    Utilizada para acessar a tela de listagem de clientes por meio do menu lateral.
     ${ordenacaoMenu}=    sfa_lib_mobile.Retornar ordem menu mobile
     
-    ${index}=    Get Index From List    ${ordenacaoMenu}    Consulta
-    ${index}=    Evaluate    ${index}+1
-    ${locator}=    Catenate    ${menu.opcaoGeral}    [${index}]
+    ${index}=    Collections.Get Index From List    ${ordenacaoMenu}    Consulta
+    ${index}=    BuiltIn.Evaluate    ${index}+1
+
+    #Quando o menu lateral é acessado de uma tela que não é a tela inicial do app, o xpath dos elementos do menu muda, por isso é necessária essa validação abaixo.
+    ${activity}=    AppiumLibrary.Get Activity
+    IF  '${activity}' == '${activityMenuPrincipal}'
+        ${locator}    BuiltIn.Catenate    ${menu.opcaoGeral}    [${index}]
+    ELSE
+        ${locator}    BuiltIn.Catenate    ${menu.opcaoGeral2}    [${index}]
+    END
+
     ${statusMenu}=    BuiltIn.Run Keyword And Return Status    AppiumLibrary.Element Should Be Visible    id=${menu.labelProfissional}
     BuiltIn.Run Keyword If    '${statusMenu}' == 'False'    Exibir/recolher menu lateral
     AppiumLibrary.Click Element    xpath=${locator}

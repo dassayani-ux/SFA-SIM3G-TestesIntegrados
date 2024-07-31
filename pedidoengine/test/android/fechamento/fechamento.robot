@@ -6,6 +6,8 @@ Resource    ${EXECDIR}/resources/pages/android/login/login.robot
 Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
 Resource    ${EXECDIR}/resources/pages/android/menu/menuAndroid.robot
 Resource    ${EXECDIR}/resources/pages/android/aplicacao/aplicacao.robot
+Resource    ${EXECDIR}/resources/pages/android/consulta/consultaGeral.robot
+Resource    ${EXECDIR}/resources/pages/android/consulta/consultaPedido.robot
 Resource    ${EXECDIR}/resources/pages/android/sincronizacao/sincronizacao.robot
 Resource    ${EXECDIR}/resources/pages/android/pedido/cadastroPedidoAndroidResources.robot
 Resource    ${EXECDIR}/resources/pages/android/cliente/listagemClienteAndroidResources.robot
