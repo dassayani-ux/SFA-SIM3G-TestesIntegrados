@@ -12,3 +12,6 @@ Documentation    Arquivo utilizado para armazenar variáveis de dados que contri
 ...    idTabelaPreco=
 ...    idCondicaoPagamento=
 ...    idTipoCobranca=
+...    valorTotalPedido=${0}
+...    quantidadeItensPedido=${0}
+...    quantidadeProdutosPedido=

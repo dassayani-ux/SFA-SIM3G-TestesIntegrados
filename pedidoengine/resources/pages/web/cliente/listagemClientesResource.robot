@@ -315,10 +315,10 @@ Filtra cliente por local
 Filtra cliente por documento
     [Documentation]    Irá realizar a consulta de clientes tendo como parâmetro o campo de *Documento*.
 
-    ${documento}=    FakerLibrary.Random Number    digits=5
+    ${documento}=    FakerLibrary.Random Number    digits=2
     ${countRegistros}=    SQL Pesquisa Avancada    documento=${documento}
     WHILE  ${countRegistros} == ${0}
-        ${documento}=    FakerLibrary.Random Number    digits=5
+        ${documento}=    FakerLibrary.Random Number    digits=2
         ${countRegistros}=    SQL Pesquisa Avancada    documento=${documento} 
     END
 
@@ -342,10 +342,12 @@ Filtra cliente por documento
 Filtra cliente por matricula
     [Documentation]    Irá realizar a consulta de clientes tendo como parâmetro o campo *Matrícula*.
 
-    ${matricula}=    FakerLibrary.Random Number    digits=6
+    ${parceiro}=    Retornar razao, matricula e id de parceiro aleatorio
+    ${matricula}=    BuiltIn.Set Variable    ${parceiro[1]}
     ${countRegistros}=    SQL Pesquisa Avancada    matricula=${matricula}
     WHILE  ${countRegistros} == ${0}
-        ${matricula}=    FakerLibrary.Random Number    digits=6
+        ${parceiro}=    Retornar razao, matricula e id de parceiro aleatorio
+        ${matricula}=    BuiltIn.Set Variable    ${parceiro[1]}
         ${countRegistros}=    SQL Pesquisa Avancada    matricula=${matricula} 
     END
 

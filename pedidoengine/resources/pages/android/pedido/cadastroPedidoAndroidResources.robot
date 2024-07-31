@@ -28,11 +28,13 @@ Preencher tabela de preco cabecalho - Android
     IF  ${countOpcoes} == ${1}
         BuiltIn.Fail    Não há tabela de preço disponível para seleção.
     ELSE IF  ${countOpcoes} == ${2}
-        ${opcao}=    BuiltIn.Set Variable    [2]
+        ${opcao}=    BuiltIn.Set Variable    2
     ELSE
-        ${opcao}=    BuiltIn.Evaluate    random.sample(range(2, ${countOpcoes}), 1)    random
+        ${opcao}=    BuiltIn.Evaluate    random.randint(2, ${countOpcoes})    random
     END
-    AppiumLibrary.Click Element    xpath=${popUpOpcoesCombo.opcoesDisponiveis}${opcao}
+    ${xpath}    BuiltIn.Set Variable
+    ${xpath}    BuiltIn.Catenate    ${popUpOpcoesCombo.opcoesDisponiveis}    [${opcao}]
+    AppiumLibrary.Click Element    xpath=${xpath}
     ${tabelaPreco}=    AppiumLibrary.Get Text    xpath=${cabecalhoPedidoAndroid.comboboxTabelaPreco}
     BuiltIn.Log To Console    Tabela de preço selecionada: ${tabelaPreco}
 
@@ -46,11 +48,13 @@ Preencher condicao pagamento cabecalho - Android
     IF  ${countOpcoes} == ${1}
         BuiltIn.Fail    Não há condição de pagamento disponível para seleção.
     ELSE IF  ${countOpcoes} == ${2}
-        ${opcao}=    BuiltIn.Set Variable    [2]
+        ${opcao}=    BuiltIn.Set Variable    2
     ELSE
-        ${opcao}=    BuiltIn.Evaluate    random.sample(range(2, ${countOpcoes}), 1)    random
+        ${opcao}=    BuiltIn.Evaluate    random.randint(2, ${countOpcoes})    random
     END
-    AppiumLibrary.Click Element    xpath=${popUpOpcoesCombo.opcoesDisponiveis}${opcao}
+    ${xpath}    BuiltIn.Set Variable
+    ${xpath}    BuiltIn.Catenate    ${popUpOpcoesCombo.opcoesDisponiveis}    [${opcao}]
+    AppiumLibrary.Click Element    xpath=${xpath}
     ${condicaoPagamento}=    AppiumLibrary.Get Text    xpath=${cabecalhoPedidoAndroid.comboboxCondicaoPagamento}
     BuiltIn.Log To Console    Condição de pagamento selecionada: ${condicaoPagamento}
 
@@ -80,11 +84,13 @@ Preencher safra cabecalho - Android
     IF  ${countOpcoes} == ${1}
         BuiltIn.Fail    Não há safra disponível para seleção.
     ELSE IF  ${countOpcoes} == ${2}
-        ${opcao}=    BuiltIn.Set Variable    [2]
+        ${opcao}=    BuiltIn.Set Variable    2
     ELSE
-        ${opcao}=    BuiltIn.Evaluate    random.sample(range(2, ${countOpcoes}), 1)    random
+        ${opcao}=    BuiltIn.Evaluate    random.randint(2, ${countOpcoes})    random
     END
-    AppiumLibrary.Click Element    xpath=${popUpOpcoesCombo.opcoesDisponiveis}${opcao}
+    ${xpath}    BuiltIn.Set Variable
+    ${xpath}    BuiltIn.Catenate    ${popUpOpcoesCombo.opcoesDisponiveis}    [${opcao}]
+    AppiumLibrary.Click Element    xpath=${xpath}
     AppiumLibrary.Wait Until Page Does Not Contain Element    id=${painelMsgCarregando}    timeout=60s
     ${safra}=    AppiumLibrary.Get Text    xpath=${cabecalhoPedidoAndroid.comboboxSafra}
     BuiltIn.Log To Console    Safra selecionada: ${safra}
@@ -129,18 +135,19 @@ Popular dicionario de dados do pedido
 
 Incluir produtos no pedido - Android
     [Documentation]    Utilizada para incluir produtos no pedido Android.
-    ...    \nO argumento *${quantidadeItens}* define quantos produtos serão inclusos no pedido.
+    ...    \nO argumento *${quantidadeItensProdutos}* define quantos produtos serão inclusos no pedido.
     ...    \nO argumento *${quantidadeMaxima}* define qual a quantidade máxima para os itens.
-    [Arguments]    ${quantidadeItens}=${2}    ${quantidadeMaxima}=${100}
+    [Arguments]    ${quantidadeItensProdutos}=${2}    ${quantidadeMaxima}=${100}
 
+    ${dadosPedidoAndroid.quantidadeProdutosPedido}=    BuiltIn.Set Variable    ${quantidadeItensProdutos}
     Acessar guia de produtos - Android
     BuiltIn.Sleep   1s
     ${countProdutosTabela}=    Retorna quantidade de itens da tabela    ${dadosPedidoAndroid.idTabelaPreco}
-    ${randomProdutos}=    Evaluate    random.sample(range(0, ${countProdutosTabela}), ${quantidadeItens})    random
+    ${randomProdutos}=    Evaluate    random.sample(range(0, ${countProdutosTabela}), ${quantidadeItensProdutos})    random
     ${produtos}=    Retorna produtos    @{randomProdutos}    tabelaPreco=${dadosPedidoAndroid.idTabelaPreco}
     Log To Console    Produtos selecionados: ${produtos}
 
-    FOR  ${IP}  IN RANGE    ${quantidadeItens}
+    FOR  ${IP}  IN RANGE    ${quantidadeItensProdutos}
         AppiumLibrary.Input Text    class=${guiaProdutoPedidoAndroid.campoPesquisa}    ${produtos[${IP}]}
         BuiltIn.Sleep    1s
         AppiumLibrary.Wait Until Page Does Not Contain Element    id=${painelMsgCarregando}    timeout=60s
@@ -173,6 +180,7 @@ Incluir produtos no pedido - Android
             ${qtde}=    Evaluate    round(random.randint(1, round(${quantidadeMaxima}/${qtdApresentacao})) * ${qtdApresentacao})    random
         END
 
+        ${dadosPedidoAndroid.quantidadeItensPedido}    BuiltIn.Evaluate    ${dadosPedidoAndroid.quantidadeItensPedido} + ${qtde}
         ${qtde}=    BuiltIn.Convert To String    ${qtde}
         BuiltIn.Log To Console    Quantidade sorteada para o produto ${produtos[${IP}]} = ${qtde}
         ${lenQtd}=    BuiltIn.Get Length    ${qtde}
@@ -188,6 +196,9 @@ Incluir produtos no pedido - Android
         ${casasDecimais}=    sfa_lib_mobile.Retornar casas decimais valores monetarios
         ${valorTotalItemCalculado}=    BuiltIn.Evaluate    round(${precoProdutoSemRound}*${qtde}, ${casasDecimais})
         ${valorTotalItemCalculado}=    BuiltIn.Evaluate    "{:.${casasDecimais}f}".format(${valorTotalItemCalculado})
+        ${dadosPedidoAndroid.valorTotalPedido}=    BuiltIn.Evaluate    ${dadosPedidoAndroid.valorTotalPedido} + ${valorTotalItemCalculado}
+        ${dadosPedidoAndroid.valorTotalPedido}=    BuiltIn.Evaluate    round(${dadosPedidoAndroid.valorTotalPedido}, ${casasDecimais})
+        ${dadosPedidoAndroid.valorTotalPedido}=    BuiltIn.Evaluate    "{:.${casasDecimais}f}".format(${dadosPedidoAndroid.valorTotalPedido})
         ${valorTotalItemCalculado}=    sfa_lib_mobile.Formatar valor monetario    ${valorTotalItemCalculado}
         ${getValorTotalItemCard}=    AppiumLibrary.Get Text    xpath=${cardProdutoListagem.valorTotal}
         ${valorTotalItemCard}=    sfa_lib_mobile.Formatar valor monetario    ${getValorTotalItemCard}
@@ -250,3 +261,38 @@ Finalizar pedido de venda - Android
     AppiumLibrary.Click Element    id=${guiaResumoPedidoAndroid.btnOk}
     AppiumLibrary.Wait Until Page Does Not Contain Element    xpath=${guiaResumoPedidoAndroid.guia}    timeout=10s
     BuiltIn.Log To Console    \nPedido ${dadosPedidoAndroid.numeroPedido} finalizado com sucesso!
+
+Validar informacoes da guia resumo
+    [Documentation]    Keyword utilizada para validar as informações exibidas na guia Resumo.
+
+    ${quantidadeProdutosGuiaResumo}    AppiumLibrary.Get Text    xpath=${guiaResumoPedidoAndroid.quantidadeProdutos}
+    ${quantidadeItensGuiaResumo}    AppiumLibrary.Get Text    xpath=${guiaResumoPedidoAndroid.quantidadeItens}
+    ${valorTotalGuiaResumo}    AppiumLibrary.Get Text    xpath=${guiaResumoPedidoAndroid.valorTotalLiquido}
+
+    #Validacao da quantidade de produtos
+    IF  '${quantidadeProdutosGuiaResumo}' == '${dadosPedidoAndroid.quantidadeProdutosPedido}'
+        BuiltIn.Log To Console    Quantidade de produtos exibida no resumo está correta. (${dadosPedidoAndroid.quantidadeProdutosPedido})
+    ELSE
+        BuiltIn.Log To Console    Quantidade de produtos exibida na guia resumo está errada. (Correta:${dadosPedidoAndroid.quantidadeProdutosPedido} / Resumo: ${quantidadeProdutosGuiaResumo})
+        BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+    END
+    
+    #Validacao da quantidade de itens
+    ${quantidadeItens}    String.Split String    ${quantidadeItensGuiaResumo}    ,
+    IF  '${quantidadeItens[0]}' == '${dadosPedidoAndroid.quantidadeItensPedido}'
+        BuiltIn.Log To Console    Quantidade de itens exibida no resumo está correta. (${dadosPedidoAndroid.quantidadeItensPedido})
+    ELSE
+        BuiltIn.Log To Console    Quantidade de produtos exibida na guia resumo está errada. (Correta:${dadosPedidoAndroid.quantidadeItensPedido} / Resumo: ${quantidadeItens[0]})
+        BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+    END
+    
+    #Validacao do valor líquido
+    ${valorTotalPedidoD}=    sfa_lib_mobile.Formatar valor monetario    ${dadosPedidoAndroid.valorTotalPedido}    #Formata o valor salvo no dicionário
+    ${valorTotalPedidoR}=    sfa_lib_mobile.Formatar valor monetario    ${valorTotalGuiaResumo}    #Formata o valor resgatado da guia resumo.
+
+    IF  '${valorTotalPedidoD}' == '${valorTotalPedidoR}'
+        BuiltIn.Log To Console    Valor total líquido exibido na guia resumo está correto. (${valorTotalGuiaResumo})
+    ELSE
+        BuiltIn.Log To Console    Valor total líquido exibido na guia resumo está errado. (Correta:${valorTotalPedidoD} / Resumo: ${valorTotalPedidoR})
+        BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+    END
