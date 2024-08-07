@@ -139,8 +139,12 @@ Incluir produtos no pedido - Android
     ...    \nO argumento *${quantidadeMaxima}* define qual a quantidade máxima para os itens.
     [Arguments]    ${quantidadeItensProdutos}=${2}    ${quantidadeMaxima}=${100}
 
+    # Setando para 0 para que bata os valores quando se tratar de inclusao de itens durante uma edicao de pedido de venda.
+    ${dadosPedidoAndroid.quantidadeProdutosPedido}=    BuiltIn.Set Variable    ${0}
+    ${dadosPedidoAndroid.quantidadeItensPedido}=    BuiltIn.Set Variable    ${0}
+    ${dadosPedidoAndroid.valorTotalPedido}=    BuiltIn.Set Variable    ${0}
+
     ${dadosPedidoAndroid.quantidadeProdutosPedido}=    BuiltIn.Set Variable    ${quantidadeItensProdutos}
-    Acessar guia de produtos - Android
     BuiltIn.Sleep   1s
     ${countProdutosTabela}=    Retorna quantidade de itens da tabela    ${dadosPedidoAndroid.idTabelaPreco}
     ${randomProdutos}=    Evaluate    random.sample(range(0, ${countProdutosTabela}), ${quantidadeItensProdutos})    random
@@ -220,6 +224,13 @@ Acessar guia de produtos - Android
     BuiltIn.Sleep    0.7s
     AppiumLibrary.Wait Until Page Does Not Contain Element    id=${painelMsgCarregando}    timeout=60s
 
+Acessar a guia de carrinho - Android
+    [Documentation]    Utilizada para acessar a guia de carrinho no pedido Android.
+
+    AppiumLibrary.Click Element    xpath=${guiaCarrinhoidoAndroid.guiaCarrinho}
+    BuiltIn.Sleep    0.7s
+    AppiumLibrary.Wait Until Page Does Not Contain Element    id=${painelMsgCarregando}    timeout=60s
+
 Acessar guia de complemento - Android
     [Documentation]    Utilizada para acessar a guia de informações complementares no pedido Android.
 
@@ -296,3 +307,20 @@ Validar informacoes da guia resumo
         BuiltIn.Log To Console    Valor total líquido exibido na guia resumo está errado. (Correta:${valorTotalPedidoD} / Resumo: ${valorTotalPedidoR})
         BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
     END
+
+Remover itens do pedido
+    [Documentation]    Utilizada para remover todos os itens presentes no carrinho do pedido de venda.
+
+    ${quantidadeItensCarrinho}    AppiumLibrary.Get Text    xpath=${guiaCarrinhoidoAndroid.guiaCarrinho}
+    ${quantidadeItensCarrinho}    String.Split String    ${quantidadeItensCarrinho}    separator=)
+    ${quantidadeItensCarrinho}    BuiltIn.Set Variable    ${quantidadeItensCarrinho[0]}
+    ${quantidadeItensCarrinho}    String.Remove String    ${quantidadeItensCarrinho}    (
+    ${quantidadeItensCarrinho}    BuiltIn.Convert To Integer    ${quantidadeItensCarrinho}
+
+    FOR  ${I}  IN RANGE    ${quantidadeItensCarrinho}
+        AppiumLibrary.Click Element    xpath=${guiaCarrinhoidoAndroid.removerItemCarrinho}
+        AppiumLibrary.Wait Until Element Is Visible    xpath=${guiaCarrinhoidoAndroid.msg}
+        AppiumLibrary.Click Element    id=${guiaCarrinhoidoAndroid.btnSim}
+    END
+    BuiltIn.Log To Console    Produtos removidos do pedido.
+    
