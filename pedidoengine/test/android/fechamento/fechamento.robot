@@ -35,7 +35,23 @@ Teste 004 ::: Lançar pedido pela tela 360° do cliente, gravar e finalizar
     Iniciar atendimento tela 360
     Iniciar novo pedido tela 360
     Preencher cabecalho pedido - Android
+    Acessar guia de produtos - Android
     Incluir produtos no pedido - Android
     Gravar pedido de venda - Android
+    Validar informacoes da guia resumo
     Finalizar pedido de venda - Android
     Finalizar atendimento tela 360
+
+Teste 005 ::: Filtrar pedido na listagem e editar
+    Acessar a guia de consulta no menu
+    Acessar a consulta de pedidos
+    Abrir a pesquisa avancada na consulta de pedidos
+    Filtrar pedido por numero    numeroPedido=${dadosPedidoAndroid.numeroPedido}
+    Visualizar pedido de venda
+    Acessar a guia de carrinho - Android
+    Remover itens do pedido
+    Acessar guia de produtos - Android
+    Incluir produtos no pedido - Android
+    Gravar pedido de venda - Android
+    Validar informacoes da guia resumo
+    Finalizar pedido de venda - Android
