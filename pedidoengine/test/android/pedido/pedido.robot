@@ -42,3 +42,9 @@ Teste 002 ::: Filtrar pedido na listagem e editar
     Gravar pedido de venda - Android
     Validar informacoes da guia resumo
     Finalizar pedido de venda - Android
+
+Teste 003 ::: Filtrar pedido e clonar
+    Abrir a pesquisa avancada na consulta de pedidos
+    Filtrar pedido por numero    numeroPedido=${dadosPedidoAndroid.numeroPedido}
+    Clonar pedido de venda
+    Validar cabecalho do pedido clonado

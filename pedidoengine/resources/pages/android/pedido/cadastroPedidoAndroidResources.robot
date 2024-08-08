@@ -101,6 +101,13 @@ Preencher safra cabecalho - Android
 
 Popular dicionario de dados do pedido
     [Documentation]    Utilizada para preencher o dicinário de dados do pedido Android, cujo o qual será utilizado em keywords.
+    [Arguments]    ${clone}=False
+
+    # Se caso se tratar de clonagem de pedido, irá preecher o parceiro aqui com base no que é exibido em tela
+    IF  '${clone}' == '${True}'
+        ${txtNomeParceiro}=    AppiumLibrary.Get Text    xpath=${cabecalhoPedidoAndroid.nomeParceiro}
+        ${dadosPedidoAndroid.idParceiro}=    Retorna idparceiro    nomeParceiro=${txtNomeParceiro}
+    END
 
     # Número pedido {
     ${txtCabecalhoPedidoNumeroPedido}=    AppiumLibrary.Get Text    xpath=${cabecalhoPedidoAndroid.numeroPedido}
@@ -324,3 +331,90 @@ Remover itens do pedido
     END
     BuiltIn.Log To Console    Produtos removidos do pedido.
     
+Validar cabecalho do pedido clonado
+    [Documentation]    Irá verificar se o cabecalho do pedido clonado está identico ao do pedido original. Para isso,
+    ...    será feito um clone do dicionário de dados do pedido para armazenar as informacoes originais e, reeprenchido o dicionário de dados com os dados do pedido clonado
+
+    ${dadosPedidoAndroidOriginal}    Collections.Copy Dictionary    ${dadosPedidoAndroid}    #Faz a cópia do dicionário para armazenar as informacoes originais.
+    Popular dicionario de dados do pedido    #Preenche o dicionário do pedido com os dados atuais exibidos no pedido clonado.
+
+    BuiltIn.Log To Console    ...::: INÍCIO DA COMPARAÇÃO DOS DADOS DO PEDIDO CLONADO :::...
+    Verificar igualdade de idParceiro    ${dadosPedidoAndroidOriginal['idParceiro']}
+    Verificar igualdade de idLocalParceiro    ${dadosPedidoAndroidOriginal['idLocalParceiro']}
+    Verificar igualdade de idLocalFilial    ${dadosPedidoAndroidOriginal['idLocalFilial']}
+    Verificar igualdade de idTipoPedido    ${dadosPedidoAndroidOriginal['idTipoPedido']}
+    Verificar igualdade de idTabelaPreco    ${dadosPedidoAndroidOriginal['idTabelaPreco']}
+    Verificar igualdade de idCondicaoPagamento    ${dadosPedidoAndroidOriginal['idCondicaoPagamento']}
+    BuiltIn.Log To Console    ...::: FIM DA COMPARAÇÃO DOS DADOS DO PEDIDO CLONADO :::...
+
+Verificar igualdade de idParceiro
+    [Documentation]    Utilizada para verificar se o idParceiro do argumento é o mesmo que o idParceiro salvo nos dados do pedido. 
+    ...    \nUtilizada na validacao dos dados de cabecalho do pedido clonado
+    [Arguments]    ${idParceiro}=${EMPTY}
+
+    IF  '${idParceiro}' == '${dadosPedidoAndroid.idParceiro}'
+        BuiltIn.Log To Console    Parceiro do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        BuiltIn.Log To Console    Parceiro do pedido clonado é diferente do parceiro selecionado no pedido original. (idParceiro original: ${idParceiro} | idParceiro do pedido clonado: ${dadosPedidoAndroid.idParceiro})
+        BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+    END
+
+Verificar igualdade de idLocalParceiro
+    [Documentation]    Utilizada para verificar se o idLocalParceiro do argumento é o mesmo que o idLocalParceiro salvo nos dados do pedido. 
+    ...    \nUtilizada na validacao dos dados de cabecalho do pedido clonado
+    [Arguments]    ${idLocalParceiro}=${EMPTY}
+
+    IF  '${idLocalParceiro}' == '${dadosPedidoAndroid.idLocalParceiro}'
+        BuiltIn.Log To Console    Local Parceiro do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        BuiltIn.Log To Console    Local Parceiro do pedido clonado é diferente do local parceiro selecionado no pedido original. (idLocalParceiro original: ${idLocalParceiro} | idLocalParceiro do pedido clonado: ${dadosPedidoAndroid.idLocalParceiro})
+        BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+    END
+
+Verificar igualdade de idLocalFilial
+    [Documentation]    Utilizada para verificar se o idLocalFilial do argumento é o mesmo que o idLocalFilial salvo nos dados do pedido. 
+    ...    \nUtilizada na validacao dos dados de cabecalho do pedido clonado
+    [Arguments]    ${idLocalFilial}=${EMPTY}
+
+    IF  '${idLocalFilial}' == '${dadosPedidoAndroid.idLocalFilial}'
+        BuiltIn.Log To Console    Filial do pedido clonado é a mesma que a do pedido original.
+    ELSE
+        BuiltIn.Log To Console    Filial do pedido clonado é diferente da filial selecionada no pedido original. (idLocalFilial original: ${idLocalFilial} | idLocalFilial do pedido clonado: ${dadosPedidoAndroid.idLocalFilial})
+        BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+    END
+
+Verificar igualdade de idTipoPedido
+    [Documentation]    Utilizada para verificar se o idTipoPedido do argumento é o mesmo que o idTipoPedido salvo nos dados do pedido. 
+    ...    \nUtilizada na validacao dos dados de cabecalho do pedido clonado
+    [Arguments]    ${idTipoPedido}=${EMPTY}
+
+    IF  '${idTipoPedido}' == '${dadosPedidoAndroid.idTipoPedido}'
+        BuiltIn.Log To Console    Tipo do pedido clonado é o mesmo que o do pedido original.
+    ELSE
+        BuiltIn.Log To Console    Tipo do pedido clonado é diferente do tipo selecionado no pedido original. (idTipoPedido original: ${idTipoPedido} | idTipoPedido do pedido clonado: ${dadosPedidoAndroid.idTipoPedido})
+        BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+    END
+
+Verificar igualdade de idTabelaPreco
+    [Documentation]    Utilizada para verificar se o idTabelaPreco do argumento é o mesmo que o idTabelaPreco salvo nos dados do pedido. 
+    ...    \nUtilizada na validacao dos dados de cabecalho do pedido clonado
+    [Arguments]    ${idTabelaPreco}=${EMPTY}
+
+    IF  '${idTabelaPreco}' == '${dadosPedidoAndroid.idTabelaPreco}'
+        BuiltIn.Log To Console    Tabela de preco do pedido clonado é a mesma que a do pedido original.
+    ELSE
+        BuiltIn.Log To Console    Tabela de preco do pedido clonado é diferente da tabela de preco selecionada no pedido original. (idTabelaPreco original: ${idTabelaPreco} | idTabelaPreco do pedido clonado: ${dadosPedidoAndroid.idTabelaPreco})
+        BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+    END
+
+Verificar igualdade de idCondicaoPagamento
+    [Documentation]    Utilizada para verificar se o idCondicaoPagamento do argumento é o mesmo que o idCondicaoPagamento salvo nos dados do pedido. 
+    ...    \nUtilizada na validacao dos dados de cabecalho do pedido clonado
+    [Arguments]    ${idCondicaoPagamento}=${EMPTY}
+
+    IF  '${idCondicaoPagamento}' == '${dadosPedidoAndroid.idCondicaoPagamento}'
+        BuiltIn.Log To Console    Condicao de pagamento do pedido clonado é a mesma que a do pedido original.
+    ELSE
+        BuiltIn.Log To Console    Condicao de pagamento do pedido clonado é diferente da condicao de pagamento selecionada no pedido original. (idCondicaoPagamento original: ${idCondicaoPagamento} | idCondicaoPagamento do pedido clonado: ${dadosPedidoAndroid.idCondicaoPagamento})
+        BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+    END
