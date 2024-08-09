@@ -146,6 +146,9 @@ Incluir produtos no pedido - Android
     ...    \nO argumento *${quantidadeMaxima}* define qual a quantidade máxima para os itens.
     [Arguments]    ${quantidadeItensProdutos}=${2}    ${quantidadeMaxima}=${100}
 
+    #Limpando lista de dicionários de produtos
+    sfa_lib_mobile.Limpar listas    ${dados_produtos_pedido}
+
     # Setando para 0 para que bata os valores quando se tratar de inclusao de itens durante uma edicao de pedido de venda.
     ${dadosPedidoAndroid.quantidadeProdutosPedido}=    BuiltIn.Set Variable    ${0}
     ${dadosPedidoAndroid.quantidadeItensPedido}=    BuiltIn.Set Variable    ${0}
@@ -222,6 +225,9 @@ Incluir produtos no pedido - Android
         END
         
         AppiumLibrary.Clear Text    class=${guiaProdutoPedidoAndroid.campoPesquisa}
+
+        #Criando o dicionário com dados do produto e adicionando o dicionário a lista.
+        Criar dicionario de dados do produto    codigoProduto=${produtos[${IP}]}    quantidadeProduto=${qtde}    precoProduto=${precoProdutoDB}    valorTotalProduto=${valorTotalItemCalculado}
     END
 
 Acessar guia de produtos - Android
@@ -418,3 +424,35 @@ Verificar igualdade de idCondicaoPagamento
         BuiltIn.Log To Console    Condicao de pagamento do pedido clonado é diferente da condicao de pagamento selecionada no pedido original. (idCondicaoPagamento original: ${idCondicaoPagamento} | idCondicaoPagamento do pedido clonado: ${dadosPedidoAndroid.idCondicaoPagamento})
         BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
     END
+
+Criar dicionario de dados do produto
+    [Documentation]    Essa keyword será utilizada para criar um dicionário com alguns dados do produto que foi 
+    ...    incluído no pedido de venda e adicionar esse dicionário em uma lista para posterior utilizacão.
+    [Arguments]    ${idProduto}=${EMPTY}    ${codigoProduto}=${EMPTY}    ${descricaoProduto}=${EMPTY}    ${quantidadeProduto}=${EMPTY}    ${precoProduto}=${EMPTY}    ${valorTotalProduto}=${EMPTY}
+
+    #Cria o dicionário para armazenar os dados.
+    ${produto}    BuiltIn.Create Dictionary    
+
+    #O bloco de código abaixo verifica cada argumento, adicionando o campo ao dicionário quando o argumento não for vazio.
+    IF  '${idProduto}' != '${EMPTY}'
+        Collections.Set To Dictionary    ${produto}    id=${idProduto}
+    END
+    IF  '${codigoProduto}' != '${EMPTY}'
+        Collections.Set To Dictionary    ${produto}    codigo=${codigoProduto}
+    END
+    IF  '${descricaoProduto}' != '${EMPTY}'
+        Collections.Set To Dictionary    ${produto}    descricao=${descricaoProduto}
+    END
+    IF  '${quantidadeProduto}' != '${EMPTY}'
+        Collections.Set To Dictionary    ${produto}    quantidade=${quantidadeProduto}
+    END
+    IF  '${precoProduto}' != '${EMPTY}'
+        Collections.Set To Dictionary    ${produto}    preco=${precoProduto}
+    END
+    IF  '${valorTotalProduto}' != '${EMPTY}'
+        Collections.Set To Dictionary    ${produto}    valorTotal=${valorTotalProduto}
+    END
+
+    BuiltIn.Log To Console    ${produto}
+    
+    Collections.Append To List    ${dados_produtos_pedido}    ${produto}

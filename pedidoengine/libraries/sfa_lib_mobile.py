@@ -203,3 +203,11 @@ def scroll_screan(direction='down', duration=1000):
     end_y = height * 0.2 if direction == 'down' else height * 0.8
 
     driver.swipe(start_x, start_y, end_x, end_y, duration)
+@keyword("Limpar listas")
+def clear_list(input_list):
+    """
+    Remove todos os itens da lista passada como argumento.
+
+    :param input_list: A lista que será limpa.
+    """
+    input_list.clear()
