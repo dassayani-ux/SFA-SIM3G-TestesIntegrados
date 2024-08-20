@@ -27,7 +27,7 @@ Filtrar cliente por razao social e Matricula e selecionar
         ${matricula}=    BuiltIn.Set Variable    ${cliente[1]}
         ${dadosPedidoAndroid.idParceiro}=    BuiltIn.Set Variable    ${cliente[2]}
     ELSE
-        ${dadosPedidoAndroid.idParceiro}=    Retorna idparceiro    maricula=${matricula}    nomeParceiro=${nomeCliente}
+        ${dadosPedidoAndroid.idParceiro}=    Retorna idparceiro    matricula=${matricula}    nomeParceiro=${nomeCliente}
     END
 
     Ativar pesquisa avancada cliente

@@ -102,3 +102,17 @@ Retornar id local parceiro
     ${idLocal}    Set Variable    ${listaIdLocal[${index[0]}][0]}
 
     Return From Keyword    ${idLocal}
+
+Retornar dados de local especifico
+    [Documentation]    Irá retornar dados de um local específico.
+    [Arguments]    ${idlocal}=${EMPTY}
+
+    IF  '${idlocal}' == '${EMPTY}'
+        BuiltIn.Log To Console    [ERRO] Nenhum local informado.
+        BuiltIn.Fail
+    ELSE
+        ${sql}    BuiltIn.Set Variable    select descricao from local l where l.idlocal = ${idlocal};
+        ${local}    DatabaseLibrary.Query    ${sql}    returnAsDict=True
+    
+        BuiltIn.Return From Keyword    ${local[0]}
+    END

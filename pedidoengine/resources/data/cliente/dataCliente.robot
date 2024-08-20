@@ -416,12 +416,21 @@ SQL Pesquisa Avancada
     Return From Keyword    ${countPesquisaAvancada}
 
 Retorna idparceiro
-    [Documentation]    Esta keyword irá retornar o ID do Parceiro com base nos argumentos *matricula* e *nomeParceiro*
-    [Arguments]    ${maricula}    ${nomeParceiro}
+    [Documentation]    Esta keyword irá retornar o ID do Parceiro com base nos argumentos *matricula* e/ou *nomeParceiro*
+    [Arguments]    ${matricula}=${EMPTY}    ${nomeParceiro}=${EMPTY}
 
-    ${idParceiro}=    Query    select p.idparceiro from parceiro p where p.numeromatricula = '${maricula}' and p.nomeparceiro ilike '%${nomeParceiro}%'
+    IF  '${matricula}' != '${EMPTY}' and '${nomeParceiro}' != '${EMPTY}'
+        ${idParceiro}=    DatabaseLibrary.Query    select p.idparceiro from parceiro p where p.numeromatricula = '${matricula}' and p.nomeparceiro ilike '%${nomeParceiro}%'
+    ELSE IF  '${matricula}' == '${EMPTY}' and '${nomeParceiro}' != '${EMPTY}'
+        ${idParceiro}=    DatabaseLibrary.Query    select p.idparceiro from parceiro p where p.nomeparceiro ilike '%${nomeParceiro}%'
+    ELSE IF  '${matricula}' != '${EMPTY}' and '${nomeParceiro}' == '${EMPTY}'
+        ${idParceiro}=    DatabaseLibrary.Query    select p.idparceiro from parceiro p where p.numeromatricula = '${matricula}'
+    ELSE
+        BuiltIn.Log To Console    Nenhum argumento passado como parâmetro para retornar o idParceiro.
+        BuiltIn.Fail
+    END
 
-    Return From Keyword    ${idParceiro[0][0]}
+    BuiltIn.Return From Keyword    ${idParceiro[0][0]}
 
 Retornar cliente ativo
     [Documentation]    Irá retornar uma lista contendo o id, nome, nome fantasia e número da matrícula de um cliente random com situação ativo.

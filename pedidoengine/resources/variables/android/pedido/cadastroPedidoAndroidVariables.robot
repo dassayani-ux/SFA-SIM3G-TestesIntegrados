@@ -15,3 +15,6 @@ Documentation    Arquivo utilizado para armazenar variáveis de dados que contri
 ...    valorTotalPedido=${0}
 ...    quantidadeItensPedido=${0}
 ...    quantidadeProdutosPedido=
+
+# A lista abaixo será responsável por armazenar dicionários com dados dos produtos incluídos no pedido.
+@{dados_produtos_pedido}
