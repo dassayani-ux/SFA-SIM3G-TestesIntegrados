@@ -169,11 +169,11 @@ Incluir produtos no pedido - Android
         AppiumLibrary.Click Element    xpath=${cardProdutoListagem.expandirCard}
         ${precoProdutoDB}=    Retornar preco de tabela do produto    tabelaPreco=${dadosPedidoAndroid.idTabelaPreco}    codigoProduto=${produtos[${IP}]}
         BuiltIn.Log To Console    Preço para o produto de código ${produtos[${IP}]} = R$${precoProdutoDB}
-        ${precoProduto}=    sfa_lib_mobile.Formatar valor monetario    ${precoProdutoDB}
+        ${precoProdutoDB}=    sfa_lib_mobile.Formatar valor monetario    ${precoProdutoDB}
         ${getPrecoVendaCard}=    AppiumLibrary.Get Text    xpath=${cardProdutoListagem.precoVenda}
         ${precoVendaCard}=    sfa_lib_mobile.Formatar valor monetario    ${getPrecoVendaCard}
 
-        IF  '${precoProduto}' == '${precoVendaCard}'
+        IF  '${precoProdutoDB}' == '${precoVendaCard}'
             BuiltIn.Log To Console    Preço apresentado em tela está de acordo.
         ELSE
             BuiltIn.Log To Console    Preço apresentado em tela está divergente. R$(${precoVendaCard})
@@ -324,14 +324,10 @@ Validar informacoes da guia resumo
 Remover itens do pedido
     [Documentation]    Utilizada para remover todos os itens presentes no carrinho do pedido de venda.
 
-    ${quantidadeItensCarrinho}    AppiumLibrary.Get Text    xpath=${guiaCarrinhoidoAndroid.guiaCarrinho}
-    ${quantidadeItensCarrinho}    String.Split String    ${quantidadeItensCarrinho}    separator=)
-    ${quantidadeItensCarrinho}    BuiltIn.Set Variable    ${quantidadeItensCarrinho[0]}
-    ${quantidadeItensCarrinho}    String.Remove String    ${quantidadeItensCarrinho}    (
-    ${quantidadeItensCarrinho}    BuiltIn.Convert To Integer    ${quantidadeItensCarrinho}
+    ${quantidadeProdutosCarrinho}    Capturar e retornar a quantidade de produtos no carrinho
 
-    FOR  ${I}  IN RANGE    ${quantidadeItensCarrinho}
-        AppiumLibrary.Click Element    xpath=${guiaCarrinhoidoAndroid.removerItemCarrinho}
+    FOR  ${I}  IN RANGE    ${quantidadeProdutosCarrinho}
+        AppiumLibrary.Click Element    xpath=${cardCarrinhoAndroid.removerItemCarrinho}
         AppiumLibrary.Wait Until Element Is Visible    xpath=${guiaCarrinhoidoAndroid.msg}
         AppiumLibrary.Click Element    id=${guiaCarrinhoidoAndroid.btnSim}
     END
@@ -456,3 +452,84 @@ Criar dicionario de dados do produto
     BuiltIn.Log To Console    ${produto}
     
     Collections.Append To List    ${dados_produtos_pedido}    ${produto}
+
+Capturar e retornar a quantidade de produtos no carrinho
+    [Documentation]    Captura e retorna a quantidade de registros exibido no contador da guia carrinho do Android.
+
+    ${quantidadeProdutosCarrinho}    AppiumLibrary.Get Text    xpath=${guiaCarrinhoidoAndroid.guiaCarrinho}
+    ${quantidadeProdutosCarrinho}    String.Split String    ${quantidadeProdutosCarrinho}    separator=)
+    ${quantidadeProdutosCarrinho}    BuiltIn.Set Variable    ${quantidadeProdutosCarrinho[0]}
+    ${quantidadeProdutosCarrinho}    String.Remove String    ${quantidadeProdutosCarrinho}    (
+    ${quantidadeProdutosCarrinho}    BuiltIn.Convert To Integer    ${quantidadeProdutosCarrinho}
+
+    BuiltIn.Return From Keyword    ${quantidadeProdutosCarrinho}
+
+Validar produtos do pedido clonado
+    [Documentation]    Esta keyword verifica se todos os produtos com os dados do pedido original estão presentes no pedido clonado.
+
+    BuiltIn.Log To Console    ....::: INÍCIO DA COMPARAÇÃO DOS PRODUTOS DO PEDIDO CLONADO :::...
+    ${qtdProdutosCarrinhoClone}    Capturar e retornar a quantidade de produtos no carrinho
+    ${qtdProdutosCarrinhoOriginal}    BuiltIn.Get Length    ${dados_produtos_pedido}
+
+    #Verifica se a quantidade de produtos no pedido clonado é a mesma qua a do pedido original
+    IF  ${qtdProdutosCarrinhoClone} == ${qtdProdutosCarrinhoOriginal}
+        FOR  ${P}  IN RANGE  ${qtdProdutosCarrinhoOriginal}
+            AppiumLibrary.Input Text    class=${guiaCarrinhoidoAndroid.campoPesquisa}    ${dados_produtos_pedido[${P}]['codigo']}
+            ${codigoProdutoCard}    AppiumLibrary.Get Text    xpath=${cardCarrinhoAndroid.codigoProduto}
+            IF  "${codigoProdutoCard}" == "${dados_produtos_pedido[${P}]['codigo']}"
+                BuiltIn.Log To Console    Produto ${dados_produtos_pedido[${P}]['codigo']} localizado com sucesso.
+                IF  ${P} > ${1}
+                    BuiltIn.Sleep    3s  
+                END
+                AppiumLibrary.Click Element    xpath=${cardCarrinhoAndroid.expandirCard}
+                
+                # Captura os dados do card e formata
+                AppiumLibrary.Wait Until Page Contains Element    xpath=${cardCarrinhoAndroid.quantidade}
+                ${quantidadeCard}    AppiumLibrary.Get Text    xpath=${cardCarrinhoAndroid.quantidade}
+                ${precoCard}    AppiumLibrary.Get Text    xpath=${cardCarrinhoAndroid.precoVenda}
+                ${valorTotalCard}    AppiumLibrary.Get Text    xpath=${cardCarrinhoAndroid.valorTotalCardExpandido}
+                ${precoCard}    sfa_lib_mobile.Formatar valor monetario    ${precoCard}
+                ${valorTotalCard}    sfa_lib_mobile.Formatar valor monetario    ${valorTotalCard}
+
+                # Formata a quantidade do item presente no dicionário para poder comparar com a quantidade do card.
+                ${casasDecimaisQuantidade}    sfa_lib_mobile.Retornar casas decimais quantidade fracionada
+                ${quantidadeDic}    BuiltIn.Set Variable    ${dados_produtos_pedido[${P}]['quantidade']}
+                ${quantidadeDic}    BuiltIn.Evaluate    "{:.${casasDecimaisQuantidade}f}".format(${quantidadeDic})
+                ${quantidadeDic}    sfa_lib_mobile.Formatar quantidade fracionada    ${quantidadeDic}
+                
+                # Abaixo é verificado se a quantidade, o preco e o valor total do item está igual ao do pedido original.
+                IF  '${precoCard}' == "${dados_produtos_pedido[${P}]['preco']}"
+                    BuiltIn.Log To Console    Preco para o produto ${dados_produtos_pedido[${P}]['codigo']} está correto.
+                ELSE
+                    BuiltIn.Log To Console    Preco para o produto ${dados_produtos_pedido[${P}]['codigo']} está errado. (Pedido original: ${dados_produtos_pedido[${P}]['preco']} | Pedido clonado: ${precoCard})
+                    BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+                END
+
+                IF  '${valorTotalCard}' == "${dados_produtos_pedido[${P}]['valorTotal']}"
+                    BuiltIn.Log To Console    Valor total do produto ${dados_produtos_pedido[${P}]['codigo']} está correto.
+                ELSE
+                    BuiltIn.Log To Console    Valor total do produto ${dados_produtos_pedido[${P}]['codigo']} está errado. (Pedido original: ${dados_produtos_pedido[${P}]['valorTotal']} | Pedido clonado: ${valorTotalCard})
+                    BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+                END
+
+                IF  '${quantidadeDic}' == '${quantidadeCard}'
+                    BuiltIn.Log To Console    Quantidade para o produto ${dados_produtos_pedido[${P}]['codigo']} está correta.
+                ELSE
+                    BuiltIn.Log To Console    Quantidade para o produto ${dados_produtos_pedido[${P}]['codigo']} está errada. (Pedido original: ${quantidadeDic} | Pedido clonado: ${quantidadeCard})
+                    BuiltIn.Run Keyword And Continue On Failure    BuiltIn.Fail
+                END
+
+                AppiumLibrary.Click Element    xpath=${cardCarrinhoAndroid.retrairCard}
+            ELSE
+                BuiltIn.Log To Console    Produto ${dados_produtos_pedido[${P}]['codigo']} não foi localizado no pedido.
+                BuiltIn.Fail
+            END
+            AppiumLibrary.Click Element    xpath=${guiaCarrinhoidoAndroid.limparCampoPesquisa}
+            BuiltIn.Log To Console    ============================
+        END
+    ELSE
+        BuiltIn.Log To Console    Quantidade de produtos do pedido clonado está diferente da quantidade de produtos do pedido original. (Clone: ${qtdProdutosCarrinhoClone} | Original: ${qtdProdutosCarrinhoOriginal})
+        BuiltIn.Fail
+    END
+    BuiltIn.Log To Console    ....::: FIM DA COMPARAÇÃO DOS PRODUTOS DO PEDIDO CLONADO :::...
+    

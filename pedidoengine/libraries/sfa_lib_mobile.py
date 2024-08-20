@@ -161,15 +161,47 @@ def return_decimals_monetario():
 
     return casas_int
 
+@keyword("Retornar casas decimais quantidade fracionada")
+def return_decimals_quantidade_fracionada():
+    """Esta keyword retorna o valor para o parâmetro QTD_CASAS_DECIMAIS_QUANTIDADE_FRACIONADA"""
+
+    sql = f"select p.valor from parametro p where p.chave = 'QTD_CASAS_DECIMAIS_QUANTIDADE_FRACIONADA';"
+    casas = executar_sql(sql)
+    casas_str = casas[0][0]
+    casas_int = int(casas_str)
+
+    return casas_int
+
 @keyword("Formatar valor monetario")
 def format_valor_monetario(value):
     """Esta keyword recebe um valor e remove pontos, vírgulas, R$ e espaços. 
-    Feito isso, adiciona a vírgula seguindo o valor do parêmetro que define a quantidade de casas decimais monetárias (QTD_CASAS_DECIMAIS_MONETARIO)"""
+    Feito isso, adiciona a vírgula seguindo o valor do parametro que define a quantidade de casas decimais monetárias (QTD_CASAS_DECIMAIS_MONETARIO)"""
 
     value_str = str(value)
     casas = return_decimals_monetario()
 
     valueRemove = value_str.replace(".","").replace(",","").replace("R$","").replace(" ","")
+
+    # Inserir a vírgula na posição correta
+    parte_inteira = valueRemove[:-casas]
+    parte_decimal = valueRemove[-casas:]
+
+    print(f"Valor sem vírgula: [", valueRemove, "]")
+    print(f"Parte inteira: [", parte_inteira, "]")
+    print(f"Parte decimal: [", parte_decimal, "]")
+    
+    value_final= f"{parte_inteira},{parte_decimal}"
+    return value_final
+
+@keyword("Formatar quantidade fracionada")
+def format_quantidade_fracionada(value):
+    """Esta keyword recebe um valor e remove pontos, vírgulas  e espaços. 
+    Feito isso, adiciona a vírgula seguindo o valor do parametro que define a quantidade de casas decimais de quantidade fracionada (QTD_CASAS_DECIMAIS_QUANTIDADE_FRACIONADA)"""
+
+    value_str = str(value)
+    casas = return_decimals_quantidade_fracionada()
+
+    valueRemove = value_str.replace(".","").replace(",","").replace(" ","")
 
     # Inserir a vírgula na posição correta
     parte_inteira = valueRemove[:-casas]
@@ -203,6 +235,7 @@ def scroll_screan(direction='down', duration=1000):
     end_y = height * 0.2 if direction == 'down' else height * 0.8
 
     driver.swipe(start_x, start_y, end_x, end_y, duration)
+
 @keyword("Limpar listas")
 def clear_list(input_list):
     """
