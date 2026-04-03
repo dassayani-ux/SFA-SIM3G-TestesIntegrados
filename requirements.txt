@@ -1,0 +1,10 @@
+robotframework==6.0.1
+robotframework-seleniumlibrary
+robotframework-databaselibrary
+robotframework-faker
+robotframework-appiumlibrary
+psycopg2
+requests
+lxml
+cssselect
+unidecode

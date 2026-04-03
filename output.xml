@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.0.1 (Python 3.13.1 on win32)" generated="20260403 15:45:41.656" rpa="false" schemaversion="3">
+<suite id="s1" name="cadastroCliente" source="C:\ws\TestesIntegrados\SFA-SIM3G-TestesIntegrados\pedidoengine\test\web\cliente\cadastroCliente.robot">
+<kw name="Run Keywords" library="BuiltIn" type="SETUP">
+<arg>Conecta ao banco de dados</arg>
+<arg>AND</arg>
+<arg>Configura parametros padroes do sistema</arg>
+<arg>AND</arg>
+<arg>Abre navegador</arg>
+<arg>AND</arg>
+<arg>Realiza login na plataforma web</arg>
+<doc>Executes all the given keywords in a sequence.</doc>
+<kw name="Conecta ao banco de dados" library="conectionDatabase">
+<doc>Keyword utilizada para realizar a conexão com o banco de dados.</doc>
+<kw name="Connect To Database" library="DatabaseLibrary">
+<arg>psycopg2</arg>
+<arg>${banco_de_dados.dbName}</arg>
+<arg>${banco_de_dados.dbUser}</arg>
+<arg>${banco_de_dados.dbPass}</arg>
+<arg>${banco_de_dados.dbHost}</arg>
+<arg>${banco_de_dados.dbPort}</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<msg timestamp="20260403 15:45:44.291" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg timestamp="20260403 15:45:44.291" level="INFO">Configuration file doesn't exist</msg>
+<msg timestamp="20260403 15:45:44.382" level="INFO">Connect to DB using : psycopg2.connect(database='ws', user='wssim', password=***, host='10.171.217.166', port=9000)</msg>
+<status status="PASS" starttime="20260403 15:45:44.281" endtime="20260403 15:45:44.477"/>
+</kw>
+<status status="PASS" starttime="20260403 15:45:44.280" endtime="20260403 15:45:44.478"/>
+</kw>
+<kw name="Configura parametros padroes do sistema" library="cadastroClienteResource">
+<doc>Injeta toda a massa necessária para os combos e campos obrigatórios.</doc>
+<kw name="Log To Console" library="BuiltIn">
+<arg>\n⚙️ Injetando Massa de Dados no Postgres...</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20260403 15:45:44.478" endtime="20260403 15:45:44.479"/>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<var>${query}</var>
+<arg>SEPARATOR=\n</arg>
+<arg>BEGIN;</arg>
+<arg>UPDATE wsconfigentidade SET idnpermitevisualizar = 1, idnpermiteeditar = 1, idnpermitecadastrar = 1;</arg>
+<arg>UPDATE wsconfigentidadecampo SET idnobrigatorio = 0;</arg>
+<arg>UPDATE wsconfigentidadecampo SET idnobrigatorio = 1 WHERE labelcampo IN ('tipocliente', 'descricao', 'cidade', 'nome', 'parceiro', 'idnativo', 'profissional', 'sgltipopessoa', 'telefone', 'email', 'razaosocial', 'idnpessoafisica', 'cpf', 'login', 'perfilacesso', 'idnpadrao', 'datainicio', 'logradouro', 'nomeparceiro', 'numero', 'cnpj', 'nomeparceirofantasia');</arg>
+<arg>-- MASSA PARA COMBOS (RESTORED)</arg>
+<arg>INSERT INTO classificacaoparceiro (idclassificacaoparceiro, idnativo, percentualdesconto, descricao, sglclassificacao, ordem, codigoerp, wsversao) SELECT 99999, 1, 0, 'CLASSIFICACAO AUTOMACAO', 'AUTO', 1, 'CT#AUTO', 1 WHERE NOT EXISTS (SELECT 1 FROM classificacaoparceiro WHERE idclassificacaoparceiro = 99999);</arg>
+<arg>INSERT INTO grupoparceiro (idgrupoparceiro, idnativo, descricao, codigoerp, wsversao, sglgrupoparceiro) SELECT 99999, 1, 'GRUPO AUTOMACAO', 'CT#AUTO', 1, 'AUTO' WHERE NOT EXISTS (SELECT 1 FROM grupoparceiro WHERE idgrupoparceiro = 99999);</arg>
+<arg>INSERT INTO tipologia (idtipologia, idnativo, descricao, codigo, sgltipologia, codigoerp, wsversao) SELECT 99999, 1, 'TIPOLOGIA AUTOMACAO', 'AUTO', 'AUT', 'CT#AUTO', 1 WHERE NOT EXISTS (SELECT 1 FROM tipologia WHERE idtipologia = 99999);</arg>
+<arg>INSERT INTO regiao (idregiao, descricao, codigo, idnativo, codigoerp, wsversao) SELECT 99999, 'REGIAO AUTOMACAO', 'AUTO', 1, 'CT#AUTO', 1 WHERE NOT EXISTS (SELECT 1 FROM regiao WHERE idregiao = 99999);</arg>
+<arg>INSERT INTO segmento (idsegmento, descricao, idnativo, codigo, sigla, idnconsomecotasupervisor, codigoerp, wsversao) SELECT 99999, 'SEGMENTO AUTOMACAO', 1, 'AUTO', 'AUT', 0, 'CT#AUTO', 1 WHERE NOT EXISTS (SELECT 1 FROM segmento WHERE idsegmento = 99999);</arg>
+<arg>COMMIT;</arg>
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<msg timestamp="20260403 15:45:44.480" level="INFO">${query} = BEGIN;
+UPDATE wsconfigentidade SET idnpermitevisualizar = 1, idnpermiteeditar = 1, idnpermitecadastrar = 1;
+UPDATE wsconfigentidadecampo SET idnobrigatorio = 0;
+UPDATE wsconfigentidadecampo SET idnobr...</msg>
+<status status="PASS" starttime="20260403 15:45:44.479" endtime="20260403 15:45:44.480"/>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<arg>${query}</arg>
+<doc>Executes the ``sql_string`` - as a single SQL command (default) or as separate statements.</doc>
+<msg timestamp="20260403 15:45:44.480" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;BEGIN;
+UPDATE wsconfigentidade SET idnpermitevisualizar = 1, idnpermiteeditar = 1, idnpermitecadastrar = 1;
+UPDATE wsconfigentidadecampo SET idnobrigatorio = 0;
+UPDATE wsconfigentidadecampo SET idnobrigatorio = 1 WHERE labelcampo IN ('tipocliente', 'descricao', 'cidade', 'nome', 'parceiro', 'idnativo', 'profissional', 'sgltipopessoa', 'telefone', 'email', 'razaosocial', 'idnpessoafisica', 'cpf', 'login', 'perfilacesso', 'idnpadrao', 'datainicio', 'logradouro', 'nomeparceiro', 'numero', 'cnpj', 'nomeparceirofantasia');
+-- MASSA PARA COMBOS (RESTORED)
+INSERT INTO classificacaoparceiro (idclassificacaoparceiro, idnativo, percentualdesconto, descricao, sglclassificacao, ordem, codigoerp, wsversao) SELECT 99999, 1, 0, 'CLASSIFICACAO AUTOMACAO', 'AUTO', 1, 'CT#AUTO', 1 WHERE NOT EXISTS (SELECT 1 FROM classificacaoparceiro WHERE idclassificacaoparceiro = 99999);
+INSERT INTO grupoparceiro (idgrupoparceiro, idnativo, descricao, codigoerp, wsversao, sglgrupoparceiro) SELECT 99999, 1, 'GRUPO AUTOMACAO', 'CT#AUTO', 1, 'AUTO' WHERE NOT EXISTS (SELECT 1 FROM grupoparceiro WHERE idgrupoparceiro = 99999);
+INSERT INTO tipologia (idtipologia, idnativo, descricao, codigo, sgltipologia, codigoerp, wsversao) SELECT 99999, 1, 'TIPOLOGIA AUTOMACAO', 'AUTO', 'AUT', 'CT#AUTO', 1 WHERE NOT EXISTS (SELECT 1 FROM tipologia WHERE idtipologia = 99999);
+INSERT INTO regiao (idregiao, descricao, codigo, idnativo, codigoerp, wsversao) SELECT 99999, 'REGIAO AUTOMACAO', 'AUTO', 1, 'CT#AUTO', 1 WHERE NOT EXISTS (SELECT 1 FROM regiao WHERE idregiao = 99999);
+INSERT INTO segmento (idsegmento, descricao, idnativo, codigo, sigla, idnconsomecotasupervisor, codigoerp, wsversao) SELECT 99999, 'SEGMENTO AUTOMACAO', 1, 'AUTO', 'AUT', 0, 'CT#AUTO', 1 WHERE NOT EXISTS (SELECT 1 FROM segmento WHERE idsegmento = 99999);
+COMMIT;&lt;/code&gt;</msg>
+<msg timestamp="20260403 15:45:44.544" level="INFO">Commit the transaction</msg>
+<status status="PASS" starttime="20260403 15:45:44.480" endtime="20260403 15:45:44.560"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>✅ Banco preparado!</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20260403 15:45:44.560" endtime="20260403 15:45:44.561"/>
+</kw>
+<status status="PASS" starttime="20260403 15:45:44.478" endtime="20260403 15:45:44.561"/>
+</kw>
+<kw name="Abre navegador" library="navegadorResources">
+<doc>Irá abrir a aplicação web no navegador previamente informado.</doc>
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>${aplicacao_web.urlWeb}</arg>
+<arg>${aplicacao_web.navegadorWeb}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20260403 15:45:44.565" level="INFO">Opening browser 'Chrome' to base url 'http://10.171.217.166:9001/totvscrmsfa/'.</msg>
+<status status="PASS" starttime="20260403 15:45:44.562" endtime="20260403 15:45:48.908"/>
+</kw>
+<kw name="Maximize Browser Window" library="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" starttime="20260403 15:45:48.908" endtime="20260403 15:45:48.984"/>
+</kw>
+<status status="PASS" starttime="20260403 15:45:44.561" endtime="20260403 15:45:48.985"/>
+</kw>
+<kw name="Realiza login na plataforma web" library="loginResources">
+<doc>Irá realizar o login na plataforma web utilizando os dados informados no arquivo de variáveis.</doc>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>${TF_LOGIN}</arg>
+<arg>${login_web.usuarioWeb}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:48.988" level="INFO">Typing text 'admin' into text field 'formusuario'.</msg>
+<status status="PASS" starttime="20260403 15:45:48.986" endtime="20260403 15:45:49.191"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>${TF_SENHA}</arg>
+<arg>${login_web.senhaWeb}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:49.193" level="INFO">Typing text 'ws18012001' into text field 'formsenha'.</msg>
+<status status="PASS" starttime="20260403 15:45:49.191" endtime="20260403 15:45:49.361"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${BTN_ENTRAR}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:49.362" level="INFO">Clicking element 'id=btnGravar'.</msg>
+<status status="PASS" starttime="20260403 15:45:49.361" endtime="20260403 15:45:49.710"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20260403 15:45:51.711" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20260403 15:45:49.710" endtime="20260403 15:45:51.712"/>
+</kw>
+<status status="PASS" starttime="20260403 15:45:48.985" endtime="20260403 15:45:51.712"/>
+</kw>
+<status status="PASS" starttime="20260403 15:45:44.279" endtime="20260403 15:45:51.712"/>
+</kw>
+<test id="s1-t1" name="Teste 002 ::: Cadastro de cliente Pessoa Jurídica" line="19">
+<kw name="Acessa tela de cadastro de cliente" library="cadastroClienteResource">
+<kw name="Wait Until Element Is Not Visible" library="SeleniumLibrary">
+<arg>class=minimalist-loading-background</arg>
+<arg>30s</arg>
+<doc>Waits until the element ``locator`` is not visible.</doc>
+<status status="PASS" starttime="20260403 15:45:51.714" endtime="20260403 15:45:51.734"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${cliente.menuCliente}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:51.736" level="INFO">Clicking element 'id=cliente.menuMain'.</msg>
+<status status="PASS" starttime="20260403 15:45:51.734" endtime="20260403 15:45:51.886"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>id=${cliente.subMenuCliente}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260403 15:45:51.886" endtime="20260403 15:45:52.179"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${cliente.subMenuCliente}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:52.181" level="INFO">Clicking element 'id=menu.cliente.cadastrar'.</msg>
+<status status="PASS" starttime="20260403 15:45:52.179" endtime="20260403 15:45:52.308"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>id=${cliente.novoCliente}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260403 15:45:52.309" endtime="20260403 15:45:52.586"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${cliente.novoCliente}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:52.588" level="INFO">Clicking element 'id=menu.cliente.cadastrar.novo'.</msg>
+<status status="PASS" starttime="20260403 15:45:52.586" endtime="20260403 15:45:54.324"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>xpath=${tituloPaginaCadastroCLiente}</arg>
+<arg>20s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260403 15:45:54.325" endtime="20260403 15:45:54.350"/>
+</kw>
+<status status="PASS" starttime="20260403 15:45:51.714" endtime="20260403 15:45:54.350"/>
+</kw>
+<kw name="Cadastra cliente juridico" library="cadastroClienteResource">
+<kw name="Preenche dados gerais pessoa juridica" library="cadastroClienteResource">
+<kw name="Evaluate" library="BuiltIn">
+<var>${idRand}</var>
+<arg>int(time.time() * 1000)</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20260403 15:45:54.353" level="INFO">${idRand} = 1775241954352</msg>
+<status status="PASS" starttime="20260403 15:45:54.352" endtime="20260403 15:45:54.353"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${nome}</arg>
+<arg>Cliente Auto PJ ${idRand}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20260403 15:45:54.353" level="INFO">${nome} = Cliente Auto PJ 1775241954352</msg>
+<status status="PASS" starttime="20260403 15:45:54.353" endtime="20260403 15:45:54.354"/>
+</kw>
+<kw name="Click Forcado JS" library="cadastroClienteResource">
+<arg>xpath=${geralCliente.pessoajuridica}</arg>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260403 15:45:54.356" endtime="20260403 15:45:54.387"/>
+</kw>
+<kw name="Get WebElement" library="SeleniumLibrary">
+<var>${element}</var>
+<arg>${locator}</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<msg timestamp="20260403 15:45:54.410" level="INFO">${element} = &lt;selenium.webdriver.remote.webelement.WebElement (session="3f20952cfd663310bf05b58dfdbf43bb", element="f.DA6CF057F0BA9939453F1BF2654261CC.d.B94006791D1E066705859EC5E5BF7E79.e.257")&gt;</msg>
+<status status="PASS" starttime="20260403 15:45:54.388" endtime="20260403 15:45:54.410"/>
+</kw>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<arg>arguments[0].click();</arg>
+<arg>ARGUMENTS</arg>
+<arg>${element}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<msg timestamp="20260403 15:45:54.412" level="INFO">Executing JavaScript:
+arguments[0].click();
+By using argument:
+'&lt;selenium.webdriver.remote.webelement.WebElement (session="3f20952cfd663310bf05b58dfdbf43bb", element="f.DA6CF057F0BA9939453F1BF2654261CC.d.B94006791D1E066705859EC5E5BF7E79.e.257")&gt;'</msg>
+<status status="PASS" starttime="20260403 15:45:54.410" endtime="20260403 15:45:54.430"/>
+</kw>
+<status status="PASS" starttime="20260403 15:45:54.354" endtime="20260403 15:45:54.431"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=${geralCliente.nomeCliente}</arg>
+<arg>${nome}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:54.433" level="INFO">Typing text 'Cliente Auto PJ 1775241954352' into text field 'name=parceiro_nomeparceiro'.</msg>
+<status status="PASS" starttime="20260403 15:45:54.431" endtime="20260403 15:45:54.740"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=${geralCliente.fantasiaCliente}</arg>
+<arg>${nome}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:54.743" level="INFO">Typing text 'Cliente Auto PJ 1775241954352' into text field 'name=parceiro_nomeparceirofantasia'.</msg>
+<status status="PASS" starttime="20260403 15:45:54.740" endtime="20260403 15:45:54.960"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=${geralCliente.numeroMatricula}</arg>
+<arg>${idRand}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:54.962" level="INFO">Typing text '1775241954352' into text field 'name=parceiro_numeromatricula'.</msg>
+<status status="PASS" starttime="20260403 15:45:54.960" endtime="20260403 15:45:55.138"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=parceiro_homepage</arg>
+<arg>www.automacao.com.br</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:55.138" level="INFO">Typing text 'www.automacao.com.br' into text field 'name=parceiro_homepage'.</msg>
+<status status="PASS" starttime="20260403 15:45:55.138" endtime="20260403 15:45:55.320"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>xpath=${tituloPaginaCadastroCLiente}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20260403 15:45:55.321" level="INFO">Clicking element 'xpath=//*[@id="principal"]/div[1]/div/div[1]/h1[contains(text(),'Cadastro de cliente')]'.</msg>
+<status status="PASS" starttime="20260403 15:45:55.320" endtime="20260403 15:45:55.393"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${lupa_atividade}</var>
+<arg>xpath=(//*[@name='pessoajuridica_atividadeseconomica']/..//*[contains(@class, 'ui-button') or contains(@class, 'icon-search')])[1]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260403 15:45:55.394" level="INFO">${lupa_atividade} = xpath=(//*[@name='pessoajuridica_atividadeseconomica']/..//*[contains(@class, 'ui-button') or contains(@class, 'icon-search')])[1]</msg>
+<status status="PASS" starttime="20260403 15:45:55.393" endtime="20260403 15:45:55.394"/>
+</kw>
+<kw name="Scroll Para Elemento" library="cadastroClienteResource">
+<arg>${lupa_atividade}</arg>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<msg timestamp="20260403 15:46:10.767" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20260403 15:46:10.767" level="FAIL">Element 'xpath=(//*[@name='pessoajuridica_atividadeseconomica']/..//*[contains(@class, 'ui-button') or contains(@class, 'icon-search')])[1]' did not appear in 15 seconds.</msg>
+<status status="FAIL" starttime="20260403 15:45:55.394" endtime="20260403 15:46:10.774"/>
+</kw>
+<kw name="Get WebElement" library="SeleniumLibrary">
+<var>${element}</var>
+<arg>${locator}</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<status status="NOT RUN" starttime="20260403 15:46:10.774" endtime="20260403 15:46:10.774"/>
+</kw>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<arg>arguments[0].scrollIntoView({block: "center"});</arg>
+<arg>ARGUMENTS</arg>
+<arg>${element}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="NOT RUN" starttime="20260403 15:46:10.774" endtime="20260403 15:46:10.774"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" starttime="20260403 15:46:10.774" endtime="20260403 15:46:10.776"/>
+</kw>
+<status status="FAIL" starttime="20260403 15:45:55.394" endtime="20260403 15:46:10.776"/>
+</kw>
+<kw name="Selecionar Lupa Padrao Cypress" library="cadastroClienteResource">
+<arg>pessoajuridica_atividadeseconomica</arg>
+<status status="NOT RUN" starttime="20260403 15:46:10.776" endtime="20260403 15:46:10.776"/>
+</kw>
+<kw name="Selecionar Lupa Padrao Cypress" library="cadastroClienteResource">
+<arg>parceiro_grupoparceiro</arg>
+<status status="NOT RUN" starttime="20260403 15:46:10.777" endtime="20260403 15:46:10.777"/>
+</kw>
+<kw name="Selecionar primeira opcao valida do select" library="cadastroClienteResource">
+<arg>parceiro_classificacaoparceiro</arg>
+<status status="NOT RUN" starttime="20260403 15:46:10.777" endtime="20260403 15:46:10.777"/>
+</kw>
+<status status="FAIL" starttime="20260403 15:45:54.352" endtime="20260403 15:46:10.777"/>
+</kw>
+<kw name="Preenche dados de complemento pessoa juridica" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:10.777" endtime="20260403 15:46:10.777"/>
+</kw>
+<kw name="Preenche dados gerais de local" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:10.777" endtime="20260403 15:46:10.777"/>
+</kw>
+<kw name="Preenche dados complementares do local" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:10.777" endtime="20260403 15:46:10.777"/>
+</kw>
+<kw name="Grava cadastro de cliente" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:10.777" endtime="20260403 15:46:10.777"/>
+</kw>
+<kw name="Entra em modo de edicao apos salvar" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:10.777" endtime="20260403 15:46:10.777"/>
+</kw>
+<kw name="Adiciona contato ao cliente" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:10.778" endtime="20260403 15:46:10.778"/>
+</kw>
+<status status="FAIL" starttime="20260403 15:45:54.351" endtime="20260403 15:46:10.778"/>
+</kw>
+<kw name="Valida cliente no banco de dados" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:10.778" endtime="20260403 15:46:10.778"/>
+</kw>
+<doc>DTSFASAPP-T76: Realiza o fluxo completo de cadastro de PJ e valida no BD.</doc>
+<status status="FAIL" starttime="20260403 15:45:51.713" endtime="20260403 15:46:10.779">Element 'xpath=(//*[@name='pessoajuridica_atividadeseconomica']/..//*[contains(@class, 'ui-button') or contains(@class, 'icon-search')])[1]' did not appear in 15 seconds.</status>
+</test>
+<test id="s1-t2" name="Teste 005 ::: Cadastro de cliente Pessoa Física com Contato" line="35">
+<kw name="Acessa tela de cadastro de cliente" library="cadastroClienteResource">
+<kw name="Wait Until Element Is Not Visible" library="SeleniumLibrary">
+<arg>class=minimalist-loading-background</arg>
+<arg>30s</arg>
+<doc>Waits until the element ``locator`` is not visible.</doc>
+<status status="PASS" starttime="20260403 15:46:10.783" endtime="20260403 15:46:10.797"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${cliente.menuCliente}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:10.799" level="INFO">Clicking element 'id=cliente.menuMain'.</msg>
+<status status="PASS" starttime="20260403 15:46:10.797" endtime="20260403 15:46:11.020"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>id=${cliente.subMenuCliente}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260403 15:46:11.021" endtime="20260403 15:46:11.096"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${cliente.subMenuCliente}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:11.100" level="INFO">Clicking element 'id=menu.cliente.cadastrar'.</msg>
+<status status="PASS" starttime="20260403 15:46:11.097" endtime="20260403 15:46:11.474"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>id=${cliente.novoCliente}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20260403 15:46:11.475" endtime="20260403 15:46:11.881"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>id=${cliente.novoCliente}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:11.883" level="INFO">Clicking element 'id=menu.cliente.cadastrar.novo'.</msg>
+<status status="PASS" starttime="20260403 15:46:11.881" endtime="20260403 15:46:14.706"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>xpath=${tituloPaginaCadastroCLiente}</arg>
+<arg>20s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260403 15:46:14.710" endtime="20260403 15:46:14.750"/>
+</kw>
+<status status="PASS" starttime="20260403 15:46:10.783" endtime="20260403 15:46:14.751"/>
+</kw>
+<kw name="Cadastra cliente fisico" library="cadastroClienteResource">
+<kw name="Preenche dados gerais pessoa fisica" library="cadastroClienteResource">
+<kw name="Evaluate" library="BuiltIn">
+<var>${idRand}</var>
+<arg>int(time.time() * 1000)</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20260403 15:46:14.754" level="INFO">${idRand} = 1775241974753</msg>
+<status status="PASS" starttime="20260403 15:46:14.753" endtime="20260403 15:46:14.754"/>
+</kw>
+<kw name="Set Test Variable" library="BuiltIn">
+<arg>${nome}</arg>
+<arg>Cliente Auto PF ${idRand}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<msg timestamp="20260403 15:46:14.755" level="INFO">${nome} = Cliente Auto PF 1775241974753</msg>
+<status status="PASS" starttime="20260403 15:46:14.754" endtime="20260403 15:46:14.755"/>
+</kw>
+<kw name="Cpf" library="FakerLibrary">
+<var>${cpf}</var>
+<msg timestamp="20260403 15:46:14.755" level="INFO">${cpf} = 461.783.092-87</msg>
+<status status="PASS" starttime="20260403 15:46:14.755" endtime="20260403 15:46:14.755"/>
+</kw>
+<kw name="Remove String" library="String">
+<var>${cpf_limpo}</var>
+<arg>${cpf}</arg>
+<arg>.</arg>
+<arg>-</arg>
+<doc>Removes all ``removables`` from the given ``string``.</doc>
+<msg timestamp="20260403 15:46:14.756" level="INFO">${cpf_limpo} = 46178309287</msg>
+<status status="PASS" starttime="20260403 15:46:14.756" endtime="20260403 15:46:14.756"/>
+</kw>
+<kw name="Click Forcado JS" library="cadastroClienteResource">
+<arg>xpath=${geralCliente.pessoaFisica}</arg>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260403 15:46:14.758" endtime="20260403 15:46:14.792"/>
+</kw>
+<kw name="Get WebElement" library="SeleniumLibrary">
+<var>${element}</var>
+<arg>${locator}</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<msg timestamp="20260403 15:46:14.815" level="INFO">${element} = &lt;selenium.webdriver.remote.webelement.WebElement (session="3f20952cfd663310bf05b58dfdbf43bb", element="f.DA6CF057F0BA9939453F1BF2654261CC.d.920ED0F42116F85A2F5660C25E837B82.e.479")&gt;</msg>
+<status status="PASS" starttime="20260403 15:46:14.793" endtime="20260403 15:46:14.815"/>
+</kw>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<arg>arguments[0].click();</arg>
+<arg>ARGUMENTS</arg>
+<arg>${element}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<msg timestamp="20260403 15:46:14.816" level="INFO">Executing JavaScript:
+arguments[0].click();
+By using argument:
+'&lt;selenium.webdriver.remote.webelement.WebElement (session="3f20952cfd663310bf05b58dfdbf43bb", element="f.DA6CF057F0BA9939453F1BF2654261CC.d.920ED0F42116F85A2F5660C25E837B82.e.479")&gt;'</msg>
+<status status="PASS" starttime="20260403 15:46:14.815" endtime="20260403 15:46:14.852"/>
+</kw>
+<status status="PASS" starttime="20260403 15:46:14.756" endtime="20260403 15:46:14.852"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=${geralCliente.nomeCliente}</arg>
+<arg>${nome}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:14.855" level="INFO">Typing text 'Cliente Auto PF 1775241974753' into text field 'name=parceiro_nomeparceiro'.</msg>
+<status status="PASS" starttime="20260403 15:46:14.852" endtime="20260403 15:46:15.250"/>
+</kw>
+<kw name="Scroll Para Elemento" library="cadastroClienteResource">
+<arg>name=pessoafisica_documentoidentificacao</arg>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260403 15:46:15.251" endtime="20260403 15:46:15.284"/>
+</kw>
+<kw name="Get WebElement" library="SeleniumLibrary">
+<var>${element}</var>
+<arg>${locator}</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<msg timestamp="20260403 15:46:15.302" level="INFO">${element} = &lt;selenium.webdriver.remote.webelement.WebElement (session="3f20952cfd663310bf05b58dfdbf43bb", element="f.DA6CF057F0BA9939453F1BF2654261CC.d.920ED0F42116F85A2F5660C25E837B82.e.291")&gt;</msg>
+<status status="PASS" starttime="20260403 15:46:15.285" endtime="20260403 15:46:15.302"/>
+</kw>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<arg>arguments[0].scrollIntoView({block: "center"});</arg>
+<arg>ARGUMENTS</arg>
+<arg>${element}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<msg timestamp="20260403 15:46:15.304" level="INFO">Executing JavaScript:
+arguments[0].scrollIntoView({block: "center"});
+By using argument:
+'&lt;selenium.webdriver.remote.webelement.WebElement (session="3f20952cfd663310bf05b58dfdbf43bb", element="f.DA6CF057F0BA9939453F1BF2654261CC.d.920ED0F42116F85A2F5660C25E837B82.e.291")&gt;'</msg>
+<status status="PASS" starttime="20260403 15:46:15.303" endtime="20260403 15:46:15.322"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20260403 15:46:15.623" level="INFO">Slept 300 milliseconds</msg>
+<status status="PASS" starttime="20260403 15:46:15.322" endtime="20260403 15:46:15.623"/>
+</kw>
+<status status="PASS" starttime="20260403 15:46:15.250" endtime="20260403 15:46:15.623"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=pessoafisica_documentoidentificacao</arg>
+<arg>${cpf_limpo}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:15.625" level="INFO">Typing text '46178309287' into text field 'name=pessoafisica_documentoidentificacao'.</msg>
+<status status="PASS" starttime="20260403 15:46:15.624" endtime="20260403 15:46:15.895"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=pessoafisica_datanascimento</arg>
+<arg>15/08/1990</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:15.897" level="INFO">Typing text '15/08/1990' into text field 'name=pessoafisica_datanascimento'.</msg>
+<status status="PASS" starttime="20260403 15:46:15.896" endtime="20260403 15:46:16.224"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=pessoafisica_nomemae</arg>
+<arg>Maria da Silva Cypress</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:16.226" level="INFO">Typing text 'Maria da Silva Cypress' into text field 'name=pessoafisica_nomemae'.</msg>
+<status status="PASS" starttime="20260403 15:46:16.225" endtime="20260403 15:46:16.669"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=pessoafisica_profissao</arg>
+<arg>Analista de Qualidade</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:16.670" level="INFO">Typing text 'Analista de Qualidade' into text field 'name=pessoafisica_profissao'.</msg>
+<status status="PASS" starttime="20260403 15:46:16.670" endtime="20260403 15:46:17.024"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=pessoafisica_rendamensal</arg>
+<arg>850000</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:17.025" level="INFO">Typing text '850000' into text field 'name=pessoafisica_rendamensal'.</msg>
+<status status="PASS" starttime="20260403 15:46:17.024" endtime="20260403 15:46:17.260"/>
+</kw>
+<kw name="Cpf" library="FakerLibrary">
+<var>${cpfConj}</var>
+<msg timestamp="20260403 15:46:17.261" level="INFO">${cpfConj} = 681.249.703-78</msg>
+<status status="PASS" starttime="20260403 15:46:17.260" endtime="20260403 15:46:17.261"/>
+</kw>
+<kw name="Remove String" library="String">
+<var>${cpfConj_limpo}</var>
+<arg>${cpfConj}</arg>
+<arg>.</arg>
+<arg>-</arg>
+<doc>Removes all ``removables`` from the given ``string``.</doc>
+<msg timestamp="20260403 15:46:17.262" level="INFO">${cpfConj_limpo} = 68124970378</msg>
+<status status="PASS" starttime="20260403 15:46:17.261" endtime="20260403 15:46:17.262"/>
+</kw>
+<kw name="Scroll Para Elemento" library="cadastroClienteResource">
+<arg>name=conjuge_nome</arg>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260403 15:46:17.263" endtime="20260403 15:46:17.285"/>
+</kw>
+<kw name="Get WebElement" library="SeleniumLibrary">
+<var>${element}</var>
+<arg>${locator}</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<msg timestamp="20260403 15:46:17.301" level="INFO">${element} = &lt;selenium.webdriver.remote.webelement.WebElement (session="3f20952cfd663310bf05b58dfdbf43bb", element="f.DA6CF057F0BA9939453F1BF2654261CC.d.920ED0F42116F85A2F5660C25E837B82.e.302")&gt;</msg>
+<status status="PASS" starttime="20260403 15:46:17.286" endtime="20260403 15:46:17.301"/>
+</kw>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<arg>arguments[0].scrollIntoView({block: "center"});</arg>
+<arg>ARGUMENTS</arg>
+<arg>${element}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<msg timestamp="20260403 15:46:17.303" level="INFO">Executing JavaScript:
+arguments[0].scrollIntoView({block: "center"});
+By using argument:
+'&lt;selenium.webdriver.remote.webelement.WebElement (session="3f20952cfd663310bf05b58dfdbf43bb", element="f.DA6CF057F0BA9939453F1BF2654261CC.d.920ED0F42116F85A2F5660C25E837B82.e.302")&gt;'</msg>
+<status status="PASS" starttime="20260403 15:46:17.301" endtime="20260403 15:46:17.321"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20260403 15:46:17.622" level="INFO">Slept 300 milliseconds</msg>
+<status status="PASS" starttime="20260403 15:46:17.321" endtime="20260403 15:46:17.622"/>
+</kw>
+<status status="PASS" starttime="20260403 15:46:17.262" endtime="20260403 15:46:17.622"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=conjuge_nome</arg>
+<arg>Esposa Automação</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:17.623" level="INFO">Typing text 'Esposa Automação' into text field 'name=conjuge_nome'.</msg>
+<status status="PASS" starttime="20260403 15:46:17.622" endtime="20260403 15:46:17.839"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=conjuge_documentoidentificacao</arg>
+<arg>${cpfConj_limpo}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:17.840" level="INFO">Typing text '68124970378' into text field 'name=conjuge_documentoidentificacao'.</msg>
+<status status="PASS" starttime="20260403 15:46:17.839" endtime="20260403 15:46:17.988"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=conjuge_anonascimento</arg>
+<arg>1992</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:17.989" level="INFO">Typing text '1992' into text field 'name=conjuge_anonascimento'.</msg>
+<status status="PASS" starttime="20260403 15:46:17.988" endtime="20260403 15:46:18.125"/>
+</kw>
+<status status="PASS" starttime="20260403 15:46:14.753" endtime="20260403 15:46:18.125"/>
+</kw>
+<kw name="Preenche dados gerais de local" library="cadastroClienteResource">
+<kw name="Scroll Para Elemento" library="cadastroClienteResource">
+<arg>name=local_descricao</arg>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260403 15:46:18.127" endtime="20260403 15:46:18.143"/>
+</kw>
+<kw name="Get WebElement" library="SeleniumLibrary">
+<var>${element}</var>
+<arg>${locator}</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<msg timestamp="20260403 15:46:18.158" level="INFO">${element} = &lt;selenium.webdriver.remote.webelement.WebElement (session="3f20952cfd663310bf05b58dfdbf43bb", element="f.DA6CF057F0BA9939453F1BF2654261CC.d.920ED0F42116F85A2F5660C25E837B82.e.339")&gt;</msg>
+<status status="PASS" starttime="20260403 15:46:18.143" endtime="20260403 15:46:18.158"/>
+</kw>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<arg>arguments[0].scrollIntoView({block: "center"});</arg>
+<arg>ARGUMENTS</arg>
+<arg>${element}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<msg timestamp="20260403 15:46:18.160" level="INFO">Executing JavaScript:
+arguments[0].scrollIntoView({block: "center"});
+By using argument:
+'&lt;selenium.webdriver.remote.webelement.WebElement (session="3f20952cfd663310bf05b58dfdbf43bb", element="f.DA6CF057F0BA9939453F1BF2654261CC.d.920ED0F42116F85A2F5660C25E837B82.e.339")&gt;'</msg>
+<status status="PASS" starttime="20260403 15:46:18.159" endtime="20260403 15:46:18.172"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20260403 15:46:18.473" level="INFO">Slept 300 milliseconds</msg>
+<status status="PASS" starttime="20260403 15:46:18.172" endtime="20260403 15:46:18.473"/>
+</kw>
+<status status="PASS" starttime="20260403 15:46:18.126" endtime="20260403 15:46:18.473"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=local_descricao</arg>
+<arg>LOCAL PRINCIPAL</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:18.474" level="INFO">Typing text 'LOCAL PRINCIPAL' into text field 'name=local_descricao'.</msg>
+<status status="PASS" starttime="20260403 15:46:18.473" endtime="20260403 15:46:18.602"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=local_logradouro</arg>
+<arg>Avenida Brasil</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:18.602" level="INFO">Typing text 'Avenida Brasil' into text field 'name=local_logradouro'.</msg>
+<status status="PASS" starttime="20260403 15:46:18.602" endtime="20260403 15:46:18.716"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=local_numero</arg>
+<arg>123</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:18.717" level="INFO">Typing text '123' into text field 'name=local_numero'.</msg>
+<status status="PASS" starttime="20260403 15:46:18.716" endtime="20260403 15:46:18.830"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=local_bairro</arg>
+<arg>Centro</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:18.831" level="INFO">Typing text 'Centro' into text field 'name=local_bairro'.</msg>
+<status status="PASS" starttime="20260403 15:46:18.830" endtime="20260403 15:46:18.962"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=local_cep</arg>
+<arg>85812000</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260403 15:46:18.962" level="INFO">Typing text '85812000' into text field 'name=local_cep'.</msg>
+<status status="PASS" starttime="20260403 15:46:18.962" endtime="20260403 15:46:19.085"/>
+</kw>
+<kw name="Select From List By Label" library="SeleniumLibrary">
+<arg>name=local_unidadefederativa</arg>
+<arg>PARANA</arg>
+<doc>Selects options from selection list ``locator`` by ``labels``.</doc>
+<msg timestamp="20260403 15:46:19.085" level="INFO">Selecting options from selection list 'name=local_unidadefederativa' by label PARANA.</msg>
+<status status="PASS" starttime="20260403 15:46:19.085" endtime="20260403 15:46:19.239"/>
+</kw>
+<kw name="Wait Until Element Is Not Visible" library="SeleniumLibrary">
+<arg>xpath=${msgCarregando}</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is not visible.</doc>
+<status status="PASS" starttime="20260403 15:46:19.239" endtime="20260403 15:46:19.260"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>xpath=//select[@name='local_cidade']/option[contains(text(), 'CASCAVEL')]</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260403 15:46:19.260" endtime="20260403 15:46:19.499"/>
+</kw>
+<kw name="Select From List By Label" library="SeleniumLibrary">
+<arg>name=local_cidade</arg>
+<arg>CASCAVEL (PR)</arg>
+<doc>Selects options from selection list ``locator`` by ``labels``.</doc>
+<msg timestamp="20260403 15:46:19.500" level="INFO">Selecting options from selection list 'name=local_cidade' by label CASCAVEL (PR).</msg>
+<status status="PASS" starttime="20260403 15:46:19.499" endtime="20260403 15:46:19.641"/>
+</kw>
+<kw name="Wait Until Element Is Not Visible" library="SeleniumLibrary">
+<arg>xpath=${msgCarregando}</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is not visible.</doc>
+<status status="PASS" starttime="20260403 15:46:19.641" endtime="20260403 15:46:19.663"/>
+</kw>
+<kw name="Scroll Para Elemento" library="cadastroClienteResource">
+<arg>xpath=//input[@name='local_idnisentoie']/..//label</arg>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<msg timestamp="20260403 15:46:34.862" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-2.png"&gt;&lt;img src="selenium-screenshot-2.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20260403 15:46:34.862" level="FAIL">Element 'xpath=//input[@name='local_idnisentoie']/..//label' did not appear in 15 seconds.</msg>
+<status status="FAIL" starttime="20260403 15:46:19.664" endtime="20260403 15:46:34.865"/>
+</kw>
+<kw name="Get WebElement" library="SeleniumLibrary">
+<var>${element}</var>
+<arg>${locator}</arg>
+<doc>Returns the first WebElement matching the given ``locator``.</doc>
+<status status="NOT RUN" starttime="20260403 15:46:34.865" endtime="20260403 15:46:34.865"/>
+</kw>
+<kw name="Execute Javascript" library="SeleniumLibrary">
+<arg>arguments[0].scrollIntoView({block: "center"});</arg>
+<arg>ARGUMENTS</arg>
+<arg>${element}</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="NOT RUN" starttime="20260403 15:46:34.865" endtime="20260403 15:46:34.865"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>0.3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" starttime="20260403 15:46:34.865" endtime="20260403 15:46:34.865"/>
+</kw>
+<status status="FAIL" starttime="20260403 15:46:19.663" endtime="20260403 15:46:34.866"/>
+</kw>
+<kw name="Click Forcado JS" library="cadastroClienteResource">
+<arg>xpath=//input[@name='local_idnisentoie']/..//label</arg>
+<status status="NOT RUN" starttime="20260403 15:46:34.866" endtime="20260403 15:46:34.866"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>name=local_telefone</arg>
+<arg>45999998888</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" starttime="20260403 15:46:34.866" endtime="20260403 15:46:34.866"/>
+</kw>
+<status status="FAIL" starttime="20260403 15:46:18.125" endtime="20260403 15:46:34.866"/>
+</kw>
+<kw name="Preenche dados complementares do local" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:34.866" endtime="20260403 15:46:34.866"/>
+</kw>
+<kw name="Grava cadastro de cliente" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:34.866" endtime="20260403 15:46:34.866"/>
+</kw>
+<kw name="Entra em modo de edicao apos salvar" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:34.866" endtime="20260403 15:46:34.866"/>
+</kw>
+<kw name="Adiciona contato ao cliente" library="cadastroClienteResource">
+<status status="NOT RUN" starttime="20260403 15:46:34.866" endtime="20260403 15:46:34.866"/>
+</kw>
+<status status="FAIL" starttime="20260403 15:46:14.752" endtime="20260403 15:46:34.867"/>
+</kw>
+<doc>Fluxo E2E importado do Cypress: Cria PF, insere contato e valida no BD.</doc>
+<status status="FAIL" starttime="20260403 15:46:10.781" endtime="20260403 15:46:34.867">Element 'xpath=//input[@name='local_idnisentoie']/..//label' did not appear in 15 seconds.</status>
+</test>
+<kw name="Disconnect From Database" library="DatabaseLibrary" type="TEARDOWN">
+<doc>Disconnects from the database.</doc>
+<status status="PASS" starttime="20260403 15:46:34.869" endtime="20260403 15:46:34.870"/>
+</kw>
+<doc>Arquivo utilizado para armazenar os testes relativos a cadastro de clientes.</doc>
+<status status="FAIL" starttime="20260403 15:45:41.659" endtime="20260403 15:46:34.870"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="2" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="2" skip="0" id="s1" name="cadastroCliente">cadastroCliente</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20260403 15:45:44.119" level="ERROR">Error in file 'C:\ws\TestesIntegrados\SFA-SIM3G-TestesIntegrados\pedidoengine\resources\pages\web\local\localResources.robot' on line 4: Resource file 'C:\ws\TestesIntegrados\SFA-SIM3G-TestesIntegrados\resources\lib\web\lib.robot' does not exist.</msg>
+<msg timestamp="20260403 15:45:44.137" level="ERROR">Error in file 'C:\ws\TestesIntegrados\SFA-SIM3G-TestesIntegrados\pedidoengine\resources\pages\web\local\localResources.robot' on line 5: Resource file 'C:\ws\TestesIntegrados\SFA-SIM3G-TestesIntegrados\resources\locators\web\menu\menuLateralLocators.robot' does not exist.</msg>
+<msg timestamp="20260403 15:45:44.177" level="ERROR">Error in file 'C:\ws\TestesIntegrados\SFA-SIM3G-TestesIntegrados\pedidoengine\resources\pages\web\local\localResources.robot' on line 6: Resource file 'C:\ws\TestesIntegrados\SFA-SIM3G-TestesIntegrados\resources\data\local\dataLocal.robot' does not exist.</msg>
+</errors>
+</robot>

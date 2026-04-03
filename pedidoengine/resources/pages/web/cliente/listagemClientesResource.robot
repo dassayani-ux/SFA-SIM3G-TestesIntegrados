@@ -1,12 +1,12 @@
 *** Settings ***
 Documentation    Arquivo utilizado para escrever as keywords utilizadas no processo de listagem de clientes.
 
-Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
-Resource    ${EXECDIR}/resources/locators/web/cliente/listaClientesLocators.robot
-Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot
-Resource    ${EXECDIR}/resources/pages/web/local/localResources.robot
-Resource    ${EXECDIR}/resources/data/usuario/dataUsuario.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/web/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/menu/menuLateralLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/cliente/listaClientesLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/cliente/dataCliente.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/local/localResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/usuario/dataUsuario.robot
 
 *** Keywords ***
 Acessa tela de listagem de clientes

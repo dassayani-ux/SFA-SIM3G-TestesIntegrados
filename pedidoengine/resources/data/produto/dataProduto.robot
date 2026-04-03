@@ -2,7 +2,7 @@
 Documentation    Arquivo criado para armazenar as SQLs utilizadas para validar produtos.
 
 Library    DatabaseLibrary
-Library    ${EXECDIR}/libraries/sfa_lib_mobile.py
+Library    ${EXECDIR}/pedidoengine/libraries/sfa_lib_mobile.py
 
 *** Keywords ***
 Retornar quantidade apresentacao produto

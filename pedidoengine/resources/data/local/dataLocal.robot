@@ -2,7 +2,7 @@
 Documentation    Arquivo criado para armazenar as SQLs utilizadas para validar local.
 
 Library    DatabaseLibrary
-Resource    ${EXECDIR}/resources/data/usuario/dataUsuario.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/usuario/dataUsuario.robot
 
 *** Variables ***
 ${LOCAL_CLIENTE_SQL}    select p.idlocal from parceirolocal p where idparceiro =

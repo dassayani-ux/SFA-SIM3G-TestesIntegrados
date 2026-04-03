@@ -2,7 +2,7 @@
 Documentation    Arquivo utilizado para realizar a conexão com o banco de dados de acordo com os dador fornecidos.
 
 Library    DatabaseLibrary
-Variables    ${EXECDIR}/libraries/variables/sfa_variables.py
+Variables    ${EXECDIR}/pedidoengine/libraries/variables/sfa_variables.py
 
 *** Keywords ***
 Conecta ao banco de dados

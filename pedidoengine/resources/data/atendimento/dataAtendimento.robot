@@ -1,8 +1,8 @@
 *** Settings ***
 Documentation    Arquivo criado para armazenar as SQLs e palavras chaves utilizadas para validar atendimentos.
 
-Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/data/usuario/dataUsuario.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/web/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/usuario/dataUsuario.robot
 
 *** Keywords ***
 Retornar proximo atendimento

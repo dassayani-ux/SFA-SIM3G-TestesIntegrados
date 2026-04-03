@@ -2,7 +2,7 @@
 Documentation    Arquivo criado para armazenar as SQLs utilizadas para validar usuários.
 
 Library    DatabaseLibrary
-Variables    ${EXECDIR}/libraries/variables/sfa_variables.py
+Variables    ${EXECDIR}/pedidoengine/libraries/variables/sfa_variables.py
 
 *** Keywords ***
 Retornar id usuario logado web
