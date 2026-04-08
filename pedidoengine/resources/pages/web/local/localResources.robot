@@ -1,9 +1,9 @@
 *** Settings ***
 Documentation    Arquivo utilizado para escrever as keywords utilizadas para validar ou apresentar informalões respectivas ao local do parceiro.
 
-Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
-Resource    ${EXECDIR}/resources/data/local/dataLocal.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/web/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/menu/menuLateralLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/local/dataLocal.robot
 
 *** Keywords ***
 Retorna local aleatorio

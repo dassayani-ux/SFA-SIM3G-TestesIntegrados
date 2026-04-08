@@ -10,10 +10,10 @@ Variables        ../../../../libraries/variables/sfa_variables.py
 Realiza login na plataforma web
     [Documentation]    Irá realizar o login na plataforma web utilizando os dados informados no arquivo de variáveis.
 
-    Input Text       ${TF_LOGIN}    ${login_web.usuarioWeb}
-    Input Text       ${TF_SENHA}    ${login_web.senhaWeb}
-    Click Element    id=${BTN_ENTRAR}
-    Sleep            2s
+    Input Text                    ${TF_LOGIN}    ${login_web.usuarioWeb}
+    Input Text                    ${TF_SENHA}    ${login_web.senhaWeb}
+    Click Element                 id=${BTN_ENTRAR}
+    Wait Until Element Is Visible    id=${logoff.acoes}    15s
 
 Login com usuario invalido
     [Documentation]    Tenta realizar login na plataforma web utilizando um usuário inválido.
@@ -44,12 +44,11 @@ Login com usuario e senha invalidos
 
 Realizar logoff
     [Documentation]    Realiza logoff na plataforma WEB.
-    
+
     Click Element                    id=${logoff.acoes}
-    Sleep                            0.3s
+    Wait Until Element Is Visible    xpath=${logoff.sair}    10s
     Click Element                    xpath=${logoff.sair}
-    # Adicionado um timeout de 10s de segurança para garantir que a tela de login carregou
-    Wait Until Element Is Visible    id=${formularioLogin}    10s
+    Wait Until Element Is Visible    id=${formularioLogin}    15s
 
 
 # ==========================================

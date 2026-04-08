@@ -1,13 +1,18 @@
 *** Settings ***
 Documentation    Arquivo utilizado para realizar os testes relativos a listagem de clientes.
 
-Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
-Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
-Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
-Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robot
+Resource    ${EXECDIR}/pedidoengine/resources/database/conectionDatabase.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/login/loginResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/navegador/navegadorResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/cliente/listagemClientesResource.robot
 
-Suite Setup    Run Keywords    Abre navegador    Realiza login na plataforma web    Conecta ao banco de dados
-Suite Teardown    Disconnect From Database
+Suite Setup      Run Keywords    Conecta ao banco de dados
+...              AND             Abre navegador
+...              AND             Realiza login na plataforma web
+...              AND             Prepara dados de automacao para listagem
+Suite Teardown   Run Keywords    Realizar logoff
+...              AND             Close Browser
+...              AND             Disconnect From Database
 
 *** Test Cases ***
 Teste 001 ::: Pesquisa rápida de cliente usando nome

@@ -42,60 +42,69 @@ Filtra cliente especifico
         Fail
     END
 
+Prepara dados de automacao para listagem
+    [Documentation]    Carrega dados do primeiro cliente de automação para uso nos testes de filtro.
+    ...                Deve ser executado no Suite Setup, após conectar ao banco.
+    ${sql}=    Catenate    SEPARATOR=\n
+    ...    SELECT p.numeromatricula,
+    ...           COALESCE(pj.documentoidentificacao, pf.documentoidentificacao, ''),
+    ...           COALESCE(l.bairro, ''),
+    ...           COALESCE(l.logradouro, ''),
+    ...           COALESCE(c.descricao, ''),
+    ...           COALESCE(uf.descricao, '')
+    ...    FROM parceiro p
+    ...    LEFT JOIN pessoajuridica pj ON p.idparceiro = pj.idpessoajuridica
+    ...    LEFT JOIN pessoafisica pf ON p.idparceiro = pf.idpessoafisica
+    ...    INNER JOIN parceirolocal pl ON p.idparceiro = pl.idparceiro
+    ...    INNER JOIN local l ON pl.idlocal = l.idlocal
+    ...    LEFT JOIN cidade c ON l.idcidade = c.idcidade
+    ...    LEFT JOIN unidadefederativa uf ON c.idunidadefederativa = uf.idunidadefederativa
+    ...    WHERE p.nomeparceiro LIKE '%Automação%' AND p.idnativo = 1
+    ...    ORDER BY p.idparceiro DESC LIMIT 1
+    ${res}=    DatabaseLibrary.Query    ${sql}
+    Should Not Be Empty    ${res}
+    ...    msg=❌ Nenhum cliente Automação encontrado. Execute cadastroCliente.robot primeiro.
+    Set Suite Variable    ${auto_matricula}      ${res[0][0]}
+    Set Suite Variable    ${auto_documento}      ${res[0][1]}
+    Set Suite Variable    ${auto_bairro}         ${res[0][2]}
+    Set Suite Variable    ${auto_logradouro}     ${res[0][3]}
+    Set Suite Variable    ${auto_cidade}         ${res[0][4]}
+    Set Suite Variable    ${auto_uf}             ${res[0][5]}
+    Log To Console    \n✅ Dados automação: matrícula=${auto_matricula} | cidade=${auto_cidade} | UF=${auto_uf}
+
 Filtra cliente na pesquisa rapida por nome
-    [Documentation]    Irá filtrar a listagem de clientes utilizando o campo de pesquisa rápida informando um nome qualquer.
-
-    ${nome}=    FakerLibrary.First Name
-    ${count}=    Pesquisa rapida sql    ${nome}
-    WHILE  ${count} == ${0}
-        ${nome}=    FakerLibrary.First Name
-        ${count}=    Pesquisa rapida sql    ${nome}   
-    END
-
-    Log To Console    \nNome selecionado: ${nome}
-
-    SeleniumLibrary.Input Text    name=${pesquisaRapida.inputPesquisa}    ${nome}
+    [Documentation]    Pesquisa rápida pelo termo 'automação' — garante resultados em qualquer base
+    ...                onde os testes de cadastro foram executados. Valida contagem tela = banco.
+    ${count}=    Pesquisa rapida sql    automação
+    Should Be True    ${count} > 0
+    ...    msg=❌ Nenhum cliente 'automação' encontrado. Execute cadastroCliente.robot antes.
+    Log To Console    \nPesquisa rápida por 'automação': ${count} registros esperados.
+    SeleniumLibrary.Input Text    name=${pesquisaRapida.inputPesquisa}    automação
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
-
-    IF  ${intQtdeRegistros} == ${count}
-        Log To Console    Listagem de clientes utilizando o nome: ${nome} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${count}
+    ...    msg=❌ Pesquisa por 'automação': tela=${intQtdeRegistros}, banco=${count}
+    Log To Console    ✅ Pesquisa rápida por nome validada: ${intQtdeRegistros} registros.
     SeleniumLibrary.Clear Element Text    name=${pesquisaRapida.inputPesquisa}
 
 Filtra cliente na pesquisa rapida por numero
-    [Documentation]    Representa uma filtragem por número de matrícula do cliente.
-
-    ${matricula}=    FakerLibrary.Random Number    digits=3
-    ${count}=    Pesquisa rapida sql    ${matricula}
-    WHILE  ${count} == ${0}
-        ${nome}=    FakerLibrary.First Name
-        ${count}=    Pesquisa rapida sql    ${matricula}   
-    END
-
-    Log To Console    \nNumero selecionado: ${matricula}
-
-    SeleniumLibrary.Input Text    name=${pesquisaRapida.inputPesquisa}    ${matricula}
+    [Documentation]    Pesquisa rápida pela matrícula do cliente de automação (carregada no Suite Setup).
+    ${count}=    Pesquisa rapida sql    ${auto_matricula}
+    Should Be True    ${count} > 0
+    ...    msg=❌ Matrícula '${auto_matricula}' não retornou resultados no banco.
+    Log To Console    \nPesquisa rápida por matrícula '${auto_matricula}': ${count} registros esperados.
+    SeleniumLibrary.Input Text    name=${pesquisaRapida.inputPesquisa}    ${auto_matricula}
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
-
-    IF  ${intQtdeRegistros} == ${count}
-        Log To Console    Listagem de clientes utilizando o número: ${matricula} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${count}
+    ...    msg=❌ Pesquisa por matrícula '${auto_matricula}': tela=${intQtdeRegistros}, banco=${count}
+    Log To Console    ✅ Pesquisa rápida por número validada: ${intQtdeRegistros} registros.
     SeleniumLibrary.Clear Element Text    name=${pesquisaRapida.inputPesquisa}
 
 Ativa pesquisa avancada
@@ -132,12 +141,9 @@ Filtra cliente por tipo pessoa
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
 
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando o tipo de pessoa: ${tipo} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro tipo pessoa '${tipo}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por tipo de pessoa '${tipo}' validado: ${intQtdeRegistros} registros.
 
     IF  '${tipo}' == 'PF'
         SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.tipoPessoaJuridica}
@@ -176,12 +182,9 @@ Filtra cliente por situacao
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
 
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando a situação: ${situacao} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro situação '${situacao}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por situação '${situacao}' validado: ${intQtdeRegistros} registros.
 
     IF  '${situacao}' == '${0}'
         SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.situacaoAtivo}
@@ -214,72 +217,47 @@ Filtra Cliente por situacao aprovacao
         ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
         ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
 
-        IF  ${intQtdeRegistros} == ${countRegistros}
-            Log To Console    \nListagem de clientes utilizando a situação de aprovacao: ${situacoesAprovacao[${I}]} está de acordo.
-        ELSE
-            Log To Console    Listagem de clientes está incorreta.
-            Fail
-        END
+        Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+        ...    msg=❌ Filtro situação aprovação '${situacoesAprovacao[${I}]}': tela=${intQtdeRegistros}, banco=${countRegistros}
+        Log To Console    ✅ Situação aprovação '${situacoesAprovacao[${I}]}': ${intQtdeRegistros} registros.
 
         SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnLimpaBuscaSituacaoAprovacao}
     END
 
 Filtra cliente por razao social
-    [Documentation]    Irá utilizar o campo Razão Social do filtro para realizar a busca por clientes.
-
-    ${razao}=    FakerLibrary.First Name
-    ${countRegistros}=    SQL Pesquisa Avancada    razaoSocial=${razao}
-    WHILE  ${countRegistros} == ${0}
-        ${razao}=    FakerLibrary.First Name
-        ${countRegistros}=    SQL Pesquisa Avancada    razaoSocial=${razao}  
-    END
-
-    Log To Console    \nTrecho de Razão Social selecionada: ${razao}
-
-    SeleniumLibrary.Input Text    name=${pesquisaAvancada.razaoSocial}    ${razao}    
+    [Documentation]    Filtra por razão social usando 'Automação' — presente em todos os clientes criados
+    ...                pela automação. Valida contagem tela = banco.
+    ${countRegistros}=    SQL Pesquisa Avancada    razaoSocial=Automação
+    Should Be True    ${countRegistros} > 0
+    ...    msg=❌ Nenhum cliente com razão social 'Automação'. Execute cadastroCliente.robot antes.
+    Log To Console    \nFiltro razão social 'Automação': ${countRegistros} registros esperados.
+    SeleniumLibrary.Input Text    name=${pesquisaAvancada.razaoSocial}    Automação
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
-
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
-
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando a Razão Social: ${razao} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro razão social 'Automação': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por razão social validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Clear Element Text    name=${pesquisaAvancada.razaoSocial}
 
 Filtra cliente por fantasia
-    [Documentation]    Irá utilizar o campo Nome Fantasia do filtro para realizar a busca por clientes.
-
-    ${fantasia}=    FakerLibrary.First Name
-    ${countRegistros}=    SQL Pesquisa Avancada    nomeFantasia=${fantasia}
-    WHILE  ${countRegistros} == ${0}
-        ${fantasia}=    FakerLibrary.First Name
-        ${countRegistros}=    SQL Pesquisa Avancada    nomeFantasia=${fantasia}  
-    END
-
-    Log To Console    \nTrecho de Nome Faantasia selecionado: ${fantasia}
-
-    SeleniumLibrary.Input Text    name=${pesquisaAvancada.fantasia}    ${fantasia}    
+    [Documentation]    Filtra por nome fantasia usando 'Automação' — presente em todos os clientes PJ
+    ...                criados pela automação. Valida contagem tela = banco.
+    ${countRegistros}=    SQL Pesquisa Avancada    nomeFantasia=Automação
+    Should Be True    ${countRegistros} > 0
+    ...    msg=❌ Nenhum cliente com nome fantasia 'Automação'. Execute cadastroCliente.robot antes.
+    Log To Console    \nFiltro nome fantasia 'Automação': ${countRegistros} registros esperados.
+    SeleniumLibrary.Input Text    name=${pesquisaAvancada.fantasia}    Automação
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
-
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
-
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando a Fantasia: ${fantasia} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro nome fantasia 'Automação': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por nome fantasia validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Clear Element Text    name=${pesquisaAvancada.fantasia}
 
 Filtra cliente por local
@@ -303,247 +281,158 @@ Filtra cliente por local
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
 
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando o local: ${local[0]} - ${local[1]} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro local '${local[0]}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por local '${local[0]} - ${local[1]}' validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnLimpaPesquisaLocal}
 
 Filtra cliente por documento
-    [Documentation]    Irá realizar a consulta de clientes tendo como parâmetro o campo de *Documento*.
-
-    ${documento}=    FakerLibrary.Random Number    digits=2
-    ${countRegistros}=    SQL Pesquisa Avancada    documento=${documento}
-    WHILE  ${countRegistros} == ${0}
-        ${documento}=    FakerLibrary.Random Number    digits=2
-        ${countRegistros}=    SQL Pesquisa Avancada    documento=${documento} 
-    END
-
-    SeleniumLibrary.Input Text    name=${pesquisaAvancada.documento}    ${documento}
+    [Documentation]    Filtra pelo documento (CNPJ/CPF) do cliente de automação carregado no Suite Setup.
+    ${fragmento}=    Get Substring    ${auto_documento}    0    6
+    ${countRegistros}=    SQL Pesquisa Avancada    documento=${fragmento}
+    Should Be True    ${countRegistros} > 0
+    ...    msg=❌ Documento '${fragmento}' não retornou registros. Verifique ${auto_documento}.
+    Log To Console    \nFiltro documento '${fragmento}': ${countRegistros} registros esperados.
+    SeleniumLibrary.Input Text    name=${pesquisaAvancada.documento}    ${fragmento}
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
-
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
-
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando o documento: ${documento} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro documento '${fragmento}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por documento validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Clear Element Text    name=${pesquisaAvancada.documento}
 
 Filtra cliente por matricula
-    [Documentation]    Irá realizar a consulta de clientes tendo como parâmetro o campo *Matrícula*.
-
-    ${parceiro}=    Retornar razao, matricula e id de parceiro aleatorio
-    ${matricula}=    BuiltIn.Set Variable    ${parceiro[1]}
-    ${countRegistros}=    SQL Pesquisa Avancada    matricula=${matricula}
-    WHILE  ${countRegistros} == ${0}
-        ${parceiro}=    Retornar razao, matricula e id de parceiro aleatorio
-        ${matricula}=    BuiltIn.Set Variable    ${parceiro[1]}
-        ${countRegistros}=    SQL Pesquisa Avancada    matricula=${matricula} 
-    END
-
-    SeleniumLibrary.Input Text    name=${pesquisaAvancada.matricula}    ${matricula}
+    [Documentation]    Filtra pela matrícula exata do cliente de automação carregada no Suite Setup.
+    ${countRegistros}=    SQL Pesquisa Avancada    matricula=${auto_matricula}
+    Should Be True    ${countRegistros} > 0
+    ...    msg=❌ Matrícula '${auto_matricula}' não retornou registros no banco.
+    Log To Console    \nFiltro matrícula '${auto_matricula}': ${countRegistros} registros esperados.
+    SeleniumLibrary.Input Text    name=${pesquisaAvancada.matricula}    ${auto_matricula}
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
-
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
-
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando a matrícula: ${matricula} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro matrícula '${auto_matricula}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por matrícula validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Clear Element Text    name=${pesquisaAvancada.matricula}
 
 Filtra cliente por bairro
-    [Documentation]    Irá realizar a consulta de clientes tendo como parâmetro o campo *Bairro*.
-
-    ${bairro}=    Retorna bairro aleatorio
-    ${countRegistros}=    SQL Pesquisa Avancada    bairro=${bairro}
-    WHILE  ${countRegistros} == ${0}
-        ${bairro}=    Retorna bairro aleatorio
-        ${countRegistros}=    SQL Pesquisa Avancada    bairro=${bairro} 
-    END
-
-    SeleniumLibrary.Input Text    name=${pesquisaAvancada.bairro}    ${bairro}
+    [Documentation]    Filtra pelo bairro do cliente de automação ('Centro', fixo em todos os cadastros).
+    ${countRegistros}=    SQL Pesquisa Avancada    bairro=Centro
+    Should Be True    ${countRegistros} > 0
+    ...    msg=❌ Nenhum cliente com bairro 'Centro' encontrado.
+    Log To Console    \nFiltro bairro 'Centro': ${countRegistros} registros esperados.
+    SeleniumLibrary.Input Text    name=${pesquisaAvancada.bairro}    Centro
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
-
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
-
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando o bairro: ${bairro} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro bairro 'Centro': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por bairro validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Clear Element Text    name=${pesquisaAvancada.bairro}
 
 Filtra cliente por logradouro
-    [Documentation]    Irá realizar a consulta de clientes tendo como parâmetro o campo *Logradouro*.
-
-    ${logradouro}=    Retorna logradouro aleatorio
-    ${countRegistros}=    SQL Pesquisa Avancada    logradouro=${logradouro}
-    WHILE  ${countRegistros} == ${0}
-        ${logradouro}=    Retorna logradouro aleatorio
-        ${countRegistros}=    SQL Pesquisa Avancada    logradouro=${logradouro} 
-    END
-
-    SeleniumLibrary.Input Text    name=${pesquisaAvancada.logradouro}    ${logradouro}
+    [Documentation]    Filtra pelo logradouro do cliente de automação ('Avenida Brasil', fixo nos cadastros).
+    ${countRegistros}=    SQL Pesquisa Avancada    logradouro=Avenida Brasil
+    Should Be True    ${countRegistros} > 0
+    ...    msg=❌ Nenhum cliente com logradouro 'Avenida Brasil' encontrado.
+    Log To Console    \nFiltro logradouro 'Avenida Brasil': ${countRegistros} registros esperados.
+    SeleniumLibrary.Input Text    name=${pesquisaAvancada.logradouro}    Avenida Brasil
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
-
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
-
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando o logradouro: ${logradouro} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro logradouro 'Avenida Brasil': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por logradouro validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Clear Element Text    name=${pesquisaAvancada.logradouro}
 
 Filtra cliente por estado
-    [Documentation]    Irá realizar a consulta de clientes tendo como parâmetro o campo *UF*.
-
-    ${formatoDescricao}    DatabaseLibrary.Query    select AVG(LENGTH(descricao)) from unidadefederativa u where u.idnativo = 1;
-    IF  ${formatoDescricao[0][0]} == ${2}
-        ${estadoUnformat}=    FakerLibrary.State Abbr
-    ELSE
-        ${estadoUnformat}=    FakerLibrary.State
-    END
-    ${format}    Convert To Upper Case    ${estadoUnformat}
-    ${estadoFormat}=    Evaluate    unidecode.unidecode('${format}')
-    ${countEstado}=    Retorna count Estado    ${estadoFormat}
-    WHILE  ${countEstado} > ${1} or ${countEstado} == ${0}    ## Por hora, só irá filtrar por estados que possuem nome único.
-        ${formatoDescricao}    DatabaseLibrary.Query    select AVG(LENGTH(descricao)) from unidadefederativa u where u.idnativo = 1;
-        IF  ${formatoDescricao[0][0]} == ${2}
-            ${estadoUnformat}=    FakerLibrary.State Abbr
-        ELSE
-            ${estadoUnformat}=    FakerLibrary.State
-        END
-        ${format}    Convert To Upper Case    ${estadoUnformat}
-        ${estadoFormat}=    Evaluate    unidecode.unidecode('${format}')
-        ${countEstado}=    Retorna count Estado    ${estadoFormat}
-    END
-    ${countRegistros}=    SQL Pesquisa Avancada    estadoUF=${estadoFormat}
-    WHILE  ${countRegistros} == ${0}
-        ${formatoDescricao}    DatabaseLibrary.Query    select AVG(LENGTH(descricao)) from unidadefederativa u where u.idnativo = 1;
-        IF  ${formatoDescricao[0][0]} == ${2}
-            ${estadoUnformat}=    FakerLibrary.State Abbr
-        ELSE
-            ${estadoUnformat}=    FakerLibrary.State
-        END
-        ${format}    Convert To Upper Case    ${estadoUnformat}
-        ${estadoFormat}=    Evaluate    unidecode.unidecode('${format}')
-        ${countEstado}=    Retorna count Estado    ${estadoFormat}
-        WHILE  ${countEstado} > ${1}    ## Por hora, só irá filtrar por estados que possuem nome único.
-            ${formatoDescricao}    DatabaseLibrary.Query    select AVG(LENGTH(descricao)) from unidadefederativa u where u.idnativo = 1;
-            IF  ${formatoDescricao[0][0]} == ${2}
-                ${estadoUnformat}=    FakerLibrary.State Abbr
-            ELSE
-                ${estadoUnformat}=    FakerLibrary.State
-            END
-            ${format}    Convert To Upper Case    ${estadoUnformat}
-            ${estadoFormat}=    Evaluate    unidecode.unidecode('${format}')
-            ${countEstado}=    Retorna count Estado    ${estadoFormat}
-        END
-        ${countRegistros}=    SQL Pesquisa Avancada    estadoUF=${estadoFormat}
-    END
-    
-    SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnPesquisaUF}
+    [Documentation]    Filtra pelo estado do cliente de automação carregado no Suite Setup.
+    ...                O valor vem direto do banco, portanto funciona em qualquer base.
+    ${countRegistros}=    SQL Pesquisa Avancada    estadoUF=${auto_uf}
+    Should Be True    ${countRegistros} > 0
+    ...    msg=❌ Nenhum cliente no estado '${auto_uf}' encontrado para o usuário logado.
+    Log To Console    \nFiltro UF '${auto_uf}': ${countRegistros} registros esperados.
+    ${btnUF}=    Set Variable
+    ...    xpath=//*[starts-with(@id,'btnPesquisarUNIDADEFEDERATIVA')]//span[contains(@class,'ui-button-icon-primary')]
+    ${btnVisivel}=    Run Keyword And Return Status
+    ...    SeleniumLibrary.Wait Until Element Is Visible    ${btnUF}    3s
+    Run Keyword If    not ${btnVisivel}
+    ...    SeleniumLibrary.Click Element    class=${pesquisaAvancada.exibePesquisa}
+    SeleniumLibrary.Wait Until Element Is Visible    ${btnUF}    10s
+    SeleniumLibrary.Click Element    ${btnUF}
     SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaUnidadeFederativa.input}
     SeleniumLibrary.Wait Until Element Is Enabled    id=${pesquisaUnidadeFederativa.input}
-    SeleniumLibrary.Input Text    id=${pesquisaUnidadeFederativa.input}    ${estadoFormat}
+    SeleniumLibrary.Input Text    id=${pesquisaUnidadeFederativa.input}    ${auto_uf}
     SeleniumLibrary.Press Keys    None    ENTER
     Sleep    0.5s
     SeleniumLibrary.Press Keys    None    ENTER
     SeleniumLibrary.Wait Until Page Does Not Contain Element    id=${pesquisaUnidadeFederativa.input}
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
-
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
-
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando a UF: ${estadoUnformat} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
-    SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnLimpaPesquisaUF}
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro UF '${auto_uf}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por UF '${auto_uf}' validado: ${intQtdeRegistros} registros.
+    SeleniumLibrary.Click Element
+    ...    xpath=//*[starts-with(@id,'btnPesquisarUNIDADEFEDERATIVA')]/following-sibling::a[1]//span
 
 Filtra cliente por cidade
-    [Documentation]    Irá realizar a consulta de clientes tendo como parâmetro o campo *Cidade*.
-
-    ${cidadeUnformat}=    FakerLibrary.City
-    ${format}    Convert To Upper Case    ${cidadeUnformat}
-    ${cidade}=    Evaluate    unidecode.unidecode('${format}')
-    ${countCidade}=    Retorna count Cidade    ${cidade}
-    WHILE  ${countCidade} > ${1} or ${countCidade} == ${0}     ## Por hora, só irá filtrar por cidade que possuem nome único.
-        ${cidadeUnformat}=    FakerLibrary.City
-        ${format}    Convert To Upper Case    ${cidadeUnformat}
-        ${cidade}=    Evaluate    unidecode.unidecode('${format}')
-        ${countCidade}=    Retorna count Cidade    ${cidade}
-    END
-    ${countRegistros}=    SQL Pesquisa Avancada    cidade=${cidade}
-    WHILE  ${countRegistros} == ${0}
-        ${cidadeUnformat}=    FakerLibrary.City
-        ${format}    Convert To Upper Case    ${cidadeUnformat}
-        ${cidade}=    Evaluate    unidecode.unidecode('${format}')
-        ${countCidade}=    Retorna count Cidade    ${cidade}
-        WHILE  ${countCidade} > ${1} or ${countCidade} == ${0} 
-            ${cidadeUnformat}=    FakerLibrary.City
-            ${format}    Convert To Upper Case    ${cidadeUnformat}
-            ${cidade}=    Evaluate    unidecode.unidecode('${format}')
-            ${countCidade}=    Retorna count Cidade    ${cidade}
-        END
-    ${countRegistros}=    SQL Pesquisa Avancada    cidade=${cidade}
-    END
-
-    SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnPesquisaCidade}
-    SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaCidade.input}
+    [Documentation]    Filtra pela cidade do cliente de automação carregada no Suite Setup.
+    ...                Usa o idcidade exato do cliente automação para evitar ambiguidade
+    ...                (múltiplas cidades com o mesmo nome em estados diferentes).
+    ${usuario}=    Retornar id usuario logado web
+    ${sql_count}=    Catenate    SEPARATOR=\n
+    ...    SELECT COUNT(DISTINCT p.idparceiro) FROM parceiro p
+    ...    INNER JOIN parceirolocal pl ON p.idparceiro = pl.idparceiro
+    ...    INNER JOIN local l ON pl.idlocal = l.idlocal
+    ...    INNER JOIN cidade c ON l.idcidade = c.idcidade
+    ...    INNER JOIN usuariolocal ul ON l.idlocal = ul.idlocal
+    ...    INNER JOIN usuario u ON ul.idusuario = u.idusuario
+    ...    LEFT OUTER JOIN usuariohierarquia uh ON u.idusuario = uh.idusuario
+    ...    LEFT OUTER JOIN usuario us ON uh.idusuariosuperior = us.idusuario
+    ...    WHERE c.descricao = '${auto_cidade}'
+    ...    AND p.idnativo = 1
+    ...    AND (u.idusuario = ${usuario} OR us.idusuario = ${usuario})
+    ${res}=    DatabaseLibrary.Query    ${sql_count}
+    ${countRegistros}=    Set Variable    ${res[0][0]}
+    Should Be True    ${countRegistros} > 0
+    ...    msg=❌ Nenhum cliente em '${auto_cidade}' encontrado para o usuário logado.
+    Log To Console    \nFiltro cidade '${auto_cidade}': ${countRegistros} registros esperados.
+    ${btnCidade}=    Set Variable
+    ...    xpath=//*[starts-with(@id,'btnPesquisarCIDADE_cidade')]//span[contains(@class,'ui-button-icon-primary')]
+    ${btnVisivel}=    Run Keyword And Return Status
+    ...    SeleniumLibrary.Wait Until Element Is Visible    ${btnCidade}    3s
+    Run Keyword If    not ${btnVisivel}
+    ...    SeleniumLibrary.Click Element    class=${pesquisaAvancada.exibePesquisa}
+    SeleniumLibrary.Wait Until Element Is Visible    ${btnCidade}    10s
+    SeleniumLibrary.Click Element    ${btnCidade}
+    SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaCidade.input}    10s
     SeleniumLibrary.Wait Until Element Is Enabled    id=${pesquisaCidade.input}
-    SeleniumLibrary.Input Text    id=${pesquisaCidade.input}    ${cidade}
+    SeleniumLibrary.Input Text    id=${pesquisaCidade.input}    ${auto_cidade}
     SeleniumLibrary.Press Keys    None    ENTER
     Sleep    0.5s
     SeleniumLibrary.Press Keys    None    ENTER
     SeleniumLibrary.Wait Until Page Does Not Contain Element    id=${pesquisaCidade.input}
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
-
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
-
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando a cidade: ${cidade} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro cidade '${auto_cidade}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por cidade '${auto_cidade}' validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnLimpaPesquisaCidade}
 
 Filtra cliente por profissional
@@ -571,13 +460,9 @@ Filtra cliente por profissional
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
 
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando o profissional: ${usuario[0]} - ${usuario[1]} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro profissional '${usuario[1]}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por profissional '${usuario[1]}' validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnLimpaPesquisaProfissional}
 
 Filtra cliente por classificacao
@@ -600,13 +485,9 @@ Filtra cliente por classificacao
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
 
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando a classificação: ${classificacao[0]} - ${classificacao[1]} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro classificação '${classificacao[1]}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por classificação '${classificacao[1]}' validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnLimpaPesquisaClassificacao}
 
 Filtra cliente por situacao de cadastro
@@ -630,11 +511,7 @@ Filtra cliente por situacao de cadastro
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
 
-    IF  ${intQtdeRegistros} == ${countRegistros}
-        Log To Console    \nListagem de clientes utilizando a Situação de Cadastro: ${situacaoCadastro[0]} - ${situacaoCadastro[1]} está de acordo.
-    ELSE
-        Log To Console    Listagem de clientes está incorreta.
-        Fail
-    END
-
+    Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
+    ...    msg=❌ Filtro situação cadastro '${situacaoCadastro[1]}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por situação de cadastro '${situacaoCadastro[1]}' validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnLimpaPesquisaSituacaoCadastro}

@@ -18,6 +18,4 @@ Teste 003 ::: Login usuario e senha invalidos
 
 Teste 004 ::: Login valido e Logoff
     Realiza login na plataforma web
-    Sleep    2s
     Realizar logoff
-    Sleep    3s

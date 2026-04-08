@@ -90,26 +90,16 @@ Validar parceiro do pedido
     [Arguments]    ${numeroPedido}    ${idParceiro}
 
     ${data}    Query    select idparceiro from pedido where numeropedido = '${numeroPedido}'
-
-    IF  '${data[0][0]}' == '${idParceiro}'
-        Log To Console    Parceiro do pedido coincide com o banco de dados.
-    ELSE    
-        Log To Console    Parceiro passado é diferente do parceiro salvo no database para o pedido número ${numeroPedido}. (Argumento: ${idParceiro} / Database: ${data[0][0]})
-        Fail
-    END
+    Should Be Equal As Strings    ${data[0][0]}    ${idParceiro}
+    ...    Parceiro diverge no pedido ${numeroPedido}: esperado ${idParceiro}, banco retornou ${data[0][0]}
 
 Validar local do pedido
     [Documentation]    Irá validar se o localParceiro do pedido salvo no banco de dados está de acordo com o argumento *idLocal*.
     [Arguments]    ${numeroPedido}    ${idLocal}
 
     ${data}    Query    select idlocal from pedido where numeropedido = '${numeroPedido}'
-
-    IF  '${data[0][0]}' == '${idlocal}'
-        Log To Console    Local do parceiro no pedido coincide com o banco de dados.
-    ELSE    
-        Log To Console    Local passado é diferente do local salvo no database para o pedido número ${numeroPedido}. (Argumento: ${idlocal} / Database: ${data[0][0]})
-        Fail
-    END
+    Should Be Equal As Strings    ${data[0][0]}    ${idLocal}
+    ...    Local diverge no pedido ${numeroPedido}: esperado ${idLocal}, banco retornou ${data[0][0]}
 
 Validar se o pedido consta no banco de dados
     [Documentation]    Verifica se o pedido consta no banco de dados.
@@ -131,65 +121,40 @@ Validar filial do pedido
     [Arguments]    ${numeroPedido}    ${idFilial}
 
     ${data}    Query    select idlocalfilialvenda from pedido where numeropedido = '${numeroPedido}'
-
-    IF  '${data[0][0]}' == '${idFilial}'
-        Log To Console    Filial do pedido coincide com o banco de dados.
-    ELSE    
-        Log To Console    Filial passada é diferente da filial salva no database para o pedido número ${numeroPedido}. (Argumento: ${idFilial} / Database: ${data[0][0]})
-        Fail
-    END
+    Should Be Equal As Strings    ${data[0][0]}    ${idFilial}
+    ...    Filial diverge no pedido ${numeroPedido}: esperado ${idFilial}, banco retornou ${data[0][0]}
 
 Validar tipo do pedido
     [Documentation]    Irá validar se o Tipo do pedido salvo no banco de dados está de acordo com o argumento *idTipoPedido*.
     [Arguments]    ${numeroPedido}    ${idTipoPedido}
 
     ${data}    Query    select idtipopedido from pedido where numeropedido = '${numeroPedido}'
-
-    IF  '${data[0][0]}' == '${idTipoPedido}'
-        Log To Console    Tipo do pedido coincide com o banco de dados.
-    ELSE    
-        Log To Console    Tipo do pedido é diferente do Tipo salvo no database para o pedido número ${numeroPedido}. (Argumento: ${idTipoPedido} / Database: ${data[0][0]})
-        Fail
-    END
+    Should Be Equal As Strings    ${data[0][0]}    ${idTipoPedido}
+    ...    Tipo pedido diverge no pedido ${numeroPedido}: esperado ${idTipoPedido}, banco retornou ${data[0][0]}
 
 Validar tabela de preço
     [Documentation]    Irá validar se a Tabela de preço salva no banco de dados está de acordo com o argumento *idTabelaPreco*.
     [Arguments]    ${numeroPedido}    ${idTabelaPreco}
 
     ${data}    Query    select idtabelapreco from pedido where numeropedido = '${numeroPedido}'
-
-    IF  '${data[0][0]}' == '${idTabelaPreco}'
-        Log To Console    Tabela de preço do pedido coincide com o banco de dados.
-    ELSE    
-        Log To Console    Tabela de preço do pedido é diferente da Tabela salva no database para o pedido número ${numeroPedido}. (Argumento: ${idTabelaPreco} / Database: ${data[0][0]})
-        Fail
-    END
+    Should Be Equal As Strings    ${data[0][0]}    ${idTabelaPreco}
+    ...    Tabela de preço diverge no pedido ${numeroPedido}: esperado ${idTabelaPreco}, banco retornou ${data[0][0]}
 
 Validar condicao de pagamento
     [Documentation]    Irá validar se a Condição de pagamento salva no banco de dados está de acordo com o argumento *idCondicaoPagamento*.
     [Arguments]    ${numeroPedido}    ${idCondicaoPagamento}
 
     ${data}    Query    select idcondicaopagamento from pedido where numeropedido = '${numeroPedido}'
-
-    IF  '${data[0][0]}' == '${idCondicaoPagamento}'
-        Log To Console    Condição de pagamento do pedido coincide com o banco de dados.
-    ELSE    
-        Log To Console    Condição de pagamento do pedido é diferente da Condição salva no database para o pedido número ${numeroPedido}. (Argumento: ${idCondicaoPagamento} / Database: ${data[0][0]})
-        Fail
-    END
+    Should Be Equal As Strings    ${data[0][0]}    ${idCondicaoPagamento}
+    ...    Condição de pagamento diverge no pedido ${numeroPedido}: esperado ${idCondicaoPagamento}, banco retornou ${data[0][0]}
 
 Validar tipo cobranca
     [Documentation]    Irá validar se o Tipo de Cobrança salvo no banco de dados está de acordo com o argumento *idTipoCobranca*.
     [Arguments]    ${numeroPedido}    ${idTipoCobranca}
 
     ${data}    Query    select idtipocobranca from pedido where numeropedido = '${numeroPedido}'
-
-    IF  '${data[0][0]}' == '${idTipoCobranca}'
-        Log To Console    Tipo cobrança do pedido coincide com o banco de dados.
-    ELSE    
-        Log To Console    Tipo cobrança do pedido é diferente do Tipo cobrança salvo no database para o pedido número ${numeroPedido}. (Argumento: ${idTipoCobranca} / Database: ${data[0][0]})
-        Fail
-    END
+    Should Be Equal As Strings    ${data[0][0]}    ${idTipoCobranca}
+    ...    Tipo cobrança diverge no pedido ${numeroPedido}: esperado ${idTipoCobranca}, banco retornou ${data[0][0]}
 
 Retornar numero ultimo pedido NF
     [Documentation]    Esta keyword retorna o número do último pedido lançado que possui situação = NÃO FINALIZADO.
