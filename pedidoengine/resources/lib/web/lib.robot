@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation    Arquivo utilizado para centralizar as bibliotecas utilizadas  para os testes web.
 
-Library    SeleniumLibrary
+Library    SeleniumLibrary    screenshot_root_directory=${EXECDIR}/screenshots
 Library    FakerLibrary    locale=pt_BR
 Library    DatabaseLibrary
 Library    String

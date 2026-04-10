@@ -16,10 +16,10 @@ Teste 001 ::: Valida campos obrigatórios cadastro cliente
     Valida campos obrigatorios do cliente
 
 Teste 002 ::: Cadastro de cliente Pessoa Jurídica
-    [Documentation]    DTSFASAPP-T76: Realiza o fluxo completo de cadastro de PJ e valida no BD.
-    Acessa tela de cadastro de cliente
-    Cadastra cliente juridico
-    Valida cliente no banco de dados
+   [Documentation]    DTSFASAPP-T76: Realiza o fluxo completo de cadastro de PJ e valida no BD.
+   Acessa tela de cadastro de cliente
+   Cadastra cliente juridico
+   Valida cliente no banco de dados
 
 Teste 003 ::: Cadastro de cliente Pessoa Física com Contato
     [Documentation]    Fluxo E2E importado do Cypress: Cria PF, insere contato e valida no BD.
