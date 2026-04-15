@@ -1,9 +1,9 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para armazenar keywords utilizadas nos testes que envolvem a tela de consulta no Mobile.
 
-Resource    ${EXECDIR}/resources/lib/android/lib.robot
-Resource    ${EXECDIR}/resources/locators/android/consulta/telaConsultaPedidoLocators.robot
-Resource    ${EXECDIR}/resources/locators/android/consulta/telaGeralConsultaAndroidLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/android/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/consulta/telaConsultaPedidoLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/consulta/telaGeralConsultaAndroidLocators.robot
 
 *** Keywords ***
 Acessar a consulta de pedidos

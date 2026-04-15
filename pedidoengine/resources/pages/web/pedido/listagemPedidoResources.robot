@@ -1,12 +1,12 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para armazenar as keywords utilizadas no processo de listagem de pedido de venda.
 
-Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
-Resource    ${EXECDIR}/resources/locators/web/pedido/listagemPedidoLocators.robot
-Resource    ${EXECDIR}/resources/data/pedido/dataPedido.robot
-Resource    ${EXECDIR}/resources/locators/web/pedido/cadastroPedidoLocators.robot
-Resource    ${EXECDIR}/resources/pages/web/pedido/cadastroPedidoResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/web/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/menu/menuLateralLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/pedido/listagemPedidoLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/pedido/dataPedido.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/pedido/cadastroPedidoLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/pedido/cadastroPedidoResources.robot
 
 *** Keywords ***
 Acessar tela de listagem de pedidos

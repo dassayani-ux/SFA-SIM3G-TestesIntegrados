@@ -2,3 +2,11 @@ results*
 __pycache__*
 Sikuli_java*.txt
 pedidoengine/libraries/variables/sfa_variables.py
+
+# Prints gerados pelo Selenium durante os testes
+Prints de teste/
+
+# Arquivos de output do Robot Framework
+output.xml
+log.html
+report.html

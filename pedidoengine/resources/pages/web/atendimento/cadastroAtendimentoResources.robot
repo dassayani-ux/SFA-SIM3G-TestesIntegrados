@@ -1,13 +1,13 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para armazenas as palavras chaves utilizadas no processo de cadastro de atendimento.
 
-Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/data/local/dataLocal.robot
-Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot
-Resource    ${EXECDIR}/resources/data/atendimento/dataAtendimento.robot
-Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
-Resource    ${EXECDIR}/resources/locators/web/atendimento/cadastroAtendimentoLocators.robot
-Resource    ${EXECDIR}/resources/variables/web/atendimento/cadastroAtendimentoVariables.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/web/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/local/dataLocal.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/cliente/dataCliente.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/atendimento/dataAtendimento.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/menu/menuLateralLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/atendimento/cadastroAtendimentoLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/variables/web/atendimento/cadastroAtendimentoVariables.robot
 
 
 *** Keywords ***

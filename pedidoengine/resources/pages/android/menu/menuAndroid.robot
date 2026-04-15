@@ -1,10 +1,10 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para armazenar keywords utilizadas para realizar ações no menu do App mobile.
 
-Resource    ${EXECDIR}/resources/lib/android/lib.robot
-Resource    ${EXECDIR}/resources/locators/android/menu/menuLateralLocators.robot
-Resource    ${EXECDIR}/resources/locators/android/cliente/listagemclienteandroidLocators.robot
-Resource    ${EXECDIR}/resources/locators/android/consulta/telaGeralConsultaAndroidLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/android/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/menu/menuLateralLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/cliente/listagemclienteandroidLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/consulta/telaGeralConsultaAndroidLocators.robot
 
 
 *** Keywords ***
@@ -19,6 +19,27 @@ Acessar a guia de clientes no menu
     BuiltIn.Run Keyword If    '${statusMenu}' == 'False'    Exibir/recolher menu lateral
     AppiumLibrary.Click Element    xpath=${locator}
     AppiumLibrary.Wait Until Element Is Visible    xpath=${telaListagemClientes.titulo}
+
+Voltar para tela principal se necessario
+    [Documentation]    Pressiona Back até chegar na PrincipalActivity e garante
+    ...                que o menu lateral esteja aberto (após login fica aberto;
+    ...                após navegar via Back fica fechado — abre por swipe).
+
+    FOR    ${i}    IN RANGE    10
+        ${activity}=    AppiumLibrary.Get Activity
+        IF    '${activity}' == '${activityMenuPrincipal}'    BREAK
+        AppiumLibrary.Press Keycode    4
+        Sleep    0.8s
+    END
+
+    # Abre o drawer deslizando da borda esquerda se estiver fechado
+    ${menu_visivel}=    Run Keyword And Return Status
+    ...    AppiumLibrary.Element Should Be Visible    id=${menu.labelProfissional}
+    IF    not ${menu_visivel}
+        AppiumLibrary.Swipe    10    600    500    600    500
+        Sleep    0.8s
+    END
+    Log To Console    \n✅ App na tela principal com menu aberto.
 
 Exibir/recolher menu lateral
     [Documentation]    Keyword utilizada para exibir ou recolher o menu lateral do app Android quando necessário.

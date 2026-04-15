@@ -236,6 +236,79 @@ def scroll_screan(direction='down', duration=1000):
 
     driver.swipe(start_x, start_y, end_x, end_y, duration)
 
+@keyword("Gerar CNPJ valido")
+def gerar_cnpj_valido(seed=None):
+    """Gera um CNPJ válido com dígitos verificadores corretos.
+    Aceita um seed numérico para gerar CNPJs únicos a cada execução."""
+    import random
+    if seed is not None:
+        random.seed(int(seed))
+
+    # 8 dígitos base + filial 0001
+    base = [random.randint(0, 9) for _ in range(8)] + [0, 0, 0, 1]
+
+    # Primeiro dígito verificador
+    pesos1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+    soma1 = sum(d * p for d, p in zip(base, pesos1))
+    resto1 = soma1 % 11
+    d1 = 0 if resto1 < 2 else 11 - resto1
+    cnpj = base + [d1]
+
+    # Segundo dígito verificador
+    pesos2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+    soma2 = sum(d * p for d, p in zip(cnpj, pesos2))
+    resto2 = soma2 % 11
+    d2 = 0 if resto2 < 2 else 11 - resto2
+    cnpj.append(d2)
+
+    # Formato: XX.XXX.XXX/XXXX-XX
+    return (f"{cnpj[0]}{cnpj[1]}.{cnpj[2]}{cnpj[3]}{cnpj[4]}."
+            f"{cnpj[5]}{cnpj[6]}{cnpj[7]}/{cnpj[8]}{cnpj[9]}{cnpj[10]}{cnpj[11]}"
+            f"-{cnpj[12]}{cnpj[13]}")
+
+@keyword("Abrir drawer menu lateral")
+def abrir_drawer_menu_lateral():
+    """Desliza da borda esquerda para a direita para abrir o menu lateral (Navigation Drawer)."""
+    appium_lib = BuiltIn().get_library_instance('AppiumLibrary')
+    driver = appium_lib._current_application()
+    rect = driver.get_window_rect()
+    height = rect['height']
+    driver.swipe(10, height // 2, 500, height // 2, 500)
+
+@keyword("Digitar na calculadora android")
+def digitar_na_calculadora_android(valor):
+    """Digita cada caractere na calculadora customizada do app (tclnum) clicando nos botões
+    via resource-id (tclnum_btn0..9) e confirma com o botão Definir (android:id/button1)."""
+    appium_lib = BuiltIn().get_library_instance('AppiumLibrary')
+    driver = appium_lib._current_application()
+
+    PKG = "com.wealthsystems.sim3g.cliente.pedidoengine.app"
+
+    # Limpa o valor atual (botão C), se existir
+    try:
+        clear_btn = driver.find_element("id", f"{PKG}:id/tclnum_btnC")
+        clear_btn.click()
+    except Exception:
+        pass  # botão C não encontrado — ignora
+
+    # Clica em cada dígito pelo resource-id
+    for char in str(valor):
+        if char.isdigit():
+            btn = driver.find_element("id", f"{PKG}:id/tclnum_btn{char}")
+            btn.click()
+        elif char in (',', '.'):
+            # Vírgula / ponto decimal — tenta resource-id, cai em content-desc
+            try:
+                btn = driver.find_element("id", f"{PKG}:id/tclnum_btnDecimal")
+                btn.click()
+            except Exception:
+                btn = driver.find_element("xpath",
+                    "//android.widget.Button[@content-desc=',' or @text=',' or @text='.']")
+                btn.click()
+
+    # Clica em Definir
+    driver.find_element("id", "android:id/button1").click()
+
 @keyword("Limpar listas")
 def clear_list(input_list):
     """

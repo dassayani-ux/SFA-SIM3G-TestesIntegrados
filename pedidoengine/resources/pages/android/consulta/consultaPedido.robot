@@ -1,11 +1,11 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para armazenar keywords utilizadas para realizar consultas de pedido no App mobile.
 
-Resource    ${EXECDIR}/resources/lib/android/lib.robot
-Resource    ${EXECDIR}/resources/locators/android/pedido/cadastroPedidoAndroidLocators.robot
-Resource    ${EXECDIR}/resources/locators/android/consulta/telaConsultaPedidoLocators.robot
-Resource    ${EXECDIR}/resources/locators/android/consulta/telaGeralConsultaAndroidLocators.robot
-Resource    ${EXECDIR}/resources/variables/android/pedido/cadastroPedidoAndroidVariables.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/android/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/pedido/cadastroPedidoAndroidLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/consulta/telaConsultaPedidoLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/consulta/telaGeralConsultaAndroidLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/variables/android/pedido/cadastroPedidoAndroidVariables.robot
 
 *** Keywords ***
 Abrir a pesquisa avancada na consulta de pedidos

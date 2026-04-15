@@ -1,11 +1,11 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo destinado a armazenar keywords utilizadas em testes na tela 360° do cliente no ambiente Mobile.
 
-Resource    ${EXECDIR}/resources/lib/android/lib.robot
-Resource    ${EXECDIR}/resources/locators/android/cliente/tela360clienteLocators.robot
-Resource    ${EXECDIR}/resources/locators/android/pedido/cadastroPedidoAndroidLocators.robot
-Resource    ${EXECDIR}/resources/variables/android/pedido/cadastroPedidoAndroidVariables.robot
-Resource    ${EXECDIR}/resources/locators/android/cliente/listagemclienteandroidLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/android/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/cliente/tela360clienteLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/pedido/cadastroPedidoAndroidLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/variables/android/pedido/cadastroPedidoAndroidVariables.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/cliente/listagemclienteandroidLocators.robot
 
 *** Keywords ***
 Iniciar atendimento tela 360

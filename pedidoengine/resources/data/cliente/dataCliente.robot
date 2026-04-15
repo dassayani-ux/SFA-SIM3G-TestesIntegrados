@@ -490,8 +490,14 @@ Retornar razao, matricula e id de parceiro aleatorio
         ${usuario}=    Retornar id usuario logado mobile
         ${filial}=    Retornar id filial do usuario    usuario=${usuario}
     END
-    
-    
+
+    # Se o usuário não tem filial padrão configurada (None), ignora o filtro de filial
+    ${filial_clause}=    Set Variable    lf5_.idLocal=${filial}
+    IF    '${filial}' == 'None'
+        ${filial_clause}=    Set Variable    1=1
+        Log To Console    \n⚠️ Usuário sem filial padrão — buscando clientes sem filtro de filial.
+    END
+
     ${sql}=    Catenate    SEPARATOR=\n
     ...    select distinct this_.nomeParceiro, this_.numeroMatricula, this_.idparceiro
     ...    from Parceiro this_
@@ -504,7 +510,7 @@ Retornar razao, matricula e id de parceiro aleatorio
     ...    left outer join Local lf5_ on localfilia15_.idFilial=lf5_.idLocal
     ...    inner join ParceiroTipoParceiro ptp1_ on this_.idParceiro=ptp1_.idParceiro
     ...    inner join TipoParceiro tp2_ on ptp1_.idTipoParceiro=tp2_.idTipoParceiro
-    ...    where lf5_.idLocal=${filial}
+    ...    where ${filial_clause}
     ...    and (uh8_.idUsuarioSuperior=${usuario} or u7_.idUsuario=${usuario})
     ...    and this_.idnAtivo=1
 

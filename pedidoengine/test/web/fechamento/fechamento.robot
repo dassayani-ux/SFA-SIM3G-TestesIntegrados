@@ -1,14 +1,14 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para rodar o ciclo de teste de fechamento
 ...    https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testPlayer/DTSFAPD-C3   
 
-Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
-Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
-Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
-Resource    ${EXECDIR}/resources/pages/web/atendimento/listagemAtendimentoResources.robot
-Resource    ${EXECDIR}/resources/pages/web/atendimento/cadastroAtendimentoResources.robot
-Resource    ${EXECDIR}/resources/pages/web/cliente/cadastroCLienteResource.robot
-Resource    ${EXECDIR}/resources/pages/web/pedido/cadastroPedidoResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/navegador/navegadorResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/database/conectionDatabase.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/login/loginResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/atendimento/listagemAtendimentoResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/atendimento/cadastroAtendimentoResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/cliente/cadastroCLienteResource.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/pedido/cadastroPedidoResources.robot
 
 Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    ##Inativar pesquisa de Tipo Cobraca
 Suite Teardown    Run Keywords    Disconnect From Database    Close Browser

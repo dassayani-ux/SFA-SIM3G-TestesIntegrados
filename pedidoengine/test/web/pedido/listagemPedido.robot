@@ -1,10 +1,10 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para armazenar os casos de testes relativos à listagem de pedidos na web.
 
-Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
-Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
-Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
-Resource    ${EXECDIR}/resources/pages/web/pedido/listagemPedidoResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/database/conectionDatabase.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/login/loginResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/navegador/navegadorResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/pedido/listagemPedidoResources.robot
 
 Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    Realiza login na plataforma web
 Suite Teardown    Run Keywords    Realizar logoff    Disconnect From Database

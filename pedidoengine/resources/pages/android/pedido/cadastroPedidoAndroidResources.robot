@@ -1,13 +1,13 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo destinado a armazenar keywords utilizadas em testes envolvendo cadastro de pedidos no ambiente Mobile.
 
-Resource    ${EXECDIR}/resources/lib/android/lib.robot
-Resource    ${EXECDIR}/resources/data/local/dataLocal.robot
-Resource    ${EXECDIR}/resources/data/pedido/dataPedido.robot
-Resource    ${EXECDIR}/resources/data/produto/dataProduto.robot
-Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot
-Resource    ${EXECDIR}/resources/locators/android/pedido/cadastroPedidoAndroidLocators.robot
-Resource    ${EXECDIR}/resources/variables/android/pedido/cadastroPedidoAndroidVariables.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/android/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/local/dataLocal.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/pedido/dataPedido.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/produto/dataProduto.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/cliente/dataCliente.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/pedido/cadastroPedidoAndroidLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/variables/android/pedido/cadastroPedidoAndroidVariables.robot
 
 *** Keywords ***
 Preencher cabecalho pedido - Android

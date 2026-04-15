@@ -1,11 +1,11 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para realizar os testes relativos a edição de atendimento.
 
-Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
-Resource    ${EXECDIR}/resources/pages/web/login/loginResources.robot
-Resource    ${EXECDIR}/resources/pages/web/navegador/navegadorResources.robot
-Resource    ${EXECDIR}/resources/pages/web/atendimento/listagemAtendimentoResources.robot
-Resource    ${EXECDIR}/resources/pages/web/atendimento/cadastroAtendimentoResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/database/conectionDatabase.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/login/loginResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/navegador/navegadorResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/atendimento/listagemAtendimentoResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/atendimento/cadastroAtendimentoResources.robot
 
 Suite Setup    Run Keywords    Conecta ao banco de dados    Abre Navegador    Realiza login na plataforma web
 Suite Teardown    Run Keywords    Disconnect From Database    Close Browser

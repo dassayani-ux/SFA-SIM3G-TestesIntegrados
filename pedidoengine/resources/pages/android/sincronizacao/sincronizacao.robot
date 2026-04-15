@@ -1,9 +1,9 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para armazenar keywords utilizadas no processo de sincronização do app Android.
 
-Resource    ${EXECDIR}/resources/lib/android/lib.robot
-Resource    ${EXECDIR}/resources/locators/android/sincronizacao/syncLocators.robot
-Variables    ${EXECDIR}/libraries/variables/sfa_variables.py
+Resource    ${EXECDIR}/pedidoengine/resources/lib/android/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/android/sincronizacao/syncLocators.robot
+Variables    ${EXECDIR}/pedidoengine/libraries/variables/sfa_variables.py
 
 *** Keywords ***
 Realizar primeira sincronizacao

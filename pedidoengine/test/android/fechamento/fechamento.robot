@@ -1,17 +1,17 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para rodar o ciclo de teste de fechamento
 ...    https://jiraproducao.totvs.com.br/secure/Tests.jspa#/testPlayer/DTSFAPD-C4
 
-Resource    ${EXECDIR}/resources/pages/android/login/login.robot
-Resource    ${EXECDIR}/resources/database/conectionDatabase.robot
-Resource    ${EXECDIR}/resources/pages/android/menu/menuAndroid.robot
-Resource    ${EXECDIR}/resources/pages/android/aplicacao/aplicacao.robot
-Resource    ${EXECDIR}/resources/pages/android/consulta/consultaGeral.robot
-Resource    ${EXECDIR}/resources/pages/android/consulta/consultaPedido.robot
-Resource    ${EXECDIR}/resources/pages/android/sincronizacao/sincronizacao.robot
-Resource    ${EXECDIR}/resources/pages/android/pedido/cadastroPedidoAndroidResources.robot
-Resource    ${EXECDIR}/resources/pages/android/cliente/listagemClienteAndroidResources.robot
-Resource    ${EXECDIR}/resources/pages/android/cliente/tela360ClienteAndroid.Resources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/android/login/login.robot
+Resource    ${EXECDIR}/pedidoengine/resources/database/conectionDatabase.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/android/menu/menuAndroid.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/android/aplicacao/aplicacao.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/android/consulta/consultaGeral.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/android/consulta/consultaPedido.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/android/sincronizacao/sincronizacao.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/android/pedido/cadastroPedidoAndroidResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/android/cliente/listagemClienteAndroidResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/android/cliente/tela360ClienteAndroid.Resources.robot
 
 Suite Setup    Run Keywords    Conecta ao banco de dados    Abrir aplicativo
 Suite Teardown    Run Keywords    Disconnect From Database    Close Application

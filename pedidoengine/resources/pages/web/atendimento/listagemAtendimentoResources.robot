@@ -1,10 +1,10 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para armazenar as keywords utilizadas no proesso de listagem de atendimento.
 
-Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
-Resource    ${EXECDIR}/resources/locators/web/atendimento/listagemAtendimentoLocators.robot
-Resource    ${EXECDIR}/resources/locators/web/atendimento/cadastroAtendimentoLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/web/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/menu/menuLateralLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/atendimento/listagemAtendimentoLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/atendimento/cadastroAtendimentoLocators.robot
 
 *** Keywords ***
 Acessar listagem de atendimentos

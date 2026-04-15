@@ -1,15 +1,15 @@
-*** Settings ***
+﻿*** Settings ***
 Documentation    Arquivo utilizado para armazenar as keywords utilizadas no processo de cadastro de pedido de venda.
 
-Resource    ${EXECDIR}/resources/lib/web/lib.robot
-Resource    ${EXECDIR}/resources/data/pedido/dataPedido.robot
-Resource    ${EXECDIR}/resources/data/cliente/dataCliente.robot
-Resource    ${EXECDIR}/resources/data/produto/dataProduto.robot
-Resource    ${EXECDIR}/resources/locators/web/menu/menuLateralLocators.robot
-Resource    ${EXECDIR}/resources/locators/web/pedido/cadastroPedidoLocators.robot
-Resource    ${EXECDIR}/resources/pages/web/cliente/listagemClientesResource.robot
-Resource    ${EXECDIR}/resources/variables/web/pedido/cadastroPedidoVariables.robot
-Resource    ${EXECDIR}/resources/pages/web/pedido/listagemPedidoResources.robot
+Resource    ${EXECDIR}/pedidoengine/resources/lib/web/lib.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/pedido/dataPedido.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/cliente/dataCliente.robot
+Resource    ${EXECDIR}/pedidoengine/resources/data/produto/dataProduto.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/menu/menuLateralLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/locators/web/pedido/cadastroPedidoLocators.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/cliente/listagemClientesResource.robot
+Resource    ${EXECDIR}/pedidoengine/resources/variables/web/pedido/cadastroPedidoVariables.robot
+Resource    ${EXECDIR}/pedidoengine/resources/pages/web/pedido/listagemPedidoResources.robot
 
 *** Keywords ***
 Inativar pesquisa de Tipo Cobraca

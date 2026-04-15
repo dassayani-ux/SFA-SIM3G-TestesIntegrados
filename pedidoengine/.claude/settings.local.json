@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ':*)",
+      "Read(//c/Users/dasayani.mayara/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/24364efa-4e36-42fe-af6d-48041f4fb915/cfa7a5bb-dc36-4752-b61d-e66e204cb22a/skills/docx/**)",
+      "Bash(python scripts/office/soffice.py --headless --convert-to docx \"C:/Users/dasayani.mayara/Downloads/Requisito SFA - novo CNPJ.doc\")",
+      "Bash(where soffice:*)",
+      "Bash(where soffice.exe)",
+      "Read(//c/Program Files/LibreOffice/program/**)",
+      "Bash(where antiword:*)",
+      "Bash(where pandoc:*)",
+      "Bash(antiword \"C:/Users/dasayani.mayara/Downloads/Requisito SFA - novo CNPJ.doc\")",
+      "Bash(xxd \"C:/Users/dasayani.mayara/Downloads/Requisito SFA - novo CNPJ.doc\")",
+      "Read(//usr/**)",
+      "Read(//mingw64/**)",
+      "Read(//c/Users/dasayani.mayara/AppData/Local/Programs/Python/**)",
+      "Bash(ls \"C:/Python\"*)",
+      "Read(//c/Users/dasayani.mayara/AppData/Local/Microsoft/WindowsApps/**)",
+      "Bash(pandoc \"C:\\\\Users\\\\dasayani.mayara\\\\Documents\\\\versoes\\\\teste do novo cnpj.docx\" -o output.md)",
+      "Bash(py -3 -c ':*)",
+      "Bash(powershell -Command ':*)",
+      "Bash(npm --version)",
+      "Bash(npx appium:*)",
+      "Bash(where node:*)",
+      "Bash(where npm:*)",
+      "Bash(where appium:*)",
+      "Bash(npm install:*)",
+      "Bash(appium --version)",
+      "Bash(npm list:*)",
+      "Bash(npm root:*)",
+      "Bash(npm bin:*)",
+      "Bash(cmd /c \"dir C:\\\\Users\\\\dasayani.mayara\\\\AppData\\\\Roaming\\\\npm\\\\appium* 2>&1\")"
+    ]
+  }
+}
