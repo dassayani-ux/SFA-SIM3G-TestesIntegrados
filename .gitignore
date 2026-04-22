@@ -1,12 +1,51 @@
-results*
-__pycache__*
-Sikuli_java*.txt
+# ==============================================================================
+# DADOS SENSÍVEIS — nunca devem ir ao repositório
+# ==============================================================================
+
+# Credenciais e variáveis de ambiente (IPs, usuários, senhas do servidor e banco)
 pedidoengine/libraries/variables/sfa_variables.py
 
-# Prints gerados pelo Selenium durante os testes
-Prints de teste/
+# ==============================================================================
+# CLAUDE CODE — configurações locais geradas pela ferramenta
+# Contém caminhos absolutos da máquina, session IDs e permissões locais.
+# ==============================================================================
+.claude/
+**/.claude/
 
-# Arquivos de output do Robot Framework
+# ==============================================================================
+# OUTPUTS DO ROBOT FRAMEWORK
+# ==============================================================================
+
+# Relatórios gerados a cada execução (podem ser grandes e mudam sempre)
 output.xml
 log.html
 report.html
+
+# Pastas de resultados
+results*/
+
+# Screenshots do Selenium capturadas durante os testes
+Prints de teste/
+
+# ==============================================================================
+# PYTHON
+# ==============================================================================
+
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+.env/
+
+# ==============================================================================
+# OUTROS
+# ==============================================================================
+
+# Arquivo legado de referência (mantido por compatibilidade histórica)
+Sikuli_java*.txt
