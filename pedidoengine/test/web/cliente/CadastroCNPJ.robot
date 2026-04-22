@@ -170,3 +170,224 @@ Teste 014 ::: CNPJ numérico tradicional continua sendo aceito
     Acessa tela de cadastro de cliente
     Cadastra PJ com CNPJ numerico
     Valida cliente no banco de dados
+
+# ==============================================================================
+# CAMADA 1 (EXTRA) — MÁSCARA E FORMATAÇÃO AVANÇADA
+# Testa comportamentos específicos do campo relacionados à aplicação
+# e re-sanitização da máscara em cenários alfanumérico e numérico.
+# Ref: WEB_13, WEB_14, WEB_18, WEB_19 do plano de expansão.
+# ==============================================================================
+
+Teste 015 ::: WEB_13 Máscara alfanumérica exibe formato SS.SSS.SSS/SSSS-NN ao digitar
+    [Documentation]    WEB_13: Ao digitar um CNPJ alfanumérico bruto (ex: 12ABC34501DE35),
+    ...                o campo deve aplicar imediatamente a máscara SS.SSS.SSS/SSSS-NN,
+    ...                inserindo os separadores (pontos, barra, traço) nas posições certas.
+    ...                Valida o padrão da máscara e que letras permanecem visíveis.
+    [Tags]    mascara    campo
+    Acessa tela de cadastro de cliente
+    Valida mascara alfanumerica aplicada
+
+Teste 016 ::: WEB_14 Máscara numérica exibe formato NN.NNN.NNN/NNNN-NN ao digitar
+    [Documentation]    WEB_14: Ao digitar um CNPJ numérico bruto (ex: 12345678000195),
+    ...                o campo deve aplicar a máscara NN.NNN.NNN/NNNN-NN,
+    ...                mantendo a compatibilidade com o formato tradicional.
+    [Tags]    mascara    campo
+    Acessa tela de cadastro de cliente
+    Valida mascara numerica aplicada
+
+Teste 017 ::: WEB_18 Colar CNPJ já formatado — campo re-sanitiza a máscara
+    [Documentation]    WEB_18: Ao colar um CNPJ que já possui a máscara aplicada
+    ...                (ex: 12.ABC.345/01DE-35 via Ctrl+V), o campo deve remover
+    ...                duplicidade de separadores e re-aplicar a máscara corretamente,
+    ...                garantindo que a base de 14 caracteres seja preservada.
+    [Tags]    mascara    campo    colar
+    Acessa tela de cadastro de cliente
+    Valida campo re-sanitiza cnpj com mascara colada
+
+Teste 018 ::: WEB_19 Colar CNPJ bruto — máscara aplicada automaticamente
+    [Documentation]    WEB_19: Ao colar um CNPJ bruto sem máscara (ex: 12ABC34501DE35),
+    ...                o campo deve detectar o valor colado e aplicar a máscara
+    ...                SS.SSS.SSS/SSSS-NN automaticamente, sem exigir re-digitação.
+    [Tags]    mascara    campo    colar
+    Acessa tela de cadastro de cliente
+    Valida campo aplica mascara em cnpj bruto colado
+
+# ==============================================================================
+# CAMADA 2 (EXTRA) — VALIDAÇÃO / ERRO DE NEGÓCIO
+# Testa se a mensagem de erro é exibida corretamente na tentativa de gravar
+# um CNPJ com DV inválido (cenário de feedback ao usuário).
+# Ref: WEB_20 do plano de expansão.
+# ==============================================================================
+
+Teste 019 ::: WEB_20 Mensagem de erro visível para CNPJ com DV inválido
+    [Documentation]    WEB_20: Ao preencher o formulário com um CNPJ cujo DV não bate
+    ...                com o Módulo 11 (ex: 12.ABC.345/01DE-99) e clicar em Gravar,
+    ...                o sistema deve exibir mensagem de erro clara ("CNPJ Inválido"
+    ...                ou similar), sem fechar o formulário nem navegar.
+    ...                Valida presença de toast, alerta ou campo com erro.
+    [Tags]    validacao    erro
+    Acessa tela de cadastro de cliente
+    Preenche PJ com CNPJ    ${CNPJ_ALFA_DV_INVALIDO}
+    Valida mensagem de erro visivel para cnpj invalido
+
+# ==============================================================================
+# CAMADA 3 (EXTRA) — PESQUISA POR CNPJ NUMÉRICO NA LISTAGEM
+# Garante que a pesquisa avançada por documento também funciona para
+# CNPJ no formato numérico tradicional (retrocompatibilidade na listagem).
+# Ref: WEB_22 do plano de expansão. Depende de T014.
+# ==============================================================================
+
+Teste 020 ::: WEB_22 Pesquisa cliente por CNPJ numérico no filtro de listagem
+    [Documentation]    WEB_22: Na pesquisa avançada da listagem de clientes,
+    ...                filtrar pelo campo Documento usando o CNPJ numérico cadastrado
+    ...                em T014. O sistema deve retornar o cliente correspondente,
+    ...                validando retrocompatibilidade da busca por CNPJ numérico.
+    [Tags]    pesquisa    depende-T014
+    Acessa listagem de clientes
+    Pesquisa cliente por CNPJ numerico no filtro    ${cnpj_numerico_suite_fmt}    ${nome_cnpj_numerico_suite}
+    Valida cliente encontrado por CNPJ numerico    ${nome_cnpj_numerico_suite}
+
+# ==============================================================================
+# GRUPO TRIM / QUEBRA DE LINHA
+# Testa comportamentos de higienização de entrada no campo CNPJ.
+# Ref: WEB_33 do plano de expansão.
+# ==============================================================================
+
+Teste 021 ::: WEB_33 Campo sanitiza CNPJ com quebra de linha no meio
+    [Documentation]    WEB_33: Simula cópia de PDF que trouxe \n no meio do CNPJ.
+    ...                Cola "12ABC345<newline>01DE35" via JavaScript no campo CNPJ.
+    ...                Após blur, a base deve ter ≤ 14 chars e nenhuma quebra de linha.
+    ...                Valida que o front-end sanitiza \n antes de aplicar a máscara,
+    ...                evitando que o valor ultrapasse o limite ou quebre a submissão.
+    [Tags]    campo    trim    higienizacao
+    Acessa tela de cadastro de cliente
+    Valida campo sanitiza cnpj com quebra de linha
+
+# ==============================================================================
+# GRUPO LETRA O vs NÚMERO 0
+# Testa que o sistema distingue a letra O (ASCII 79) do dígito 0 (ASCII 48)
+# no cálculo do DV via Módulo 11.
+# Ref: WEB_36 do plano de expansão.
+# ==============================================================================
+
+Teste 022 ::: WEB_36 Sistema distingue letra O de número 0 no DV
+    [Documentation]    WEB_36: Digita CNPJ "00.ABC.345/O1DE-35" onde 'O' (letra O, ASCII 79)
+    ...                ocupa a posição 9 da ordem em vez do dígito '0' (ASCII 48).
+    ...                O DV '35' foi calculado para a base com zero, portanto é
+    ...                matematicamente inválido para a base com letra O.
+    ...                O sistema deve rejeitar, provando que o Módulo 11 usa ASCII correto
+    ...                e não confunde os dois caracteres visualmente semelhantes.
+    [Tags]    validacao    dv    campo
+    Acessa tela de cadastro de cliente
+    Valida campo bloqueia letra O no sufixo numerico
+
+# ==============================================================================
+# GRUPO LOCAL COM MESMA RAIZ ALFANUMÉRICA (WEB_42)
+# ==============================================================================
+
+Teste 023 ::: WEB_42 Vincular Local à Matriz com mesma raiz CNPJ alfanumérica
+    [Documentation]    WEB_42: Cadastra um cliente PJ Matriz com CNPJ "12.ABC.345/0001-XX"
+    ...                e vincula um Local (Filial) com CNPJ "12.ABC.345/0002-YY",
+    ...                onde ambos têm a mesma raiz alfanumérica "12ABC345".
+    ...                Os DVs são calculados em tempo de execução via Calcular DV CNPJ Alfanumerico,
+    ...                garantindo alinhamento com o algoritmo do servidor.
+    [Tags]    cadastro    local    alfa    raiz-comum
+    Acessa tela de cadastro de cliente
+    Cadastra PJ matriz e local com raiz CNPJ alfanumerica comum
+    Valida gravacao de matriz e local com raiz alfanumerica
+
+# ==============================================================================
+# CAMADA 5 — CAMPO LOCAL (local_documentoidentificacao)
+# Espelha as validações do campo PJ no campo de CNPJ do Local (filial).
+# O Local é preenchido dentro do mesmo formulário de cadastro de cliente PJ.
+# ==============================================================================
+
+Teste 024 ::: Campo local aceita CNPJ alfanumérico sem remover letras
+    [Documentation]    Digita CNPJ alfanumérico bruto no campo local_documentoidentificacao
+    ...                e verifica que o campo aceita e preserva as letras (A-Z) sem descartá-las.
+    ...                ⚠️ LACUNA FRONTEND: o campo não aplica máscara SS.SSS.SSS/SSSS-NN —
+    ...                o valor fica como string bruta de 14 chars. Registrar como melhoria.
+    [Tags]    campo    local    alfa    lacuna-frontend
+    Acessa tela de cadastro de cliente
+    Abre campo CNPJ do local
+    Valida campo local aceita CNPJ alfanumerico
+
+Teste 025 ::: Campo local bloqueia letras nas posições dos DVs
+    [Documentation]    Tenta digitar letras nas posições 13-14 (DVs) do campo local.
+    ...                Os DVs do CNPJ são estritamente numéricos — o campo deve bloquear letras.
+    ...                Guard: verifica que o campo não ficou vazio para evitar falso positivo.
+    [Tags]    campo    local    alfa
+    Acessa tela de cadastro de cliente
+    Abre campo CNPJ do local
+    Valida campo local bloqueia letras nos DVs
+
+Teste 026 ::: Campo local bloqueia caracteres especiais
+    [Documentation]    Tenta digitar @, #, $ no campo local.
+    ...                Apenas A-Z e 0-9 são permitidos pelo formato alfanumérico.
+    ...                Guard: verifica que o campo não ficou vazio para evitar falso positivo.
+    [Tags]    campo    local    alfa
+    Acessa tela de cadastro de cliente
+    Abre campo CNPJ do local
+    Valida campo local bloqueia caracteres especiais
+
+Teste 027 ::: Campo local converte minúsculas para maiúsculas automaticamente
+    [Documentation]    Digita CNPJ com letras minúsculas no campo local.
+    ...                O campo deve converter para maiúsculas — ASCII 'a'≠'A' quebraria o DV.
+    [Tags]    campo    local    alfa
+    Acessa tela de cadastro de cliente
+    Abre campo CNPJ do local
+    Valida campo local converte minusculas para maiusculas
+
+Teste 028 ::: CNPJ alfanumérico válido é aceito no local e gravado no banco
+    [Documentation]    Preenche o formulário PJ completo com CNPJ alfanumérico APENAS no Local.
+    ...                O parceiro usa CNPJ numérico gerado pelo Faker.
+    ...                Valida criação no banco: tabela local.documentoidentificacao deve
+    ...                ser VARCHAR e preservar os 14 chars alfanuméricos intactos.
+    ...                ⚠️ LACUNA BACKEND: se documentoidentificacao for NULL, o campo local
+    ...                ainda não suporta alfanumérico — registra sem reprovar pipeline.
+    [Tags]    local    alfa    banco
+    Acessa tela de cadastro de cliente
+    Cadastra PJ com CNPJ alfanumerico valido no local
+    Valida CNPJ alfanumerico do local no banco
+
+Teste 029 ::: CNPJ alfanumérico com DV inválido no local — documenta comportamento do back-end
+    [Documentation]    Preenche o parceiro com CNPJ válido e injeta CNPJ com DV errado
+    ...                (12ABC34501DE99 — DV correto: 35) no campo do Local.
+    ...                Comportamento esperado: sistema rejeita ao gravar.
+    ...                ⚠️ LACUNA BACKEND: atualmente o back-end não valida DV do campo local.
+    ...                Teste não reprova pipeline — documenta a lacuna para melhoria futura.
+    [Tags]    local    alfa    validacao    lacuna-backend
+    Acessa tela de cadastro de cliente
+    Preenche local com CNPJ invalido e valida rejeicao
+
+Teste 030 ::: CNPJ numérico tradicional continua funcionando no campo local
+    [Documentation]    Verifica retrocompatibilidade: preenche parceiro com CNPJ alfanumérico
+    ...                e mantém o CNPJ numérico padrão (gerado pelo Faker) no Local.
+    ...                O sistema deve aceitar sem erro — CNPJ numérico no Local é válido.
+    [Tags]    local    numerico    retrocompat
+    Acessa tela de cadastro de cliente
+    Cadastra PJ com CNPJ numerico no local
+
+# ==============================================================================
+# CAMADA 6 — REGRESSÃO CPF (Pessoa Física)
+# Estes testes ficam por último: garantem que a abertura do CNPJ alfanumérico
+# não contaminou o campo ou o validador de CPF da Pessoa Física.
+# ==============================================================================
+
+Teste 031 ::: WEB_37 Máscara de CPF continua sendo NNN.NNN.NNN-NN
+    [Documentation]    WEB_37: No formulário de Pessoa Física, digita 11 dígitos no campo
+    ...                CPF e verifica que a máscara NNN.NNN.NNN-NN permanece intacta.
+    ...                A introdução do CNPJ alfanumérico usa o mesmo componente de documento
+    ...                (documentoIdentificacao) — valida que a máscara do CPF não foi alterada.
+    [Tags]    mascara    campo    cpf    regressao
+    Acessa formulario como pessoa fisica
+    Valida mascara de CPF intacta
+
+Teste 032 ::: WEB_38 Campo CPF bloqueia letras em Pessoa Física
+    [Documentation]    WEB_38: No formulário de Pessoa Física, tenta digitar letras no campo CPF.
+    ...                O campo deve bloquear qualquer letra — CPF é 100% numérico pela lei.
+    ...                Valida que a abertura do CNPJ alfanumérico não "vazou" a permissão
+    ...                de letras para o campo CPF quando o tipo de pessoa é Física.
+    [Tags]    campo    cpf    regressao
+    Acessa formulario como pessoa fisica
+    Valida campo CPF bloqueia letras

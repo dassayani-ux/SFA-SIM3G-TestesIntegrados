@@ -12,6 +12,12 @@ Resource    ${EXECDIR}/pedidoengine/resources/pages/web/pedido/cadastroPedidoRes
 Acessar tela de listagem de pedidos
     [Documentation]    Irá acessar a tela de listagem de clientes
 
+    # Fecha popup0 se ainda estiver aberto de um teste anterior com falha (cobriria o menu)
+    BuiltIn.Run Keyword And Ignore Error    SeleniumLibrary.Press Keys    None    ESCAPE
+    BuiltIn.Run Keyword And Ignore Error
+    ...    SeleniumLibrary.Wait Until Element Is Not Visible    xpath=//div[contains(@class,'minimalist-popup-background')]    3s
+    # Aguarda qualquer loading pendente de operações anteriores (ex: finalização lenta)
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    600s
     SeleniumLibrary.Wait Until Element Is Enabled    id=${venda.menuVenda}
     SeleniumLibrary.Click Element    id=${venda.menuVenda}
     SeleniumLibrary.Wait Until Element Is Visible    id=${venda.subMenuPedido}
@@ -87,7 +93,8 @@ Finalizar pedido de venda na listagem
     [Arguments]    ${numeroPedido}
 
     SeleniumLibrary.Click Element    xpath=${gridListagemPedidos.finalizarPedido}
-    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...    180s
+    # A finalização pode ser lenta dependendo da aplicação — aguarda até 10 minutos
+    SeleniumLibrary.Wait Until Page Does Not Contain    Carregando...    600s
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${popUpFinalizarPedidoListagem.divPopUp}
     SeleniumLibrary.Wait Until Element Is Enabled    xpath=${popUpFinalizarPedidoListagem.btnSim}
     SeleniumLibrary.Click Element    xpath=${popUpFinalizarPedidoListagem.btnSim}

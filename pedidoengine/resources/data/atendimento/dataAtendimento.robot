@@ -34,6 +34,12 @@ Retornar descricao tipo atendimento
 
     ${listaTipoAtendimento}    Query    ${sql}
     ${count}    Row Count    ${sql}
+
+    IF    ${count} == ${0}
+        BuiltIn.Log To Console    ⚠️ Nenhum tipo de atendimento encontrado no banco — campo será ignorado.
+        BuiltIn.Return From Keyword    ${EMPTY}
+    END
+
     ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
     ${tipoAtendimento}    Set Variable    ${listaTipoAtendimento[${index[0]}][0]}
 
@@ -43,6 +49,7 @@ Retornar descricao tipo atendimento
 
 Retornar descricao justificativa atendimento
     [Documentation]    Irá retornar a descricao de uma justificativa para preencher no atendimento.
+    ...    Retorna ${EMPTY} se não houver justificativas cadastradas no banco para o contexto ATE.
     [Arguments]    ${idJustificativa}=${EMPTY}
 
     IF  '${idJustificativa}' == '${EMPTY}'
@@ -53,6 +60,12 @@ Retornar descricao justificativa atendimento
 
     ${listaJustificativa}    Query    ${sql}
     ${count}    Row Count    ${sql}
+
+    IF    ${count} == ${0}
+        BuiltIn.Log To Console    ⚠️ Nenhuma justificativa encontrada no banco para contexto ATE — campo será ignorado.
+        BuiltIn.Return From Keyword    ${EMPTY}
+    END
+
     ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
     ${justificativa}    Set Variable    ${listaJustificativa[${index[0]}][0]}
 
@@ -69,10 +82,45 @@ Retornar data e hora fim do atendimento
         BuiltIn.Fail
     ELSE
         ${sql}    Set Variable    select datafim, horafim from atendimento where idatendimento = ${idAtendimento}
-        ${dataHoraFim}    Query    ${sql}    returnAsDict=True
+        ${dataHoraFim}    Query    ${sql}    return_dict=True
     END
     
     Return From Keyword    ${dataHoraFim[0]}
+
+Retornar nome profissional atendimento
+    [Documentation]    Retorna o nome do usuário de automação para preencher o campo Profissional no atendimento.
+
+    ${sql}=    Set Variable    select nome from usuario where idnativo = 1 and upper(nome) like upper('%automação%') limit 1
+    ${result}    Query    ${sql}
+    Return From Keyword    ${result[0][0]}
+
+Retornar contato parceiro
+    [Documentation]    Retorna o nome de um contato ativo vinculado ao parceiro.
+    ...    A tabela no banco é *contatopessoa* (vínculo Parceiro → Contato).
+    ...    Em caso de tabela inexistente ou nenhum registro, retorna ${EMPTY} sem falhar.
+    [Arguments]    ${idParceiro}=${EMPTY}
+
+    IF  '${idParceiro}' == '${EMPTY}'
+        ${sql}    Set Variable    select c.nome from contatopessoa c where c.idnativo = 1 limit 1
+    ELSE
+        ${sql}    Set Variable    select c.nome from contatopessoa c where c.idparceiro = ${idParceiro} and c.idnativo = 1 limit 1
+    END
+
+    ${status}    ${listaContato}=    BuiltIn.Run Keyword And Ignore Error    DatabaseLibrary.Query    ${sql}
+    IF    '${status}' == 'FAIL'
+        BuiltIn.Log To Console    ⚠️ Não foi possível consultar contatos (tabela não encontrada ou erro de SQL) — campo será ignorado.
+        BuiltIn.Return From Keyword    ${EMPTY}
+    END
+
+    ${count}=    BuiltIn.Get Length    ${listaContato}
+    IF    ${count} == ${0}
+        BuiltIn.Log To Console    \n⚠️ Nenhum contato encontrado para o parceiro ${idParceiro} — campo será ignorado.
+        BuiltIn.Return From Keyword    ${EMPTY}
+    END
+
+    ${contato}    Set Variable    ${listaContato[0][0]}
+    Log To Console    Contato selecionado: ${contato}
+    Return From Keyword    ${contato}
 
 Retornar dados de campos da config atendimento
     [Documentation]    Utilizada para retornar informações a respeito de campos/abas exibidos no atendimento.
@@ -89,6 +137,12 @@ Retornar dados de campos da config atendimento
     ...    inner join atendimentoconfig ac on ac.idatendimentoconfig = pa.idatendimentoconfig
     ...    where u.idusuario = ${idUsuario};
 
-    ${result}    DatabaseLibrary.Query    ${sql}    returnAsDict=True
+    ${result}    DatabaseLibrary.Query    ${sql}    return_dict=True
+
+    IF    not ${result}
+        Log To Console    \n⚠️ Nenhuma atendimentoconfig encontrada para o usuário — usando config padrão (sem contato, sem outro prof, sem justificativa).
+        ${default}=    BuiltIn.Create Dictionary    contato=${0}    outro_prof=${0}    justificativa=${0}
+        BuiltIn.Return From Keyword    ${default}
+    END
 
     BuiltIn.Return From Keyword    ${result[0]}

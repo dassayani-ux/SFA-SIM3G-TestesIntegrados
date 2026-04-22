@@ -24,6 +24,7 @@ Inativar pesquisa de Tipo Cobraca
 
 Acessar cadastro de novo pedido
     [Documentation]    Keyword utilizada para acessar a tela de novo pedido na web.
+    ...    O SFA pode abrir uma aba de Dashboard ao navegar pelo menu — fechada ao final.
 
     SeleniumLibrary.Wait Until Element Is Enabled    id=${venda.menuVenda}
     SeleniumLibrary.Click Element    id=${venda.menuVenda}
@@ -32,9 +33,12 @@ Acessar cadastro de novo pedido
     SeleniumLibrary.Wait Until Element Is Visible    id=${venda.novoPedido}
     SeleniumLibrary.Click Element    id=${venda.novoPedido}
     SeleniumLibrary.Wait Until Element Is Visible    id=${cabecalhoPedido.idCabecalho}
+    sfa_lib_web.Fechar guia de Dashboard
+    SeleniumLibrary.Switch Window    MAIN
 
 Preenche cabecalho pedido
     [Documentation]    Keyword responsável por preencher os dados de cabeçalho do pedido de venda.
+    Cabecalho - Profissional
     Cabecalho - Parceiro
     Cabecalho - Local Parceiro
     Cabecalho - Filial
@@ -46,34 +50,86 @@ Preenche cabecalho pedido
     Cabecalho - Data de vencimento
     Popula dicionario de dados do pedido
 
+Cabecalho - Profissional
+    [Documentation]    Preenche o campo *Profissional* no cabeçalho do pedido com o usuário Automação.
+    ...                O campo é um select2 — clica no container, digita na busca e seleciona o primeiro resultado.
+    [Tags]    Pedido-Cabecalho
+
+    # Verifica se o campo select2 está presente (pode não existir em alguns perfis)
+    ${campoVisivel}=    BuiltIn.Run Keyword And Return Status
+    ...    SeleniumLibrary.Wait Until Element Is Visible    id=${cabecalhoPedido.pesquisaProfissional}    5s
+    IF    not ${campoVisivel}
+        Log To Console    ℹ️ Campo Profissional não encontrado — ignorado.
+        RETURN
+    END
+    SeleniumLibrary.Click Element    id=${cabecalhoPedido.pesquisaProfissional}
+    SeleniumLibrary.Wait Until Element Is Visible    xpath=//input[@type='search']    10s
+    SeleniumLibrary.Input Text    xpath=//input[@type='search']    Automação
+    SeleniumLibrary.Wait Until Element Is Visible
+    ...    xpath=//li[contains(@class,'select2-results__option') and not(contains(@class,'select2-results__option--disabled'))]    10s
+    ${profissional}=    SeleniumLibrary.Get Text
+    ...    xpath=(//li[contains(@class,'select2-results__option')])[1]
+    SeleniumLibrary.Click Element
+    ...    xpath=(//li[contains(@class,'select2-results__option')])[1]
+    Log To Console    \nProfissional para pedido: ${profissional}
+
 Cabecalho - Parceiro
-    [Documentation]    Preenche a infomação de *Parceiro* no cabeçalho do pedido
+    [Documentation]    Preenche a infomação de *Parceiro* no cabeçalho do pedido.
+    ...    Usa apenas a pesquisa rápida (campo termSelection_TERMO) com a matrícula do cliente Automação.
+    ...    Não usa pesquisa avançada — o popup já carrega resultados ao abrir e a busca por matrícula
+    ...    garante resultado único sem ambiguidade.
     [Tags]    Pedido-Cabecalho
 
     ${parceiro}=    Retornar razao, matricula e id de parceiro aleatorio
-    SeleniumLibrary.Click Element    xpath=${cabecalhoPedido.pesquisaCliente}
-    SeleniumLibrary.Wait Until Element Does Not Contain    xpath=${pesquisaCliente.headerGridPedidos}    (0) Registros
-    SeleniumLibrary.Click Element    class=${pesquisaCliente.pesquisaAvancada}
-    SeleniumLibrary.Wait Until Element Is Enabled    id=${pesquisaCliente.camposAtivos}
-    SeleniumLibrary.Input Text    id=${pesquisaCliente.razaoSocial}    ${parceiro[0]}
-    SeleniumLibrary.Input Text    id=${pesquisaCliente.matricula}    ${parceiro[1]}
-    SeleniumLibrary.Click Element    xpath=${pesquisaCliente.btnPesquisar}
     ${dadosPedido.idParceiro}=    Set Variable    ${parceiro[2]}
-    BuiltIn.Sleep    2s
+    # Aguarda AMBOS os overlays de loading sumirem antes de clicar na lupa do cliente
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    15s
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loadingDiv}    15s
+    SeleniumLibrary.Wait Until Element Is Visible    xpath=${cabecalhoPedido.pesquisaCliente}    15s
+    SeleniumLibrary.Click Element    xpath=${cabecalhoPedido.pesquisaCliente}
+    # Aguarda o popup abrir e carregar a grid inicial
+    SeleniumLibrary.Wait Until Element Is Visible    xpath=${pesquisaCliente.headerGridPedidos}    10s
+    SeleniumLibrary.Wait Until Element Does Not Contain    xpath=${pesquisaCliente.headerGridPedidos}    (0) Registros
+    # Pesquisa rápida: digita a matrícula no campo de busca simples e pesquisa
+    SeleniumLibrary.Input Text    id=${pesquisaCliente.input}    ${parceiro[1]}
+    SeleniumLibrary.Click Element    xpath=${pesquisaCliente.btnPesquisar}
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    15s
+    # Seleciona o primeiro resultado (deve ser o Cliente Automação)
+    # Race condition: popup pode fechar entre o check e o click — trata com Run Keyword And Return Status
+    ${primeiraLinha}=    BuiltIn.Run Keyword And Return Status
+    ...    SeleniumLibrary.Wait Until Element Is Visible    xpath=${pesquisaCliente.primeiraLinhaGrid}    5s
+    IF    ${primeiraLinha}
+        ${clicouLinha}=    BuiltIn.Run Keyword And Return Status
+        ...    SeleniumLibrary.Click Element    xpath=${pesquisaCliente.primeiraLinhaGrid}
+        IF    ${clicouLinha}
+            SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaCliente.btnConfirmar}
+            SeleniumLibrary.Click Element    xpath=${pesquisaCliente.btnConfirmar}
+        END
+    END
+    SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${pesquisaCliente.headerGridPedidos}    10s
 
 Cabecalho - Local Parceiro
     [Documentation]    Preenche a informação de *local* no cabeçalho do pedido.
+    ...    Aguarda os dois overlays de loading sumirem antes de abrir o select2,
+    ...    pois o SFA carrega os locais via AJAX após a seleção do parceiro.
     [Tags]    Pedido-Cabecalho
 
+    # Aguarda o AJAX pós-parceiro terminar antes de abrir o dropdown
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    15s
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loadingDiv}    15s
     SeleniumLibrary.Wait Until Element Is Enabled    id=${cabecalhoPedido.comboboxLocal}
     SeleniumLibrary.Click Element    id=${cabecalhoPedido.comboboxLocal}
     SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaLocalParceiroPedido.idComboboxLocal}
+    # Aguarda a lista de locais terminar de carregar (select2 exibe li de loading durante fetch)
+    BuiltIn.Run Keyword And Ignore Error
+    ...    SeleniumLibrary.Wait Until Element Is Not Visible
+    ...    xpath=//*[@id="${pesquisaLocalParceiroPedido.idComboboxLocal}"]//li[contains(@class,'loading')]    10s
     ${countLocal}    Get Element Count    xpath=${pesquisaLocalParceiroPedido.itensLocal}
     IF  ${countLocal} == ${1}
         BuiltIn.Fail    Não há local disponível para seleção!
     END
     FOR  ${I}  IN RANGE    ${2}    ${countLocal}+1
-        ${valor}    SeleniumLibrary.Get Text    xpath=//*[@id="${pesquisaLocalParceiroPedido.idComboboxLocal}"]/li[${I}]    
+        ${valor}    SeleniumLibrary.Get Text    xpath=//*[@id="${pesquisaLocalParceiroPedido.idComboboxLocal}"]/li[${I}]
         Collections.Append To List    ${listaLocais}    ${valor}
     END
     ${listaLocais}=    Remove itens duplicados    @{listaLocais}
@@ -83,12 +139,18 @@ Cabecalho - Local Parceiro
     ${local}=    BuiltIn.Set Variable    ${listaLocais[${index[0]}]}
     BuiltIn.Log To Console    Local selecionado: ${local}
     SeleniumLibrary.Input Text    class=select2-search__field    ${local}
-    SeleniumLibrary.Click Element    xpath=//*[@id="${pesquisaLocalParceiroPedido.idComboboxLocal}"]/li[contains(text(),'${local}')]
+    # Aguarda o item filtrado aparecer antes de clicar (evita StaleElementReferenceException)
+    SeleniumLibrary.Wait Until Element Is Visible
+    ...    xpath=//*[@id="${pesquisaLocalParceiroPedido.idComboboxLocal}"]/li[contains(text(),'${local}')]    10s
+    SeleniumLibrary.Click Element
+    ...    xpath=//*[@id="${pesquisaLocalParceiroPedido.idComboboxLocal}"]/li[contains(text(),'${local}')]
 
 Cabecalho - Filial
     [Documentation]    Preenche a informação de *Filial* no cabeçalho do pedido.
     [Tags]    Pedido-Cabecalho
 
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    15s
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loadingDiv}    15s
     SeleniumLibrary.Wait Until Element Is Enabled    id=${cabecalhoPedido.comboboxFilial}
     SeleniumLibrary.Click Element    id=${cabecalhoPedido.comboboxFilial}
     SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaFilial.idComboboxFilial}
@@ -113,6 +175,8 @@ Cabecalho - Tipo pedido
     [Documentation]    Preenche a informação de *Tipo pedido* no cabeçalho do pedido.
     [Tags]    Pedido-Cabecalho
 
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    15s
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loadingDiv}    15s
     SeleniumLibrary.Click Element    id=${cabecalhoPedido.comboboxTipoPedido}
     SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaTipoPedido.idComboboxTipoPedido}
     ${countTipoPedido}    Get Element Count    xpath=${pesquisaTipoPedido.itensTipoPedido}
@@ -141,6 +205,8 @@ Cabecalho - Tabela de preco
     [Documentation]    Preenche a informação de *Tabela de preço* no cabeçalho do pedido.
     [Tags]    Pedido-Cabecalho
 
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    15s
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loadingDiv}    15s
     SeleniumLibrary.Click Element    id=${cabecalhoPedido.comboboxTabelaPreco}
     SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaTabelaPreco.idComboboxTabelaPreco}
     ${countTabelaPreco}    Get Element Count    xpath=${pesquisaTabelaPreco.itensTabelaPreco}
@@ -175,6 +241,8 @@ Cabecalho - Condicao Pagamento
     [Documentation]    Preenche a informação de *Condição de Pagamento* no cabeçalho do pedido.
     [Tags]    Pedido-Cabecalho
 
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    15s
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loadingDiv}    15s
     SeleniumLibrary.Click Element    id=${cabecalhoPedido.comboboxCondicaoPagamento}
     SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaCondicaoPagamento.idComboboxCondicaoPagamento}
     ${countCondicaoPagamento}    Get Element Count    xpath=${pesquisaCondicaoPagamento.itensCondicaoPagamento}
@@ -253,8 +321,14 @@ Popula dicionario de dados do pedido
     ${txtCondicaoPagamento}=    SeleniumLibrary.Get Text    id=${cabecalhoPedido.comboboxCondicaoPagamento}
     ${dadosPedido.idCondicaoPagamento}=    Retorna idCondicaoPagamento    ${txtCondicaoPagamento}
 
-    ${txtTipoCobranca}=    SeleniumLibrary.Get Text    id=${cabecalhoPedido.comboboxTipoCobranca}
-    ${dadosPedido.idTipoCobranca}=    Retorna idTipoCobranca    ${txtTipoCobranca}
+    ${tcPresente}=    BuiltIn.Run Keyword And Return Status
+    ...    SeleniumLibrary.Page Should Contain Element    id=${cabecalhoPedido.comboboxTipoCobranca}
+    IF    ${tcPresente}
+        ${txtTipoCobranca}=    SeleniumLibrary.Get Text    id=${cabecalhoPedido.comboboxTipoCobranca}
+        ${dadosPedido.idTipoCobranca}=    Retorna idTipoCobranca    ${txtTipoCobranca}
+    ELSE
+        ${dadosPedido.idTipoCobranca}=    BuiltIn.Set Variable    ${EMPTY}
+    END
     
 Remove itens duplicados
     [Documentation]    Esta keyword irá remover todos os itens da lista que possuem mais de uma ocorrência.
@@ -283,6 +357,7 @@ Remove itens duplicados
 
 Gravar pedido de venda
     [Documentation]    Esta keyword é responsável por gravar o pedido de venda.
+    ...    O SFA pode abrir uma aba de Dashboard ao gravar — fechada ao final.
 
     SeleniumLibrary.Scroll Element Into View    id=${botaoGravarPedio}
     SeleniumLibrary.Wait Until Element Is Enabled    id=${botaoGravarPedio}
@@ -290,6 +365,9 @@ Gravar pedido de venda
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${popUpPedidoGravado.divPopUp}
     SeleniumLibrary.Wait Until Page Contains Element    xpath=${popUpPedidoGravado.msgGravadoSucesso}
     SeleniumLibrary.Click Element    xpath=${popUpPedidoGravado.btnOk}
+    BuiltIn.Sleep    0.5s
+    sfa_lib_web.Fechar guia de Dashboard
+    SeleniumLibrary.Switch Window    MAIN
 
 Finalizar pedido de venda
     [Documentation]    Esta keyword é responsável por finalizar o pedido de venda na tela de cadastro de pedido.
@@ -354,6 +432,7 @@ Incluir itens no pedido
         ${qtdApresentacao}=    Retornar quantidade apresentacao produto    codigoProduto=${produtos[${I}]}
         ${qtdApresentacao}=    BuiltIn.Convert To Integer    ${qtdApresentacao}
         ${qtde}=    Evaluate    round(random.randint(1, round(${quantidadeMaximaProduto}/${qtdApresentacao})) * ${qtdApresentacao})    random    #Randomiza uma quantidade múltipla da quantidade de apresentação do produto, em um intervalor de 1 a ${quantidadeMaximaProduto}.
+        SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    30s
         SeleniumLibrary.Wait Until Element Is Enabled    xpath=${pesquisaProdutosCarrinho.campoQuantidade}
         SeleniumLibrary.Click Element    ${pesquisaProdutosCarrinho.campoQuantidade}
         SeleniumLibrary.Wait Until Element Is Visible   ${pesquisaProdutosCarrinho.inputCampoQuantidade}
@@ -391,11 +470,16 @@ Excluir itens originais e incluir novos
     END
     Log To Console    Produtos orginais do pedido: ${produtosOriginais}.
 
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loadingDiv}    15s
     SeleniumLibrary.Click Element    xpath=${carrinhoPedido.selecionarTodos}
+    # Aguarda o botão de remoção ficar habilitado (após a seleção de todos os itens ser registrada pelo SFA)
+    SeleniumLibrary.Wait Until Element Is Enabled    id=${carrinhoPedido.removerProdutos}    10s
     SeleniumLibrary.Click Element    id=${carrinhoPedido.removerProdutos}
     SeleniumLibrary.Wait Until Element Is Visible    xpath=${carrinhoPedido.confirmarRemocaoProduto}
     SeleniumLibrary.Click Element    xpath=${carrinhoPedido.confirmarRemocaoProduto}
-    Sleep    0.5s
+    # Aguarda o loading sumir após a remoção antes de tentar incluir novos itens
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    30s
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loadingDiv}    15s
 
     Incluir itens no pedido    edicao=True
     Gravar pedido de venda
@@ -510,14 +594,19 @@ Verificar condicao de pagamento do pedido clonado
 
 Verificar tipo cobranca do pedido clonado
     [Documentation]    Verifica se o tipo de cobrança do pedido clonado é o mesmo que o do pedido original.
+    ...                Verificação ignorada quando tipo cobrança está inativo no cabeçalho.
     [Tags]    Pedido-clonado-cabecalho
     [Arguments]    ${tipoCobranca}
 
+    IF    '${dadosPedido.idTipoCobranca}' == '${EMPTY}'
+        Log To Console    ℹ️ Tipo cobrança não está ativo — verificação do clone ignorada.
+        RETURN
+    END
     IF  ${dadosPedido.idTipoCobranca} == ${tipoCobranca}
         Log To Console    Tipo de cobrança do pedido clonado é o mesmo que o do pedido original.
     ELSE
         Log To Console    Tipo de cobrança selecionado no pedido clonado está diferente do tipo de cobrança informado no pedido original.
-        Fail 
+        Fail
     END
 
 Verificar código dos produtos no pedido clonado

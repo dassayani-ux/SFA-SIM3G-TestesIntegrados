@@ -433,47 +433,22 @@ Retorna idparceiro
     BuiltIn.Return From Keyword    ${idParceiro[0][0]}
 
 Retornar cliente ativo
-    [Documentation]    Irá retornar uma lista contendo o id, nome, nome fantasia e número da matrícula de um cliente random com situação ativo.
+    [Documentation]    Retorna o cliente mais recente cujo nome contenha 'Automação', com situação ativo.
+    ...    Sempre usa dados de automação para garantir estabilidade dos testes.
 
-    ${IdUsuario}=    Retornar id usuario logado web
-
-    ${sql}=    BuiltIn.Set Variable
     ${sql}=    BuiltIn.Catenate    SEPARATOR=\n
-    ...    select distinct this_.idParceiro as id, this_.nomeParceiro as nome, 
-    ...    this_.nomeParceiroFantasia as fantasia, this_.numeromatricula as matricula 
-    ...    from Parceiro this_ 
-    ...    left outer join TipoSituacaoCadastro tsc6_ on this_.idTipoSituacaoCadastro=tsc6_.idTipoSituacaoCadastro 
-    ...    left outer join PessoaJuridica pj10_ on this_.idParceiro=pj10_.idPessoaJuridica 
-    ...    left outer join PessoaFisica pf9_ on this_.idParceiro=pf9_.idPessoaFisica 
-    ...    left outer join ParceiroLocal locallist17_ on this_.idParceiro=locallist17_.idParceiro 
-    ...    left outer join Local l1_ on locallist17_.idLocal=l1_.idLocal 
-    ...    left outer join Cidade c2_ on l1_.idCidade=c2_.idCidade 
-    ...    left outer join UnidadeFederativa uni3_ on c2_.idUnidadeFederativa=uni3_.idUnidadeFederativa 
-    ...    left outer join LocalIdentificacao li11_ on l1_.idLocal=li11_.idLocal 
-    ...    left outer join ParceiroTipoParceiro ptp7_ on this_.idParceiro=ptp7_.idParceiro 
-    ...    left outer join TipoParceiro tp8_ on ptp7_.idTipoParceiro=tp8_.idTipoParceiro 
-    ...    left outer join ParceiroAprovacao pa4_ on this_.idParceiro=pa4_.idParceiro 
-    ...    left outer join TipoSituacaoAprovacao tsa5_ on pa4_.idTipoSituacaoAprovacao=tsa5_.idTipoSituacaoAprovacao 
-    ...    left outer join Usuario ua12_ on this_.idUsuarioAnonimizacao=ua12_.idUsuario 
-    ...    where this_.idParceiro in 
-    ...    (	select PL_.idParceiro as y0_ 
-    ...    	from ParceiroLocal PL_ 
-    ...    	inner join Local l1_ on PL_.idLocal=l1_.idLocal 
-    ...    	inner join UsuarioLocal ul2_ on l1_.idLocal=ul2_.idLocal 
-    ...    	inner join Usuario u3_ on ul2_.idUsuario=u3_.idUsuario
-    ...    	where ( u3_.idUsuario=${IdUsuario} or u3_.idUsuario in ( 
-    ...    		select distinct UH_.idUsuario as y0_ 
-    ...    		from UsuarioHierarquia UH_ 
-    ...    		inner join Usuario u1_ on UH_.idUsuario=u1_.idUsuario 
-    ...    		inner join Usuario us2_ on UH_.idUsuarioSuperior=us2_.idUsuario 
-    ...    		where us2_.idUsuario=${IdUsuario} ) ) ) 
-    ...    and ( this_.idnAtivo=1 ) 
-    ...    order by this_.nomeParceiro asc
+    ...    SELECT DISTINCT this_.idParceiro as id, this_.nomeParceiro as nome,
+    ...    this_.nomeParceiroFantasia as fantasia, this_.numeromatricula as matricula
+    ...    FROM Parceiro this_
+    ...    WHERE this_.nomeParceiro ILIKE '%Automação%'
+    ...    AND this_.idnAtivo = 1
+    ...    ORDER BY this_.idParceiro DESC
+    ...    LIMIT 1
 
-    ${count}    Row Count    ${sql}
-    ${listaClienteAtivo}    Query    ${sql}    returnAsDict=True
-    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
-    ${clienteAtivo}    Set Variable    ${listaClienteAtivo[${index[0]}]}
+    ${listaClienteAtivo}    Query    ${sql}    return_dict=True
+    Should Not Be Empty    ${listaClienteAtivo}
+    ...    msg=❌ Nenhum cliente 'Automação' ativo encontrado no banco.
+    ${clienteAtivo}    Set Variable    ${listaClienteAtivo[0]}
 
     Log To Console    \nCliente selecionado: ${clienteAtivo['nome']}
 
@@ -513,10 +488,13 @@ Retornar razao, matricula e id de parceiro aleatorio
     ...    where ${filial_clause}
     ...    and (uh8_.idUsuarioSuperior=${usuario} or u7_.idUsuario=${usuario})
     ...    and this_.idnAtivo=1
+    ...    and this_.nomeParceiro ILIKE '%Automação%'
+    ...    order by this_.idparceiro DESC
+    ...    limit 1
 
-    ${count}    Row Count    ${sql}
     ${parceiro}    Query    ${sql}
-    ${index}=    Evaluate    random.sample(range(0, ${count}), 1)    random
+    Should Not Be Empty    ${parceiro}
+    ...    msg=❌ Nenhum parceiro 'Automação' ativo encontrado na carteira do usuário.
 
-    Log To Console    \nParceiro sorteado: ${parceiro[${index[0]}][1]} - ${parceiro[${index[0]}][0]}
-    Return From Keyword    ${parceiro[${index[0]}][0]}    ${parceiro[${index[0]}][1]}    ${parceiro[${index[0]}][2]}
+    Log To Console    \nParceiro selecionado: ${parceiro[0][1]} - ${parceiro[0][0]}
+    Return From Keyword    ${parceiro[0][0]}    ${parceiro[0][1]}    ${parceiro[0][2]}

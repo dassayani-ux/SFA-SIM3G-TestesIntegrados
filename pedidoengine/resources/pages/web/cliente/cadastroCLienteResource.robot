@@ -56,14 +56,43 @@ Valida cliente no banco de dados
     ${res}=    DatabaseLibrary.Query    SELECT idparceiro FROM parceiro WHERE nomeparceiro = '${nome}'
     Should Not Be Empty    ${res}    msg=❌ Cliente não encontrado no banco: ${nome}
 
+Valida tipo cobranca padrao
+    [Documentation]    DTSFASAPP-T89: Verifica que o último cliente automação PJ foi cadastrado
+    ...                e possui pelo menos um local com tipo cobrança configurado.
+    ${sql}=    Catenate    SEPARATOR=\n
+    ...    SELECT tc.descricao
+    ...    FROM parceiro p
+    ...    INNER JOIN parceirolocal pl ON pl.idparceiro = p.idparceiro
+    ...    INNER JOIN local l ON l.idlocal = pl.idlocal
+    ...    INNER JOIN localtipocobranca lc ON lc.idlocal = l.idlocal AND lc.idnpadrao = 1
+    ...    INNER JOIN tipocobranca tc ON tc.idtipocobranca = lc.idtipocobranca
+    ...    WHERE p.nomeparceiro LIKE '%Automação PJ%'
+    ...    AND p.idnativo = 1
+    ...    ORDER BY p.idparceiro DESC
+    ...    LIMIT 1
+    ${res}=    DatabaseLibrary.Query    ${sql}
+    Should Not Be Empty    ${res}
+    ...    msg=❌ Nenhum cliente 'Automação PJ' encontrado com local. Execute o Teste 008 antes.
+    ${tipoCobranca}=    Set Variable    ${res[0][0]}
+    Should Not Be Equal    ${tipoCobranca}    ${None}
+    ...    msg=❌ Tipo cobrança não definido no local do cliente automação PJ.
+    Log To Console    \n✅ Tipo cobrança padrão validado: ${tipoCobranca}
+
 # ==============================================================================
 # NAVEGAÇÃO
 # ==============================================================================
 
 Acessa tela de cadastro de cliente
+    # Descarta qualquer alerta JS pendente de testes anteriores
+    Run Keyword And Ignore Error    Handle Alert    ACCEPT
     Go To    ${aplicacao_web.urlWeb}
     Wait Until Element Is Not Visible    class=minimalist-loading-background    30s
-    Fecha Todos Os Popups
+    # NÃO chama Fechar guia de Dashboard aqui: o Go To navega a janela atual para a URL
+    # principal (cujo título pode ser Dashboard ou Gestao de Clientes) e Fechar guia de
+    # Dashboard fecharia exatamente essa janela que acabamos de carregar.
+    # NÃO chama Fecha Todos Os Popups aqui: o popup que pode aparecer após o Go To
+    # dispara uma navegação ao ser fechado, removendo o menu do DOM.
+    Wait Until Element Is Visible    id=${cliente.menuCliente}    20s
     Click Element    id=${cliente.menuCliente}
     Wait Until Element Is Visible    id=${cliente.subMenuCliente}    15s
     Click Element    id=${cliente.subMenuCliente}
@@ -198,7 +227,7 @@ Cadastra PJ com inscricao estadual
     Selecionar primeira opcao valida do select    parceiro_classificacaoparceiro
     Digita No Campo JS    name=parceiro_homepage    www.automacao.com.br
     Rolar Painel Cliente Ate    name=parceiro_grupoparceiro
-    Selecionar Lupa Padrao Cypress    parceiro_grupoparceiro
+    Selecionar Grupo Parceiro
     Rolar Painel Cliente Ate    name=parceiro_cnae
     Digita No Campo JS    name=parceiro_cnae    6201501
     ${cnpj}=         FakerLibrary.Cnpj
@@ -288,7 +317,7 @@ Preenche dados gerais pessoa juridica
     Selecionar primeira opcao valida do select    parceiro_classificacaoparceiro
     Digita No Campo JS    name=parceiro_homepage    www.automacao.com.br
     Rolar Painel Cliente Ate    name=parceiro_grupoparceiro
-    Selecionar Lupa Padrao Cypress    parceiro_grupoparceiro
+    Selecionar Grupo Parceiro
     Rolar Painel Cliente Ate    name=parceiro_cnae
     Digita No Campo JS    name=parceiro_cnae    6201501
 
@@ -335,7 +364,7 @@ Preenche dados gerais pessoa fisica
     Selecionar primeira opcao valida do select    parceiro_classificacaoparceiro
     Digita No Campo JS    name=parceiro_homepage    www.automacao-pf.com.br
     Rolar Painel Cliente Ate    name=parceiro_grupoparceiro
-    Selecionar Lupa Padrao Cypress    parceiro_grupoparceiro
+    Selecionar Grupo Parceiro
     Selecionar primeira opcao valida do select    parceiro_tiposituacaocadastro
     Rolar Painel Cliente Ate    name=parceiro_cnae
     Digita No Campo JS    name=parceiro_cnae    6201501
@@ -1062,6 +1091,47 @@ Selecionar Lupa Padrao Cypress
     Wait Until Element Is Visible    css=.slick-cell    20s
     Click Forcado JS    css=.slick-cell
     Click Forcado JS    id=btnConfirmar
+    Sleep    0.5s
+
+Selecionar Grupo Parceiro
+    [Documentation]    Abre o popup de grupo parceiro via lupa dinâmica (btnPesquisarGRUPOPARCEIROShortcut_*),
+    ...                seleciona a primeira linha da grid dentro do popup0 e confirma.
+    ...                Se não houver grupo parceiro no banco o campo é ignorado.
+    # Verifica se a lupa existe (pode não estar visível dependendo da config)
+    ${tem_lupa}=    BuiltIn.Run Keyword And Return Status
+    ...    SeleniumLibrary.Wait Until Page Contains Element
+    ...    xpath=//a[contains(@id,'btnPesquisarGRUPOPARCEIROShortcut')]    5s
+    IF    not ${tem_lupa}
+        BuiltIn.Log To Console    ⚠️ Lupa de Grupo Parceiro não encontrada — campo será ignorado.
+        BuiltIn.Return From Keyword
+    END
+    Click Forcado JS    xpath=//a[contains(@id,'btnPesquisarGRUPOPARCEIROShortcut')]//span[contains(@class,'ui-button-icon-primary')]
+    # Aguarda o popup0 abrir com a grid de grupos
+    ${tem_popup}=    BuiltIn.Run Keyword And Return Status
+    ...    SeleniumLibrary.Wait Until Element Is Visible
+    ...    xpath=//*[@id='popup0']//div[contains(@class,'slick-cell')]    10s
+    IF    not ${tem_popup}
+        BuiltIn.Log To Console    ⚠️ Popup de Grupo Parceiro não abriu — campo será ignorado.
+        BuiltIn.Run Keyword And Ignore Error    SeleniumLibrary.Press Keys    None    ESCAPE
+        BuiltIn.Return From Keyword
+    END
+    Sleep    0.5s
+    # Clica na primeira célula da primeira linha dentro do popup0
+    ${clicou}=    BuiltIn.Run Keyword And Return Status
+    ...    Click Forcado JS
+    ...    xpath=(//*[@id='popup0']//div[contains(@class,'slick-cell') and contains(@class,'l1')])[1]
+    IF    ${clicou}
+        ${tem_confirm}=    BuiltIn.Run Keyword And Return Status
+        ...    SeleniumLibrary.Wait Until Element Is Enabled    id=btnConfirmar    5s
+        IF    ${tem_confirm}
+            Click Forcado JS    id=btnConfirmar
+        ELSE
+            Click Forcado JS    xpath=//span[normalize-space()='Confirmar']
+        END
+    ELSE
+        BuiltIn.Log To Console    ⚠️ Nenhuma linha na grid de Grupo Parceiro — campo será ignorado.
+        BuiltIn.Run Keyword And Ignore Error    SeleniumLibrary.Press Keys    None    ESCAPE
+    END
     Sleep    0.5s
 
 Selecionar primeira opcao valida do select

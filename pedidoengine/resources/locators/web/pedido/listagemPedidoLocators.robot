@@ -17,10 +17,10 @@ ${msgCarregando}    //*[@id="loading"]/div[2]/div[contains(text(),'Carregando...
 &{gridListagemPedidos}
 ...    numeroPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[1]    #xpath
 ...    headerGrid=//*[@id="principal"]/div[2]/div/div/div[2]/div[1]/span    #xpath
-...    editarPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[14]/a    #xpath
-...    finalizarPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[16]/a    #xpath
-...    removerPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[17]/a    #xpath
-...    clonarPedido=//*[@id="grid_pedido"]/div[5]/div/div[3]/div[15]/a    #xpath
+...    editarPedido=(//*[@id="grid_pedido"]//div[contains(@class,'l18 r18')]//a//img)[1]    #xpath — coluna 18 (Editar)
+...    clonarPedido=(//*[@id="grid_pedido"]//div[contains(@class,'l19 r19')]//a//img)[1]    #xpath — coluna 19 (Clonar)
+...    finalizarPedido=(//*[@id="grid_pedido"]//div[contains(@class,'l20 r20')]//a//img)[1]    #xpath — coluna 20 (Finalizar; visível quando parâmetro sim3g.desabilita.finalizar.listagem.pedido=1)
+...    removerPedido=(//*[@id="grid_pedido"]//div[contains(@class,'l21 r21')]//a//img)[1]    #xpath — coluna 21 (Remover)
 
 &{popUpFinalizarPedidoListagem}
 ...    divPopUp=/html/body/div[4]/div    #xpath

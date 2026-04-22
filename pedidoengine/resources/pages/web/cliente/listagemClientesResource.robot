@@ -443,36 +443,41 @@ Filtra cliente por cidade
     SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnLimpaPesquisaCidade}
 
 Filtra cliente por profissional
-    [Documentation]    Filtra pela carteira do usuário logado. O mesmo ID é usado na query SQL e na
-    ...                busca da tela, garantindo que tela e banco sempre representem o mesmo escopo.
-    ${usuario_id}=    Retornar id usuario logado web
-    ${res}=    DatabaseLibrary.Query
-    ...    SELECT login FROM usuario WHERE idusuario = ${usuario_id}
-    ${usuario_login}=    Set Variable    ${res[0][0]}
+    [Documentation]    Filtra pela carteira do profissional 'Automação'. O mesmo ID é usado na query SQL
+    ...                e na busca da tela, garantindo que tela e banco sempre representem o mesmo escopo.
+    # Busca idusuario, login E nome — o popup termSelection_NOME_USUARIO filtra por nome, não login
+    ${res_auto}=    DatabaseLibrary.Query
+    ...    SELECT idusuario, login, nome FROM usuario WHERE nome ILIKE '%Automação%' AND idnativo = 1 ORDER BY idusuario LIMIT 1
+    Should Not Be Empty    ${res_auto}
+    ...    msg=❌ Nenhum usuário 'Automação' ativo encontrado no banco.
+    ${usuario_id}=      Set Variable    ${res_auto[0][0]}
+    ${usuario_login}=   Set Variable    ${res_auto[0][1]}
+    ${usuario_nome}=    Set Variable    ${res_auto[0][2]}
     ${countRegistros}=    SQL Pesquisa Avancada    usuario=${usuario_id}
     Should Be True    ${countRegistros} > 0
-    ...    msg=❌ Usuário logado '${usuario_login}' não possui clientes na carteira.
+    ...    msg=❌ Profissional 'Automação' (login: ${usuario_login}) não possui clientes na carteira.
     Log To Console    \nFiltro profissional '${usuario_login}': ${countRegistros} registros esperados.
     ${btnVisivel}=    Run Keyword And Return Status
     ...    SeleniumLibrary.Wait Until Element Is Visible    xpath=${pesquisaAvancada.btnPesquisaProfissional}    3s
     Run Keyword If    not ${btnVisivel}
     ...    SeleniumLibrary.Click Element    class=${pesquisaAvancada.exibePesquisa}
     SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnPesquisaProfissional}
-    SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaProfissional.input}
+    SeleniumLibrary.Wait Until Element Is Visible    id=${pesquisaProfissional.input}    10s
     SeleniumLibrary.Wait Until Element Is Enabled    id=${pesquisaProfissional.input}
-    SeleniumLibrary.Input Text    id=${pesquisaProfissional.input}    ${usuario_login}
+    # O popup pesquisa por NOME do usuário, não pelo login
+    SeleniumLibrary.Input Text    id=${pesquisaProfissional.input}    ${usuario_nome}
     SeleniumLibrary.Press Keys    None    ENTER
-    Sleep    0.5s
+    Sleep    1s
     SeleniumLibrary.Press Keys    None    ENTER
-    SeleniumLibrary.Wait Until Page Does Not Contain Element    id=${pesquisaProfissional.input}
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    id=${pesquisaProfissional.input}    15s
     SeleniumLibrary.Click Element    xpath=${pesquisaRapida.btnPesquisar}
     SeleniumLibrary.Wait Until Element Is Not Visible    xpath=${cerregandoRegistros}
     ${stringQtdeRegistros}    SeleniumLibrary.Get Text    class=${gridClientes.labelQtdeRegsitros}
     ${removeQtdeRegitros}    Remove String    ${stringQtdeRegistros}    Registros    (    )    .
     ${intQtdeRegistros}    Convert To Integer    ${removeQtdeRegitros}
     Should Be Equal As Integers    ${intQtdeRegistros}    ${countRegistros}
-    ...    msg=❌ Filtro profissional '${usuario_login}': tela=${intQtdeRegistros}, banco=${countRegistros}
-    Log To Console    ✅ Filtro por profissional '${usuario_login}' validado: ${intQtdeRegistros} registros.
+    ...    msg=❌ Filtro profissional '${usuario_nome}': tela=${intQtdeRegistros}, banco=${countRegistros}
+    Log To Console    ✅ Filtro por profissional '${usuario_nome}' validado: ${intQtdeRegistros} registros.
     SeleniumLibrary.Click Element    xpath=${pesquisaAvancada.btnLimpaPesquisaProfissional}
 
 Filtra cliente por classificacao

@@ -259,32 +259,14 @@ Selecionar primeira opcao spinner android
     Sleep    0.3s
 
 Preencher campo numerico android
-    [Documentation]    Abre a calculadora customizada do app, limpa o valor atual e
-    ...                digita cada caractere clicando nos botões da calculadora.
-    ...                Funciona para inteiros (ex: 10) e decimais (ex: 100000,00).
+    [Documentation]    Clica no campo, aguarda a calculadora customizada e delega
+    ...                a digitação para a keyword Python que usa resource-id dos botões.
     [Arguments]    ${campo_locator}    ${valor}
 
     AppiumLibrary.Click Element    ${campo_locator}
     Sleep    0.5s
     AppiumLibrary.Wait Until Element Is Visible    ${calculadora.display}    5s
-
-    # Limpa o valor atual (botão C), se existir
-    ${tem_clear}=    Run Keyword And Return Status
-    ...    AppiumLibrary.Element Should Be Visible    xpath=//android.widget.Button[@text="C"]
-    IF    ${tem_clear}
-        AppiumLibrary.Click Element    xpath=//android.widget.Button[@text="C"]
-        Sleep    0.2s
-    END
-
-    # Clica botão a botão para cada caractere do valor
-    ${chars}=    Split String To Characters    ${valor}
-    FOR    ${char}    IN    @{chars}
-        AppiumLibrary.Click Element    xpath=//android.widget.Button[@text="${char}"]
-        Sleep    0.1s
-    END
-
-    # Confirma com Definir
-    AppiumLibrary.Click Element    ${calculadora.btnDefinir}
+    sfa_lib_mobile.Digitar na calculadora android    ${valor}
     Sleep    0.3s
 
 Preencher campo monetario android

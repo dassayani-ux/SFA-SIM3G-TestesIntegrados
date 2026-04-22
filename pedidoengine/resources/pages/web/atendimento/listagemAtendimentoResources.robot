@@ -21,7 +21,7 @@ Acessar listagem de atendimentos
 Editar Atendimento
     [Documentation]    Irá acionar a edição do primeiro registro listado no grid.
 
-    Sleep    1s
+    SeleniumLibrary.Wait Until Page Does Not Contain Element    class=${loading}    15s
     ${countListagem}    SeleniumLibrary.Get Element Count    xpath=//*[@id="grid_atendimento"]/div[5]/div/div[1]
     IF  '${countListagem}' == '${1}'
         SeleniumLibrary.Click Element    id=${btnPesquisa}

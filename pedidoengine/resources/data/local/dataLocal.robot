@@ -112,7 +112,7 @@ Retornar dados de local especifico
         BuiltIn.Fail
     ELSE
         ${sql}    BuiltIn.Set Variable    select descricao from local l where l.idlocal = ${idlocal};
-        ${local}    DatabaseLibrary.Query    ${sql}    returnAsDict=True
+        ${local}    DatabaseLibrary.Query    ${sql}    return_dict=True
     
         BuiltIn.Return From Keyword    ${local[0]}
     END

@@ -410,11 +410,12 @@ Valida profissional no banco de dados
 
     # Garante que uma das filiais vinculadas seja a filial padrão (idnpadrao = 1).
     # Usa a filial com menor ID dentre as vinculadas ao profissional.
-    DatabaseLibrary.Execute SQL String
+    ${sql_filial}=    Catenate    SEPARATOR=\n
     ...    UPDATE usuariofilial SET idnpadrao = 1
     ...    WHERE idusuario = (SELECT idusuario FROM usuario WHERE login = '${PROF_AUTO_LOGIN}')
     ...    AND idlocalfilial = (
     ...        SELECT MIN(idlocalfilial) FROM usuariofilial
     ...        WHERE idusuario = (SELECT idusuario FROM usuario WHERE login = '${PROF_AUTO_LOGIN}')
     ...    )
+    DatabaseLibrary.Execute Sql String    ${sql_filial}
     Log To Console    \n✅ Filial padrão definida no banco para '${PROF_AUTO_LOGIN}'.

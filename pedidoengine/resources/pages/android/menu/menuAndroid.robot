@@ -36,7 +36,7 @@ Voltar para tela principal se necessario
     ${menu_visivel}=    Run Keyword And Return Status
     ...    AppiumLibrary.Element Should Be Visible    id=${menu.labelProfissional}
     IF    not ${menu_visivel}
-        AppiumLibrary.Swipe    10    600    500    600    500
+        sfa_lib_mobile.Abrir drawer menu lateral
         Sleep    0.8s
     END
     Log To Console    \n✅ App na tela principal com menu aberto.
